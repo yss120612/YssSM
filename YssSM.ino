@@ -55,17 +55,6 @@ DallasTerm kube_temp(tkube, &ds, 2.5);
 
 SSD1306Wire display(0x3C, SDA, SCL);
 
-//SSD1306Brzo display(ADDRESS, SDA, SDC);
-
-//U82GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE | U8G_I2C_OPT_DEV_0);
-
-//U8G2_SSD1306_128X64_ALT0_1_2ND_HW_I2C display(U8G2_R0);
-//#define DEMO_DURATION 3000
-//typedef void(*Demo)(void);
-
-
-
-
 
 void setup() {
 	Serial.begin(115200);
@@ -76,8 +65,7 @@ void setup() {
 		delay(1000);
 		ESP.restart();
 	}
-	ArduinoOTA.begin();
-	
+	 	
 	server.on("/", []() {
 		if (!server.authenticate(www_username, www_password))
 			return server.requestAuthentication();
@@ -97,6 +85,7 @@ void setup() {
 		noTone(BEEPER_PIN);
 	});
 
+	ArduinoOTA.begin();
 	server.begin();
 
 	pinMode(BEEPER_PIN, OUTPUT);
