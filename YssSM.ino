@@ -57,6 +57,9 @@ SSD1306Wire display(0x3C, SDA, SCL);
 
 
 void setup() {
+	pinMode(D0, OUTPUT);
+	digitalWrite(D0, LOW);
+
 	Serial.begin(115200);
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
