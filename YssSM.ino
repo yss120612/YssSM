@@ -1,14 +1,16 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <ArduinoOTA.h>
-#include <ESP8266WebServer.h>
-//#include <U8glib.h>
-//#include <U8g2lib.h>
+
+#include "Config.h"
+#include "WiFiHelper.h"
+#include "Httphelper.h"
+#include "Kran.h"
+#include "Heater.h"
+
 #include <OneWire.h>
 #include <Wire.h>  
 #include "SSD1306Wire.h"
 #include "DallasTerm.h"
 #include "images.h"
+
 
 #define MODE_MAIN 0
 #define MODE_SUVID 1
@@ -16,16 +18,14 @@
 #define MODE_RECTIFY 3
 #define MODE_SETUP 99
 
-uint8_t mode;//Режим работы устройства в данный момент
+Config conf;
+
+uint8_t mode;//Р РµР¶РёРј СЂР°Р±РѕС‚С‹ СѓСЃС‚СЂРѕР№СЃС‚РІР° РІ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚
 long scrLoop = 0;
 
-const char* ssid = "Yss_GIGA";
-const char* password = "bqt3bqt3";
 
-ESP8266WebServer server(80);
-
-const char* www_username = "admin";
-const char* www_password = "esp";
+HttpHelper httph(&conf);
+WiFiHelper wifih(&conf);
 
 //const uint8_t COOLER_PIN = 3;
 //const uint8_t LEFT_BTN_PIN = 4;
@@ -61,35 +61,16 @@ void setup() {
 	digitalWrite(D0, LOW);
 
 	Serial.begin(115200);
-	WiFi.mode(WIFI_STA);
-	WiFi.begin(ssid, password);
-	if (WiFi.waitForConnectResult() != WL_CONNECTED) {
-		Serial.println("WiFi Connect Failed! Rebooting...");
-		delay(1000);
-		ESP.restart();
-	}
-	 	
-	server.on("/", []() {
-		if (!server.authenticate(www_username, www_password))
-			return server.requestAuthentication();
-		server.send(200, "text/plain", "Login OK");
-	});
+	conf.setWiFi("Yss_GIGA","bqt3bqt3");
+	conf.setHttp("admin", "esp");
 
-	server.on("/aaa", []() {
-		if (!server.authenticate(www_username, www_password))
-			return server.requestAuthentication();
-		server.send(200, "text/plain", "Login OK on AAA");
-		tone(BEEPER_PIN, 1000);
-		//digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
-										  // but actually the LED is on; this is because 
-										  // it is active low on the ESP-01)
-		delay(1000);                      // Wait for a second
-		//digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
-		noTone(BEEPER_PIN);
-	});
-
+	
+	wifih.setup();
 	ArduinoOTA.begin();
-	server.begin();
+	httph.setup();
+	
+	
+	
 
 	pinMode(BEEPER_PIN, OUTPUT);
 
@@ -109,29 +90,16 @@ void setup() {
 long mls;
 void loop() {
 	ArduinoOTA.handle();
-	server.handleClient();
+	httph.clientHandle();
+
 	mls = millis();
 	if (scrLoop + 1000 - mls < 0) {
 		kube_temp.process(mls);
-
-		display.clear();
-		// draw the current demo method
-		//demos[demoMode]();
-
-		display.setTextAlignment(TEXT_ALIGN_LEFT);
-		display.drawString(10, 22, String(millis()));
-		display.display();
-		scrLoop = mls;
 		draw();
-		//digitalWrite(FUNC_GPIO10, !digitalRead(FUNC_GPIO10));
-	//	draw();
 	}
-	/*display.firstPage();
-	do {
-		draw();
-	} while (display.nextPage());
-*/
 }
+
+
 void draw(void) {
 	switch (mode)
 	{
@@ -140,16 +108,11 @@ void draw(void) {
 	default:
 		break;
 	}
-
-
-	
+		
 	display.clear();
 	display.drawString(0, 0,String(kube_temp.getTemp()));
 	display.display();
-	
-	
-	
-}
+	}
 
 
 void drawFontFaceDemo() {
@@ -232,5 +195,6 @@ void drawImageDemo() {
 	// on how to create xbm files
 	display.drawXbm(34, 14, WiFi_Logo_width, WiFi_Logo_height, WiFi_Logo_bits);
 }
+
 
 

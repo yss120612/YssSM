@@ -14,7 +14,7 @@
 #endif
 
 
-#endif
+
 const uint8_t dim = 5;
 const uint16_t interval = 1000;
 class DallasTerm
@@ -50,4 +50,6 @@ private:
 	uint8_t counter;
 
 };
+
+#endif
 
