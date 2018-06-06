@@ -27,9 +27,27 @@
     <ClInclude Include="DallasTerm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Heater.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Kran.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Httphelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Heater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Kran.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Httphelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
