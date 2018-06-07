@@ -23,10 +23,10 @@ public:
 	void clientHandle();
 	void setup();
 private:
-	static Config * conf;
-	static ESP8266WebServer * server;
-	static void root();
-	static void page1();
+	Config * conf;
+	ESP8266WebServer * server;
+	std::function<void(void)>  root;
+	std::function<void(void)>  page1;
 };
 
 #endif
