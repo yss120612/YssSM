@@ -33,9 +33,6 @@ const uint16_t test_time = 1000;
 
 class Suvid : public Mode {
 private:
-	Heater * heater;
-	DallasTerm * term;
-	Beeper * beeper;
 	int8_t targetT;
 	long last_time;
 	int8_t work_mode;
@@ -44,14 +41,18 @@ private:
 	long time;
 	void error(uint8_t);
 	void draw();
+	void left();
+	void right();
+	void press();
+	void long_press();
 public:
-	Suvid(Display *d, Heater * he, DallasTerm * tr, Beeper * bee);
+	Suvid(Hardware *h);
 	void start(int8_t tm, uint16_t min);
 	void stop();
 
 	
 	void process_suvid(long);
-	int getHeaterPower() { return heater->getPower(); };
+	int getHeaterPower() { return hardware->getHeater()->getPower(); };
 };
 
 

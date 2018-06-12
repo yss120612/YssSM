@@ -16,11 +16,10 @@ public:
 	void processHeater();//вызываем при проходе через 0
 	void setPower(int pw);
 	uint8_t  getPower();
-	int16_t  getCurr();
 	void start();
 	void stop();
 	void setup(uint8_t hp, int8_t rp);
-
+	boolean isON();
 private:
 	boolean cy;
 	uint8_t heater_pin;
@@ -28,7 +27,7 @@ private:
 	int8_t power;
 	const int8_t max_power = 100;
 	int16_t curr;
-	boolean heater_stopped;
+	volatile boolean heater_stopped;
 	boolean have_relay;
 	void switchRelay(boolean on);
 	boolean relayIsOn();

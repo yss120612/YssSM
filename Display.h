@@ -18,6 +18,8 @@ public:
 	~Display();
 	void setup();
 	void draw1(String s);
+	void drawXY(uint8_t x, uint8_t y, String s);
+	SSD1306Wire * getDisplay();
 private:
 	SSD1306Wire * display;
 };

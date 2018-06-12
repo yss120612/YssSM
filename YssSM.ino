@@ -1,20 +1,15 @@
 
-#include "Beeper.h"
-#include "Display.h"
 #include "Mode.h"
+#include "Hardware.h"
+#include "Main.h"
+#include "Encoder.h"
+
 #include "Suvid.h"
-#include "Config.h"
-#include "WiFiHelper.h"
-#include "Httphelper.h"
+
 #include "Kran.h"
-#include "Heater.h"
 
 #include <OneWire.h>
 #include <Wire.h>  
-
-#include "DallasTerm.h"
-#include "images.h"
-
 
 #define MODE_MAIN 0
 #define MODE_SUVID 1
@@ -22,54 +17,57 @@
 #define MODE_RECTIFY 3
 #define MODE_SETUP 99
 
+
+
 Config conf;
 
 uint8_t mode;//Режим работы устройства в данный момент
+
 long scrLoop = 0;
 
 
 HttpHelper httph(&conf);
 WiFiHelper wifih(&conf);
 
-//const uint8_t COOLER_PIN = 3;
-//const uint8_t LEFT_BTN_PIN = 4;
-//const uint8_t WATER_OPEN_PIN = 5;
-//const uint8_t WATER_CLOSE_PIN = 6;
-//const uint8_t CENTER_BTN_PIN = 7;
-//const uint8_t RIGHT_BTN_PIN = 8;
-//const uint8_t RELAY_PIN = 9;
-//const uint8_t HEATER_PIN = 9;
 const uint8_t TEMPERATURE_PIN = D3;
-//const uint8_t UROVEN_VCC_PIN = 11;
-const uint8_t BEEPER_PIN = D4;
+const uint8_t BEEPER_PIN = D10;
 
-//const uint8_t CLOCK_RST_PIN = 3;
-//const uint8_t CLOCK_DAT_PIN = 5;
-//const uint8_t CLOCK_CLK_PIN = 6;
+const uint8_t ENC_A_PIN = D5;
+const uint8_t ENC_B_PIN = D0;
+const uint8_t ENC_BTN_PIN =  D4;
 
-//const uint8_t TERMISTOR_PIN = A0;
-//const uint8_t WATER_MEASURE_PIN = 11;
-//const uint8_t UROVEN_PIN = D0;
-
+const uint8_t HEAT_NUL_PIN = D6;
+const uint8_t HEAT_REL_PIN = D8;
+const uint8_t HEAT_DRV_PIN = D7;
 
 
 OneWire ds(TEMPERATURE_PIN);
-uint8_t  tkube[] = { 0x28,0xFF,0x73,0x37,0x67,0x14,0x02,0x11 };
-uint8_t  t1[] = { 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 };
-uint8_t  t2[] = { 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61};
-uint8_t  t3[] = { 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E};
+uint8_t  tkube[]	= { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11};
+uint8_t  t1[]		= { 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66};
+uint8_t  t2[]		= { 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61};
+uint8_t  t3[]		= { 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E};
+uint8_t  t4[]		= { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56};
+uint8_t  t5[]		= { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92};
 
-DallasTerm kube_temp(t3, &ds, 2.5);
+DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
-Beeper beeper(D4);
+Beeper beeper(BEEPER_PIN);
+Encoder encoder;
+Heater heater;
 
+Hardware hard;
 
+Mode * md = new Main(&hard);
 
 void setup() {
-	//pinMode(D0, OUTPUT);
-	//digitalWrite(D0, LOW);
 
-	Serial.begin(115200);
+	hard.setConfig(&conf);
+	hard.setDisplay(&disp);
+	hard.setHeater(&heater);
+	hard.setTKube(&kube_temp);
+	hard.setHttpHelper(&httph);
+	hard.setBeeper(&beeper);
+		
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
 
@@ -77,27 +75,54 @@ void setup() {
 	httph.setup();
 	disp.setup();
 	beeper.setup();
-	//pinMode(BEEPER_PIN, OUTPUT);
-
-	
 
 	mode = MODE_MAIN;
-	//pinMode(FUNC_GPIO10,OUTPUT);
 
+	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);
+
+	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
+	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
+	encoder.setHandler(md);
+
+	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
+	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
+
+#ifdef _SERIAL
+	Serial.begin(115200);
 	Serial.print("Open http://");
 	Serial.print(WiFi.localIP());
 	Serial.println("/ in your browser to see it working");
+#endif
+
 }
+
+void nulAC() {
+	heater.processHeater();
+}
+
+void A() {
+	encoder.A();
+}
+
+void Button() {
+	encoder.Button();
+}
+
+
 
 long mls;
 void loop() {
 	httph.clientHandle();
+	md->drawImm();
 
 	mls = millis();
+
 	if (scrLoop + 1000 - mls < 0) {
 		kube_temp.process(mls);
-		draw();
+		md->draw();
 	}
+
+	encoder.process(mls);
 }
 
 
@@ -112,6 +137,7 @@ void draw(void) {
 		
 	disp.draw1(String(kube_temp.getTemp()));
 	}
+
 
 
 //void drawFontFaceDemo() {

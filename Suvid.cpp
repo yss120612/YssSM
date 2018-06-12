@@ -4,10 +4,7 @@
 
 #include "Suvid.h"
 
-Suvid::Suvid(Display *d, Heater * he, DallasTerm * tr, Beeper * bee) : Mode(d) {
-	heater = he;
-	term = tr;
-	beeper = bee;
+Suvid::Suvid(Hardware *h) : Mode(h) {
 	targetT = 0;
 	last_time = 0;
 }
@@ -15,6 +12,19 @@ Suvid::Suvid(Display *d, Heater * he, DallasTerm * tr, Beeper * bee) : Mode(d) {
 void Suvid::draw() {
 
 }
+void Suvid::left() {
+	Serial.println("left");
+}
+void Suvid::right() {
+	Serial.println("right");
+}
+void Suvid::press() {
+	Serial.println("press");
+}
+void Suvid::long_press() {
+	Serial.println("long_press");
+}
+
 
 void Suvid::process_suvid(long ms) {
 	if (work_mode == SU_OFF) return;
@@ -26,16 +36,16 @@ void Suvid::process_suvid(long ms) {
 	if (work_mode == SU_WORK && time - ms < 0) {
 		end_reason = SUEND_TIME;
 		stop();
-		beeper->beep(1000, 5000);
+		hardware->getBeeper()->beep(1000, 5000);
 		return;
 	}
 
 
-	float tmp = term->getTemp();
+	float tmp = hardware->getTKube()->getTemp();
 
 	if (tmp >= targetT && work_mode == SU_FORSAJ) {//вышли на рабочий режим
 		work_mode = SU_WORK;
-		beeper->beep(1000, 500);
+		hardware->getBeeper()->beep(1000, 500);
 		time = ms + time * 60000L;
 	}
 
@@ -58,7 +68,7 @@ void Suvid::process_suvid(long ms) {
 		need_pw = (targetT - tmp) * 10 + 5;
 	}
 
-	heater->setPower(need_pw);
+	hardware->getHeater()->setPower(need_pw);
 
 }
 
@@ -73,12 +83,12 @@ void Suvid::start(int8_t tm, uint16_t  min) {
 	err = SUERR_OK;
 	end_reason = SUEND_NO;
 
-	if (heater == NULL) {
+	if (hardware->getHeater() == NULL) {
 		error(SUERR_NOHEATER);
 		return;
 	}
 
-	if (term == NULL) {
+	if (hardware->getTKube() == NULL) {
 		error(SUERR_NOTKUB);
 		return;
 	}
@@ -86,12 +96,12 @@ void Suvid::start(int8_t tm, uint16_t  min) {
 	time = min;
 	targetT = tm;
 	work_mode = SU_FORSAJ;
-	heater->start();
+	hardware->getHeater()->start();
 }
 
 void Suvid::stop() {
-	heater->setPower(0);
-	heater->stop();
+	hardware->getHeater()->setPower(0);
+	hardware->getHeater()->stop();
 	work_mode = SU_OFF;
 	targetT = 0;
 }

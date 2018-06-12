@@ -18,9 +18,11 @@ void Heater::processHeater() {
 	if (!relayIsOn()) return;
 
 	cy = !cy;
+
 	if (!cy) return;
 
 	curr -= power;
+
 	if (curr < 0) {
 		curr += max_power;
 		digitalWrite(heater_pin, HIGH);
@@ -48,13 +50,21 @@ void Heater::setup(uint8_t hp, int8_t rp) {
 void Heater::switchRelay(boolean on) {
 	if (have_relay)
 	{
+		boolean hs = heater_stopped;
+		heater_stopped = true;
+		delay(50);
 		digitalWrite(relay_pin, (on ? HIGH : LOW));
+		heater_stopped = hs;
 	}
 }
 
 //реле включено если его нет вообще или оно есть и включено
 boolean Heater::relayIsOn() {
 	return !have_relay || digitalRead(relay_pin) == HIGH;
+}
+
+boolean Heater::isON() {
+	return !heater_stopped;
 }
 
 void Heater::start() {
@@ -72,10 +82,6 @@ uint8_t Heater::getPower()
 	return power;
 }
 
-int16_t Heater::getCurr()
-{
-	return curr;
-}
 
 void Heater::setPower(int pw) {
 	if (pw == power) return;

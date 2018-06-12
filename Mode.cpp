@@ -5,8 +5,8 @@
 #include "Mode.h"
 
 
-Mode::Mode(Display * d)
+Mode::Mode(Hardware * h)
 {
 	parent = NULL;
-	display = d;
+	hardware = h;
 }
