@@ -63,6 +63,12 @@
     <ClInclude Include="Hardware.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Extender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cooler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -102,6 +108,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hardware.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Extender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cooler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

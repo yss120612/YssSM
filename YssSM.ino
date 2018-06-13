@@ -1,6 +1,7 @@
 
+
+#include "Cooler.h"
 #include "Mode.h"
-#include "Hardware.h"
 #include "Main.h"
 #include "Encoder.h"
 
@@ -17,7 +18,39 @@
 #define MODE_RECTIFY 3
 #define MODE_SETUP 99
 
+const uint8_t EX_PIN0 = 100;
+const uint8_t EX_PIN1 = 101;
+const uint8_t EX_PIN2 = 102;
+const uint8_t EX_PIN3 = 103;
+const uint8_t EX_PIN4 = 104;
+const uint8_t EX_PIN5 = 105;
+const uint8_t EX_PIN6 = 106;
+const uint8_t EX_PIN7 = 107;
+const uint8_t EX_PIN8 = 108;
+const uint8_t EX_PIN9 = 109;
+const uint8_t EX_PIN10 = 110;
+const uint8_t EX_PIN11 = 111;
+const uint8_t EX_PIN12 = 112;
+const uint8_t EX_PIN13 = 113;
+const uint8_t EX_PIN14 = 114;
+const uint8_t EX_PIN15 = 115;
 
+
+
+const uint8_t TEMPERATURE_PIN = D3;
+const uint8_t BEEPER_PIN = D10;
+
+const uint8_t ENC_A_PIN = D5;
+const uint8_t ENC_B_PIN = D0;
+const uint8_t ENC_BTN_PIN = D4;
+
+const uint8_t HEAT_NUL_PIN = D6;
+const uint8_t HEAT_REL_PIN = D8;
+const uint8_t HEAT_DRV_PIN = D7;
+
+const uint8_t EXT_CLC =  D9;
+const uint8_t EXT_LOCK = D0;
+const uint8_t EXT_DATA = D10;
 
 Config conf;
 
@@ -25,21 +58,8 @@ uint8_t mode;//Режим работы устройства в данный мо
 
 long scrLoop = 0;
 
-
 HttpHelper httph(&conf);
 WiFiHelper wifih(&conf);
-
-const uint8_t TEMPERATURE_PIN = D3;
-const uint8_t BEEPER_PIN = D10;
-
-const uint8_t ENC_A_PIN = D5;
-const uint8_t ENC_B_PIN = D0;
-const uint8_t ENC_BTN_PIN =  D4;
-
-const uint8_t HEAT_NUL_PIN = D6;
-const uint8_t HEAT_REL_PIN = D8;
-const uint8_t HEAT_DRV_PIN = D7;
-
 
 OneWire ds(TEMPERATURE_PIN);
 uint8_t  tkube[]	= { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11};
