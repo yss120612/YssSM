@@ -17,6 +17,7 @@ public:
 	Cooler(Hardware * hr);
 	~Cooler();
 	void setup(uint8_t pin);
+	void run(boolean swc);
 	void process(uint16_t ms);
 private:
 	float borderT;

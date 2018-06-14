@@ -48,8 +48,8 @@ const uint8_t HEAT_NUL_PIN = D6;
 const uint8_t HEAT_REL_PIN = D8;
 const uint8_t HEAT_DRV_PIN = D7;
 
-const uint8_t EXT_CLC =  D9;
-const uint8_t EXT_LOCK = D0;
+const uint8_t EXT_CLC =  D8;
+const uint8_t EXT_LOCK = D9;
 const uint8_t EXT_DATA = D10;
 
 Config conf;
@@ -69,6 +69,7 @@ uint8_t  t3[]		= { 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E};
 uint8_t  t4[]		= { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56};
 uint8_t  t5[]		= { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92};
 
+PinExtender extender;
 DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
 Beeper beeper(BEEPER_PIN);
@@ -76,10 +77,11 @@ Encoder encoder;
 Heater heater;
 
 Hardware hard;
-
+Cooler cool(&hard);
 Mode * md = new Main(&hard);
 
 void setup() {
+	extender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
 
 	hard.setConfig(&conf);
 	hard.setDisplay(&disp);
@@ -87,7 +89,9 @@ void setup() {
 	hard.setTKube(&kube_temp);
 	hard.setHttpHelper(&httph);
 	hard.setBeeper(&beeper);
-		
+	hard.setExtender(&extender);
+
+
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
 
@@ -97,7 +101,7 @@ void setup() {
 	beeper.setup();
 
 	mode = MODE_MAIN;
-
+	cool.setup(EX_PIN7);
 	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);
 
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 

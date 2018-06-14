@@ -15,6 +15,12 @@ void Cooler::setup( uint8_t pin)
 	cooler_pin = pin;
 }
 
+void Cooler::run(boolean swc)
+{
+	hard->getExtender()->registerWrite(cooler_pin, swc);
+	isON = swc;
+}
+
 void Cooler::process(uint16_t ms) 
 {
 	if (hard->getTTriak() == NULL) return;

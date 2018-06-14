@@ -44,13 +44,14 @@ void Main::press() {
 	Serial.println("press in main");
 #endif
 	if (!hardware->getHeater()->isON()) {
-		hardware->getHeater()->start();
+		//hardware->getHeater()->start();
 	}
 	else {
-		hardware->getHeater()->stop();
+		//hardware->getHeater()->stop();
 	}
-	hardware->getBeeper()->beep(1000, 500);
+	//hardware->getBeeper()->beep(1000, 500);
 	drawImmed = true;
+	hardware->getExtender()->setAll(0xFFFF);
 }
 void Main::long_press() {
 #ifdef _SERIAL
