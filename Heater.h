@@ -8,6 +8,9 @@
 #else
 	#include "WProgram.h"
 #endif
+
+#include "Extender.h"
+
 class Heater
 {
 public:
@@ -20,6 +23,8 @@ public:
 	void stop();
 	void setup(uint8_t hp, int8_t rp);
 	boolean isON();
+	void setExtender(PinExtender * ex);
+
 private:
 	boolean cy;
 	uint8_t heater_pin;
@@ -31,6 +36,7 @@ private:
 	boolean have_relay;
 	void switchRelay(boolean on);
 	boolean relayIsOn();
+	PinExtender * extd;
 };
 
 

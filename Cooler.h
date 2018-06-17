@@ -18,6 +18,7 @@ public:
 	~Cooler();
 	void setup(uint8_t pin);
 	void run(boolean swc);
+	void setTemperature(float t1, float gis);
 	void process(uint16_t ms);
 private:
 	float borderT;

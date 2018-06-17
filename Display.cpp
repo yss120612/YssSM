@@ -15,7 +15,7 @@ void Display::setup()
 {
 	display->init();
 	display->flipScreenVertically();
-	display->setFont(ArialMT_Plain_10);
+	display->setFont(ArialMT_Plain_16);
 	display->flipScreenVertically();
 }
 

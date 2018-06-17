@@ -3,7 +3,7 @@
 
 #ifndef _MODE_h
 #define _MODE_h
-#define _SERIAL
+
 
 
 #if defined(ARDUINO) && ARDUINO >= 100

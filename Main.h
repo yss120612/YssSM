@@ -22,7 +22,7 @@ public:
 	void press();
 	void long_press();
 private:
-
+	int counter;
 };
 
 

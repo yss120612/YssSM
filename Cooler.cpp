@@ -17,18 +17,32 @@ void Cooler::setup( uint8_t pin)
 
 void Cooler::run(boolean swc)
 {
-	hard->getExtender()->registerWrite(cooler_pin, swc);
+	hard->getExtender()->registerWrite(cooler_pin-100, swc);
 	isON = swc;
 }
+
+
+void Cooler::setTemperature(float t1, float gis)
+{
+	borderT = t1;
+	gesteresis = gis;
+}
+
 
 void Cooler::process(uint16_t ms) 
 {
 	if (hard->getTTriak() == NULL) return;
 	float tm=hard->getTTriak()->getTemp();
 	if (isON) {
-
+		if (tm < borderT - gesteresis)
+		{
+			run(false);
+		}
 	}
 	else {
-
+		if (tm > borderT)
+		{
+			run(true);
+		}
 	}
 }
