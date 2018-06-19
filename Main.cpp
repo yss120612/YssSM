@@ -15,6 +15,7 @@ void Main::draw() {
 	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(counter));
 	hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
 	hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
+	hardware->getDisplay()->getDisplay()->drawString(0, 42, "Extender=" + String(hardware->getExtender()->getAll()));
 	hardware->getDisplay()->getDisplay()->display();
 
 	
