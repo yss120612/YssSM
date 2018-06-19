@@ -27,6 +27,7 @@ const uint8_t EX_PIN4 = 104;
 const uint8_t EX_PIN5 = 105;
 const uint8_t EX_PIN6 = 106;
 const uint8_t EX_PIN7 = 107;
+
 const uint8_t EX_PIN8 = 108;
 const uint8_t EX_PIN9 = 109;
 const uint8_t EX_PIN10 = 110;
@@ -52,10 +53,10 @@ const uint8_t EXT_LOCK = D6;
 const uint8_t EXT_DATA = D8;
 
 const uint8_t HEAT_NUL_PIN = D9;
-const uint8_t HEAT_REL_PIN = EX_PIN14;
+const uint8_t HEAT_REL_PIN = EX_PIN15;
 const uint8_t HEAT_DRV_PIN = D10;
 
-const uint8_t TRIAC_COOL_PIN = EX_PIN7;
+const uint8_t TRIAC_COOL_PIN = EX_PIN0;
 
 #define NOSERIAL
 #define NOBLED
