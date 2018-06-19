@@ -54,6 +54,9 @@ void Main::press() {
 	//hardware->getBeeper()->beep(1000, 500);
 	counter = 100;
 	drawImmed = true;
+	//digitalWrite(D6, !digitalRead(D6));
+	//digitalWrite(D7, !digitalRead(D7));
+	//digitalWrite(D8, !digitalRead(D8));
 	if (hardware->getExtender()->getAll() > 0)
 	{
 		hardware->getExtender()->setAll(0);
