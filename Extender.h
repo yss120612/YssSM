@@ -14,13 +14,15 @@ public:
 	PinExtender();
 	~PinExtender();
 
+	void setPinMode(int8_t pin, uint8_t mode);
+
 	void setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS);
 
 	void setAll(uint16_t bitsToSend);
 
-	void registerWrite(uint8_t whichPin, uint8_t whichState);
+	void registerWrite(int8_t whichPin, uint8_t whichState);
 
-	boolean getPin(uint8_t whichPin);
+	boolean getPin(int8_t whichPin);
 
 	uint16_t getAll();
 

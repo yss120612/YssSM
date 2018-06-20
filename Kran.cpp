@@ -1,17 +1,18 @@
 #include "Kran.h"
 
 void Kran::close() {
-	if (!inProgress && measureState()) {
+	//if (!inProgress && measureState()) {
+	if (!inProgress) {
 		inProgress = true;
 		progress_time = millis();
-		digitalWrite(close_pin, HIGH);
+		pext->registerWrite(close_pin, HIGH);
 	}
 }
 
 void Kran::forceClose() {
 	inProgress = true;
 	progress_time = millis();
-	digitalWrite(close_pin, HIGH);
+	pext->registerWrite(close_pin, HIGH);
 }
 
 void Kran::openQuantum(int8_t oq)
@@ -30,11 +31,11 @@ void Kran::shiftQuantum(int8_t oq)
 	state += oq;
 	if (oq < 0) {
 		quantum = -oq;
-		digitalWrite(close_pin, HIGH);
+		pext->registerWrite(close_pin, HIGH);
 	}
 	else {
 		quantum = oq;
-		digitalWrite(open_pin, HIGH);
+		pext->registerWrite(open_pin, HIGH);
 	}
 }
 
@@ -42,25 +43,25 @@ void Kran::process(long ms) {
 	if (!inProgress && !inQuantum) return;
 	if (inProgress) {
 		if (ms - progress_time > switch_time) {
-			if (digitalRead(open_pin) == HIGH) {
+			if (pext->getPin(open_pin) == HIGH) {
 				state = 100;
 			}
 			else {
 				state = 0;
 			}
-			digitalWrite(open_pin, LOW);
-			digitalWrite(close_pin, LOW);
+			pext->registerWrite(open_pin, LOW);
+			pext->registerWrite(close_pin, LOW);
 			inProgress = false;
 			if (quantum > 0) {
-				digitalWrite(open_pin, HIGH);
+				pext->registerWrite(open_pin, HIGH);
 				progress_time = ms;
 			}
 		}
 	}
 	else {
 		if (ms - progress_time > quantum*quantumT) {
-			digitalWrite(open_pin, LOW);
-			digitalWrite(close_pin, LOW);
+			pext->registerWrite(open_pin, LOW);
+			pext->registerWrite(close_pin, LOW);
 			inQuantum = false;
 			quantum = 0;
 		}
@@ -69,36 +70,40 @@ void Kran::process(long ms) {
 }
 
 void Kran::open() {
-	if (!inProgress && !measureState()) {
+	//if (!inProgress && !measureState()) {
+	if (!inProgress) {
 		inProgress = true;
 		progress_time = millis();
-		digitalWrite(open_pin, HIGH);
+		pext->registerWrite(open_pin, HIGH);
 	}
 }
 
 boolean Kran::measureState() {
-	digitalWrite(relay_pin, HIGH);
+	if (measure_pin < 0 || relay_pin < 0) return false;
+	pext->registerWrite(relay_pin, HIGH);
 	delay(200);
 	boolean result = analogRead(measure_pin)<100;
 	//int result= analogRead(measure_pin);
-	digitalWrite(relay_pin, LOW);
+	pext->registerWrite(relay_pin, LOW);
 	delay(200);
 	return result;
 }
 
-void Kran::setup(uint8_t c_pin, uint8_t o_pin, uint8_t m_pin, uint8_t r_pin) {
+void Kran::setup(PinExtender * pex, uint8_t c_pin, uint8_t o_pin, int8_t m_pin = -1, int8_t r_pin = -1) {
 	close_pin = c_pin;
 	open_pin = o_pin;
 	measure_pin = m_pin;
 	relay_pin = r_pin;
+	pext = pex;
 
-	pinMode(measure_pin, INPUT);
-	pinMode(open_pin, OUTPUT);
-	pinMode(close_pin, OUTPUT);
-	pinMode(relay_pin, OUTPUT);
-	digitalWrite(close_pin, LOW);
-	digitalWrite(open_pin, LOW);
-	digitalWrite(relay_pin, LOW);
+	pext->setPinMode(open_pin, OUTPUT);
+	pext->setPinMode(close_pin, OUTPUT);
+	pext->registerWrite(close_pin, LOW);
+	pext->registerWrite(open_pin, LOW);
+
+	pext->setPinMode(relay_pin, OUTPUT);
+	pext->registerWrite(relay_pin, LOW);
+	pext->setPinMode(measure_pin, INPUT);
 
 	inProgress = false;
 	inQuantum = false;
@@ -106,4 +111,6 @@ void Kran::setup(uint8_t c_pin, uint8_t o_pin, uint8_t m_pin, uint8_t r_pin) {
 	state = 0;
 	progress_time = 0;
 }
+
+
 

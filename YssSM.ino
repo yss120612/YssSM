@@ -1,4 +1,5 @@
 
+#include <MD_DS3231.h>
 #define _SERIAL
 
 #include "Cooler.h"
@@ -28,8 +29,8 @@ const uint8_t EX_PIN5 = 105;
 const uint8_t EX_PIN6 = 106;
 const uint8_t EX_PIN7 = 107;
 
-const uint8_t EX_PIN8 = 108;
-const uint8_t EX_PIN9 = 109;
+const uint8_t EX_PIN8  = 108;
+const uint8_t EX_PIN9  = 109;
 const uint8_t EX_PIN10 = 110;
 const uint8_t EX_PIN11 = 111;
 const uint8_t EX_PIN12 = 112;
@@ -60,8 +61,15 @@ const uint8_t TRIAC_COOL_PIN = EX_PIN0;
 
 #define NOSERIAL
 #define NOBLED
+uint8_t  tkube[] = { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 };
+uint8_t  t1[] = { 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 };
+uint8_t  t2[] = { 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61 };
+uint8_t  t3[] = { 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E };
+uint8_t  t4[] = { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 };
+uint8_t  t5[] = { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 };
 
 Config conf;
+
 
 
 //uint8_t mode;//Режим работы устройства в данный момент
@@ -70,15 +78,7 @@ long scrLoop = 0;
 
 HttpHelper httph(&conf);
 WiFiHelper wifih(&conf);
-
 OneWire ds(TEMPERATURE_PIN);
-uint8_t  tkube[]	= { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11};
-uint8_t  t1[]		= { 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66};
-uint8_t  t2[]		= { 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61};
-uint8_t  t3[]		= { 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E};
-uint8_t  t4[]		= { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56};
-uint8_t  t5[]		= { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92};
-
 PinExtender extender;
 DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
@@ -96,13 +96,14 @@ void setup() {
 	hard.setConfig(&conf);
 	hard.setDisplay(&disp);
 	hard.setHeater(&heater);
-	heater.setExtender(&extender);
 	hard.setTKube(&kube_temp);
 	hard.setTTriak(&kube_temp);
 	hard.setHttpHelper(&httph);
-	//hard.setBeeper(&beeper);
+
 	hard.setExtender(&extender);
 
+	heater.setExtender(&extender);
+	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
@@ -120,7 +121,7 @@ void setup() {
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
 	encoder.setHandler(md);
-
+	
 	//heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 
@@ -130,7 +131,7 @@ void setup() {
 	Serial.print(WiFi.localIP());
 	Serial.println("/ in your browser to see it working");
 #endif
-
+	
 }
 
 void nulAC() {
@@ -160,6 +161,7 @@ void loop() {
 	if (scrLoop + 1000 - mls < 0) {
 		kube_temp.process(mls);
 		md->draw();
+		scrLoop = millis();
 	}
 
 	

@@ -57,7 +57,7 @@ void Heater::switchRelay(boolean on) {
 		heater_stopped = true;
 		delay(50);
 		if (relay_pin >= 100) {
-			extd->registerWrite(relay_pin-100, on);
+			extd->registerWrite(relay_pin-100, on ? HIGH : LOW);
 		}
 		else {
 			digitalWrite(relay_pin, (on ? HIGH : LOW));

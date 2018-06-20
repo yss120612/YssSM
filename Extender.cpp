@@ -9,6 +9,12 @@ PinExtender::~PinExtender()
 {
 }
 
+void PinExtender::setPinMode(int8_t pin, uint8_t mode)
+{
+	if (pin<0 || pin >= 100) return;
+	pinMode(pin, mode);
+}
+
 void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
 {
 	latchPin = ST_CP;
@@ -38,7 +44,13 @@ void PinExtender::setAll(uint16_t bitsToSend) {
 }
 
 
-void PinExtender::registerWrite(uint8_t whichPin, uint8_t whichState) {
+void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
+	if (whichPin < 0)  return;
+	if (whichPin < 100) {
+		digitalWrite(whichPin, whichState);
+		return;
+	}
+
 	// для хранения 16 битов используем unsigned int
 	uint16_t bitsToSend = data;
 	// устанавливаем HIGH в соответствующий бит
@@ -50,8 +62,10 @@ void PinExtender::registerWrite(uint8_t whichPin, uint8_t whichState) {
 }
 
 
-boolean PinExtender::getPin(uint8_t whichPin) {
-	return (data & 1 << whichPin);
+boolean PinExtender::getPin(int8_t whichPin) {
+	if (whichPin < 0) return false;
+	if (whichPin < 100) return digitalRead(whichPin);
+	return  bitRead(data, whichPin);
 }
 
 uint16_t PinExtender::getAll() {
