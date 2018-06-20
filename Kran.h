@@ -8,6 +8,7 @@
 #else
 	#include "WProgram.h"
 #endif
+#include "Extender.h"
 const uint16_t switch_time = 7000;
 const uint8_t quantumT = 70;
 

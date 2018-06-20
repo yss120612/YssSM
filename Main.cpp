@@ -13,8 +13,8 @@ void Main::draw() {
 	hardware->getDisplay()->getDisplay()-> clear();
 	hardware->getDisplay()->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(counter));
-	hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
-	hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
+	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
+	//hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
 	hardware->getDisplay()->getDisplay()->drawString(0, 42, "Extender=" + String(hardware->getExtender()->getAll()));
 	hardware->getDisplay()->getDisplay()->display();
 
@@ -31,7 +31,7 @@ void Main::left() {
 #ifdef _SERIAL
 	Serial.println("left in main");
 #endif
-	hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
+	//hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
 	counter--;
 	drawImmed = true;
 }
@@ -39,7 +39,7 @@ void Main::right() {
 #ifdef _SERIAL
 	Serial.println("right in main");
 #endif
-	hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
+	///hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
 	counter++;
 	drawImmed = true;
 }
@@ -47,11 +47,11 @@ void Main::press() {
 #ifdef _SERIAL
 	Serial.println("press in main");
 #endif
-	if (!hardware->getHeater()->isON()) {
-		hardware->getHeater()->start();
-	}	else {
-		hardware->getHeater()->stop();
-	}
+	//if (!hardware->getHeater()->isON()) {
+	//	hardware->getHeater()->start();
+	//}	else {
+	//	hardware->getHeater()->stop();
+	//}
 	//hardware->getBeeper()->beep(1000, 500);
 	counter = 100;
 	drawImmed = true;

@@ -52,7 +52,7 @@ public:
 
 	
 	void process_suvid(long);
-	int getHeaterPower() { return hardware->getHeater()->getPower(); };
+	//int getHeaterPower() { return hardware->getHeater()->getPower(); };
 };
 
 

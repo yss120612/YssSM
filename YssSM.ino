@@ -1,5 +1,5 @@
 
-#include <MD_DS3231.h>
+
 #define _SERIAL
 
 #include "Cooler.h"
@@ -9,10 +9,11 @@
 
 #include "Suvid.h"
 
-#include "Kran.h"
+//#include "Kran.h"
 
 #include <OneWire.h>
 #include <Wire.h>  
+//#include <MD_DS3231.h>
 
 //#define MODE_MAIN 0
 //#define MODE_SUVID 1
@@ -84,7 +85,7 @@ DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
 //Beeper beeper(BEEPER_PIN);
 Encoder encoder;
-Heater heater;
+//Heater heater;
 
 Hardware hard;
 Cooler cool(&hard);
@@ -95,15 +96,15 @@ void setup() {
 
 	hard.setConfig(&conf);
 	hard.setDisplay(&disp);
-	hard.setHeater(&heater);
+	//hard.setHeater(&heater);
 	hard.setTKube(&kube_temp);
 	hard.setTTriak(&kube_temp);
 	hard.setHttpHelper(&httph);
 
 	hard.setExtender(&extender);
 
-	heater.setExtender(&extender);
-	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
+	//heater.setExtender(&extender);
+	//heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
@@ -135,7 +136,7 @@ void setup() {
 }
 
 void nulAC() {
-	heater.processHeater();
+//	heater.processHeater();
 }
 
 void A() {

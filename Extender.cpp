@@ -54,7 +54,7 @@ void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
 	// для хранения 16 битов используем unsigned int
 	uint16_t bitsToSend = data;
 	// устанавливаем HIGH в соответствующий бит
-	bitWrite(bitsToSend, whichPin, whichState);
+	bitWrite(bitsToSend, whichPin-100, whichState);
 	//УЖЕ УСТАНОВЛЕНО
 	if (bitsToSend == data) return;
 
@@ -65,7 +65,7 @@ void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
 boolean PinExtender::getPin(int8_t whichPin) {
 	if (whichPin < 0) return false;
 	if (whichPin < 100) return digitalRead(whichPin);
-	return  bitRead(data, whichPin);
+	return  bitRead(data, whichPin-100);
 }
 
 uint16_t PinExtender::getAll() {

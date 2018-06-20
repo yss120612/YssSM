@@ -39,15 +39,9 @@ void Heater::processHeater() {
 void Heater::setup(uint8_t hp, int8_t rp) {
 	heater_pin = hp;
 	pinMode(heater_pin, OUTPUT);
-	if (rp < 0) {
-		have_relay = false;
-	}
-	else
-	{
-		have_relay = true;
-		relay_pin = rp;
-		if (relay_pin<100) pinMode(relay_pin, OUTPUT);
-	}
+	have_relay = rp >= 0;
+	relay_pin = rp;
+	extd->setPinMode(relay_pin, OUTPUT);
 }
 
 void Heater::switchRelay(boolean on) {
@@ -56,12 +50,7 @@ void Heater::switchRelay(boolean on) {
 		boolean hs = heater_stopped;
 		heater_stopped = true;
 		delay(50);
-		if (relay_pin >= 100) {
-			extd->registerWrite(relay_pin-100, on ? HIGH : LOW);
-		}
-		else {
-			digitalWrite(relay_pin, (on ? HIGH : LOW));
-		}
+		extd->registerWrite(relay_pin, on ? HIGH : LOW);
 		heater_stopped = hs;
 	}
 }

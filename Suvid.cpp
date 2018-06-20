@@ -68,7 +68,7 @@ void Suvid::process_suvid(long ms) {
 		need_pw = (targetT - tmp) * 10 + 5;
 	}
 
-	hardware->getHeater()->setPower(need_pw);
+	//hardware->getHeater()->setPower(need_pw);
 
 }
 
@@ -83,10 +83,10 @@ void Suvid::start(int8_t tm, uint16_t  min) {
 	err = SUERR_OK;
 	end_reason = SUEND_NO;
 
-	if (hardware->getHeater() == NULL) {
-		error(SUERR_NOHEATER);
-		return;
-	}
+	//if (hardware->getHeater() == NULL) {
+	//	error(SUERR_NOHEATER);
+	//	return;
+	//}
 
 	if (hardware->getTKube() == NULL) {
 		error(SUERR_NOTKUB);
@@ -96,12 +96,12 @@ void Suvid::start(int8_t tm, uint16_t  min) {
 	time = min;
 	targetT = tm;
 	work_mode = SU_FORSAJ;
-	hardware->getHeater()->start();
+//	hardware->getHeater()->start();
 }
 
 void Suvid::stop() {
-	hardware->getHeater()->setPower(0);
-	hardware->getHeater()->stop();
+	//hardware->getHeater()->setPower(0);
+	//hardware->getHeater()->stop();
 	work_mode = SU_OFF;
 	targetT = 0;
 }

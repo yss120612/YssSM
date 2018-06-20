@@ -89,7 +89,7 @@ boolean Kran::measureState() {
 	return result;
 }
 
-void Kran::setup(PinExtender * pex, uint8_t c_pin, uint8_t o_pin, int8_t m_pin = -1, int8_t r_pin = -1) {
+void Kran::setup(PinExtender * pex, uint8_t c_pin, uint8_t o_pin, int8_t m_pin, int8_t r_pin) {
 	close_pin = c_pin;
 	open_pin = o_pin;
 	measure_pin = m_pin;

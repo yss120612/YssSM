@@ -14,7 +14,7 @@ Hardware::~Hardware()
 }
 
 
-Heater * Hardware::getHeater() { return heater; }
+//Heater * Hardware::getHeater() { return heater; }
 Display * Hardware::getDisplay() { return display; }
 DallasTerm * Hardware::getTKube() { return t_kube; }
 DallasTerm * Hardware::getTTsarga() { return t_tsarga; }
@@ -25,7 +25,7 @@ Config * Hardware::getConfig() { return config; }
 Beeper * Hardware::getBeeper() { return beeper; }
 PinExtender * Hardware::getExtender() { return pinExtender; }
 
-void Hardware::setHeater(Heater * h) { heater = h; }
+//void Hardware::setHeater(Heater * h) { heater = h; }
 void Hardware::setDisplay(Display * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }
 void Hardware::setTTsarga(DallasTerm * t) { t_tsarga = t; }
