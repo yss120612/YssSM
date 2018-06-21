@@ -1,6 +1,8 @@
 
 
-#define _SERIAL
+//#define _SERIAL
+#define NOSERIAL
+#define NOLED
 
 #include "Cooler.h"
 #include "Mode.h"
@@ -13,7 +15,7 @@
 
 #include <OneWire.h>
 #include <Wire.h>  
-//#include <MD_DS3231.h>
+
 
 //#define MODE_MAIN 0
 //#define MODE_SUVID 1
@@ -54,9 +56,9 @@ const uint8_t EXT_CLC =  D7;
 const uint8_t EXT_LOCK = D6;
 const uint8_t EXT_DATA = D8;
 
-const uint8_t HEAT_NUL_PIN = D9;
+const uint8_t HEAT_NUL_PIN = D10;
 const uint8_t HEAT_REL_PIN = EX_PIN15;
-const uint8_t HEAT_DRV_PIN = D10;
+const uint8_t HEAT_DRV_PIN = D9;
 
 const uint8_t TRIAC_COOL_PIN = EX_PIN0;
 
@@ -85,7 +87,7 @@ DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
 //Beeper beeper(BEEPER_PIN);
 Encoder encoder;
-//Heater heater;
+Heater heater;
 
 Hardware hard;
 Cooler cool(&hard);
@@ -96,15 +98,15 @@ void setup() {
 
 	hard.setConfig(&conf);
 	hard.setDisplay(&disp);
-	//hard.setHeater(&heater);
+	hard.setHeater(&heater);
 	hard.setTKube(&kube_temp);
 	hard.setTTriak(&kube_temp);
 	hard.setHttpHelper(&httph);
-
 	hard.setExtender(&extender);
+	hard.setClock(&RTC);
 
-	//heater.setExtender(&extender);
-	//heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
+	heater.setExtender(&extender);
+	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
@@ -123,8 +125,17 @@ void setup() {
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
 	encoder.setHandler(md);
 	
-	//heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
+
+	RTC.yyyy = 2018;
+	RTC.dd = 22;
+	RTC.mm = 6;
+	RTC.h = 23;
+	RTC.m = 53;
+	RTC.s = 0;
+	RTC.dow = 4;
+	//RTC.readRAM
+	//RTC.writeTime();
 
 #ifdef _SERIAL
 	Serial.begin(115200);
@@ -136,7 +147,7 @@ void setup() {
 }
 
 void nulAC() {
-//	heater.processHeater();
+	heater.processHeater();
 }
 
 void A() {

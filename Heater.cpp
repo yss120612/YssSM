@@ -18,8 +18,9 @@ void Heater::processHeater() {
 		if (digitalRead(heater_pin) == HIGH) digitalWrite(heater_pin, LOW);
 		return;
 	}
+	
 	if (!relayIsOn()) return;
-
+	dummy++;
 	cy = !cy;
 
 	if (!cy) return;
@@ -57,12 +58,13 @@ void Heater::switchRelay(boolean on) {
 
 //реле включено если его нет вообще или оно есть и включено
 boolean Heater::relayIsOn() {
-	if (relay_pin >= 100) {
+	return !have_relay || extd->getPin(relay_pin) == HIGH;
+	/*if (relay_pin >= 100) {
 		return extd->getPin(relay_pin - 100);
 	}
 	else {
-		return !have_relay || digitalRead(relay_pin) == HIGH;
-	}
+		return !have_relay || extd->getPin(relay_pin - 100) == HIGH;
+	}*/
 }
 
 boolean Heater::isON() {

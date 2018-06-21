@@ -10,21 +10,21 @@
 #endif
 
 #include "Extender.h"
-//#include "Heater.h"
 #include "DallasTerm.h"
 #include "Display.h"
 #include "WiFiHelper.h"
 #include "Httphelper.h"
 #include "Config.h"
 #include "Beeper.h"
-
+#include "Heater.h"
+#include <MD_DS3231.h>
 
 class Hardware
 {
 public:
 	Hardware();
 	~Hardware();
-	//Heater * getHeater();
+	Heater * getHeater();
 	Display * getDisplay();
 	DallasTerm * getTKube();
 	DallasTerm * getTTsarga();
@@ -34,8 +34,9 @@ public:
 	Config * getConfig();
 	Beeper * getBeeper();
 	PinExtender * getExtender();
+	MD_DS3231 * getClock();
 
-	//void setHeater(Heater * h);
+	void setHeater(Heater * h);
 	void setDisplay(Display * d);
 	void setTKube(DallasTerm * k);
 	void setTTsarga(DallasTerm * t);
@@ -45,9 +46,10 @@ public:
 	void setConfig(Config * c);
 	void setBeeper(Beeper * b);
 	void setExtender(PinExtender * p);
+	void setClock(MD_DS3231 * cl);
 
 private:
-	//Heater * heater;
+	Heater * heater;
 	Display * display;
 	DallasTerm * t_kube;
 	DallasTerm * t_tsarga;
@@ -57,6 +59,7 @@ private:
 	Beeper * beeper;
 	Config * config;
 	PinExtender * pinExtender;
+	MD_DS3231 * clock;
 };
 
 
