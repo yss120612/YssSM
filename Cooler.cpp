@@ -17,7 +17,7 @@ void Cooler::setup( uint8_t pin)
 
 void Cooler::run(boolean swc)
 {
-	hard->getExtender()->registerWrite(cooler_pin-100, swc);
+	hard->getExtender()->registerWrite(cooler_pin, swc);
 	isON = swc;
 }
 

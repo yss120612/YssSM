@@ -32,7 +32,7 @@ void PinExtender::setAll(uint16_t bitsToSend) {
 	data = bitsToSend;
 	// выключаем на время передачи битов
 	digitalWrite(latchPin, LOW);
-	delay(50);
+	//delay(100);
 	// разбиваем наши 16 бит на два байта
 	// для записи в первый и второй регистр
 	// "проталкиваем" байты в регистры

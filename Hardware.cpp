@@ -25,6 +25,11 @@ Config * Hardware::getConfig() { return config; }
 Beeper * Hardware::getBeeper() { return beeper; }
 PinExtender * Hardware::getExtender() { return pinExtender; }
 
+MD_DS3231 * Hardware::getClock()
+{
+	return clock;
+}
+
 void Hardware::setHeater(Heater * h) { heater = h; }
 void Hardware::setDisplay(Display * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }
@@ -35,3 +40,8 @@ void Hardware::setHttpHelper(HttpHelper * h) { httpHelper = h; }
 void Hardware::setConfig(Config * c) { config = c; }
 void Hardware::setBeeper(Beeper * b) { beeper = b; }
 void Hardware::setExtender(PinExtender * p) { pinExtender = p; }
+
+void Hardware::setClock(MD_DS3231 * cl)
+{
+	clock = cl;
+}
