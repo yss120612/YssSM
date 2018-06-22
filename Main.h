@@ -16,7 +16,7 @@ public:
 	Main(Hardware * h);
 
 	void draw();
-	void drawImm();
+	//void drawImm();
 	void left();
 	void right();
 	void press();

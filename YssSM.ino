@@ -1,6 +1,8 @@
 
 
 //#define _SERIAL
+#include "MenuItem.h"
+#include "Menu.h"
 #define NOSERIAL
 #define NOLED
 
@@ -41,16 +43,11 @@ const uint8_t EX_PIN13 = 113;
 const uint8_t EX_PIN14 = 114;
 const uint8_t EX_PIN15 = 115;
 
-
-
 const uint8_t TEMPERATURE_PIN = D3;
-///const uint8_t BEEPER_PIN = D10;
 
 const uint8_t ENC_A_PIN = D4;
 const uint8_t ENC_B_PIN = D0;
 const uint8_t ENC_BTN_PIN = D5;
-
-
 
 const uint8_t EXT_CLC =  D7;
 const uint8_t EXT_LOCK = D6;
@@ -72,10 +69,6 @@ uint8_t  t4[] = { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 };
 uint8_t  t5[] = { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 };
 
 Config conf;
-
-
-
-//uint8_t mode;//Режим работы устройства в данный момент
 
 long scrLoop = 0;
 
@@ -116,7 +109,6 @@ void setup() {
 	disp.setup();
 	//beeper.setup();
 
-	//mode = MODE_MAIN;
 	cool.setup(TRIAC_COOL_PIN);
 	cool.setTemperature(30, 1);
 	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);

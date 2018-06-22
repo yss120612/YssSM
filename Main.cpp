@@ -16,7 +16,7 @@ void Main::draw() {
 	hardware->getDisplay()->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(counter));
 	hardware->getDisplay()->getDisplay()->drawString(60, 0, tim);
-	hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
+	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
 	hardware->getDisplay()->getDisplay()->drawString(20, 14, "Dummy="+String(hardware->getHeater()->dummy));
 	hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
 	hardware->getDisplay()->getDisplay()->drawString(0, 42, "Extender=" + String(hardware->getExtender()->getAll()));
@@ -25,11 +25,11 @@ void Main::draw() {
 	
 }
 
-void Main::drawImm() {
-	if (!drawImmed) return;
-	draw();
-	drawImmed = false;
-}
+//void Main::drawImm() {
+//	if (!drawImmed) return;
+//	draw();
+//	drawImmed = false;
+//}
 
 void Main::left() {
 #ifdef _SERIAL

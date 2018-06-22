@@ -24,11 +24,12 @@ HttpHelper::HttpHelper(Config *c)
 
 HttpHelper::~HttpHelper()
 {
+	delete httpUpdater;
 	delete server;
 }
 
 void HttpHelper::setup() {
-	ArduinoOTA.begin();
+	//ArduinoOTA.begin();
 	if (server == NULL) return;
 	web_handlers::conf = conf;
 	web_handlers::server = server;
@@ -41,12 +42,16 @@ void HttpHelper::setup() {
 
 	
 	server->begin();
+
+	httpUpdater = new ESP8266HTTPUpdateServer();
+	httpUpdater->setup(server);
+
 }
 
 
 void HttpHelper::clientHandle() {
 	if (server!=NULL) server->handleClient();
-	ArduinoOTA.begin();
+	//ArduinoOTA.handle();
 }
 
 
