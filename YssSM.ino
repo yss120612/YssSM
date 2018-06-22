@@ -10,10 +10,10 @@
 #include "Suvid.h"
 
 //#include "Kran.h"
-
+#include <time.h>
 #include <OneWire.h>
 #include <Wire.h>  
-//#include <MD_DS3231.h>
+#include <MD_DS3231.h>
 
 //#define MODE_MAIN 0
 //#define MODE_SUVID 1
@@ -62,6 +62,7 @@ const uint8_t TRIAC_COOL_PIN = EX_PIN0;
 
 #define NOSERIAL
 #define NOBLED
+
 uint8_t  tkube[] = { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 };
 uint8_t  t1[] = { 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 };
 uint8_t  t2[] = { 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61 };
@@ -70,8 +71,6 @@ uint8_t  t4[] = { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 };
 uint8_t  t5[] = { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 };
 
 Config conf;
-
-
 
 //uint8_t mode;//Режим работы устройства в данный момент
 
@@ -85,7 +84,7 @@ DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
 //Beeper beeper(BEEPER_PIN);
 Encoder encoder;
-//Heater heater;
+Heater heater;
 
 Hardware hard;
 Cooler cool(&hard);
@@ -96,15 +95,15 @@ void setup() {
 
 	hard.setConfig(&conf);
 	hard.setDisplay(&disp);
-	//hard.setHeater(&heater);
+	hard.setHeater(&heater);
 	hard.setTKube(&kube_temp);
 	hard.setTTriak(&kube_temp);
 	hard.setHttpHelper(&httph);
 
 	hard.setExtender(&extender);
 
-	//heater.setExtender(&extender);
-	//heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
+	heater.setExtender(&extender);
+	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
@@ -123,7 +122,7 @@ void setup() {
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
 	encoder.setHandler(md);
 	
-	//heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
+	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 
 #ifdef _SERIAL
@@ -136,7 +135,7 @@ void setup() {
 }
 
 void nulAC() {
-//	heater.processHeater();
+	heater.processHeater();
 }
 
 void A() {
@@ -156,16 +155,12 @@ void loop() {
 	encoder.process(mls);
 	cool.process(mls);
 	md->drawImm();
-
 	
-
 	if (scrLoop + 1000 - mls < 0) {
 		kube_temp.process(mls);
 		md->draw();
 		scrLoop = millis();
 	}
-
-	
 }
 
 

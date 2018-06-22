@@ -10,7 +10,7 @@
 #endif
 
 #include "Extender.h"
-//#include "Heater.h"
+#include "Heater.h"
 #include "DallasTerm.h"
 #include "Display.h"
 #include "WiFiHelper.h"
@@ -24,7 +24,7 @@ class Hardware
 public:
 	Hardware();
 	~Hardware();
-	//Heater * getHeater();
+	Heater * getHeater();
 	Display * getDisplay();
 	DallasTerm * getTKube();
 	DallasTerm * getTTsarga();
@@ -35,7 +35,7 @@ public:
 	Beeper * getBeeper();
 	PinExtender * getExtender();
 
-	//void setHeater(Heater * h);
+	void setHeater(Heater * h);
 	void setDisplay(Display * d);
 	void setTKube(DallasTerm * k);
 	void setTTsarga(DallasTerm * t);
@@ -47,7 +47,7 @@ public:
 	void setExtender(PinExtender * p);
 
 private:
-	//Heater * heater;
+	Heater * heater;
 	Display * display;
 	DallasTerm * t_kube;
 	DallasTerm * t_tsarga;
