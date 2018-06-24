@@ -1,11 +1,10 @@
 
 
 //#define _SERIAL
-#include "MenuItem.h"
-#include "Menu.h"
+
 #define NOSERIAL
 #define NOLED
-
+#include <QList.h>
 #include "Cooler.h"
 #include "Mode.h"
 #include "Main.h"
@@ -57,7 +56,7 @@ const uint8_t HEAT_NUL_PIN = D10;
 const uint8_t HEAT_REL_PIN = EX_PIN15;
 const uint8_t HEAT_DRV_PIN = D9;
 
-const uint8_t TRIAC_COOL_PIN = EX_PIN0;
+const uint8_t TRIAC_COOL_PIN = EX_PIN2;
 
 #define NOSERIAL
 #define NOBLED
@@ -118,6 +117,8 @@ void setup() {
 	encoder.setHandler(md);
 	
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
+
+	
 
 	RTC.yyyy = 2018;
 	RTC.dd = 22;

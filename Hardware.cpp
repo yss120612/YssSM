@@ -24,7 +24,7 @@ HttpHelper * Hardware::getHttpHelper() { return httpHelper; }
 Config * Hardware::getConfig() { return config; }
 Beeper * Hardware::getBeeper() { return beeper; }
 PinExtender * Hardware::getExtender() { return pinExtender; }
-MD_DS3231 * Hardware::getClock() { return clock; clock->writeRAM}
+MD_DS3231 * Hardware::getClock() { return clock; }
 
 void Hardware::setHeater(Heater * h) { heater = h; }
 void Hardware::setDisplay(Display * d) { display = d; }

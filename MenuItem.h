@@ -8,6 +8,7 @@
 #else
 	#include "WProgram.h"
 #endif
+
 #include "Menu.h"
 
 class MenuItem
@@ -17,6 +18,7 @@ public:
 	~MenuItem();
 	virtual Menu * select()=0;
 	uint8_t getKind() { return kind; }
+	String getName() { return name; }
 protected:
 	String name;
 	Menu * child_menu;

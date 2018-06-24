@@ -1,7 +1,7 @@
 #include "Heater.h"
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
+//#define MIN(a,b) ((a) < (b) ? (a) : (b))
+//#define MAX(a,b) ((a) > (b) ? (a) : (b))
 
 Heater::Heater() {
 	have_relay = false;
@@ -20,7 +20,7 @@ void Heater::processHeater() {
 	}
 	
 	if (!relayIsOn()) return;
-	dummy++;
+	//dummy++;
 	cy = !cy;
 
 	if (!cy) return;
@@ -91,7 +91,8 @@ void Heater::setPower(int pw) {
 	if (pw == power) return;
 	boolean hs = heater_stopped;
 	heater_stopped = true;
-	power = MAX(MIN(pw, max_power), 0);
+	power = _max(_min(pw, max_power), 0);
+	
 	curr = max_power / 2;
 	heater_stopped = hs;
 }

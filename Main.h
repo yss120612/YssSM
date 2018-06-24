@@ -16,6 +16,7 @@ public:
 	Main(Hardware * h);
 
 	void draw();
+	void makeMenu();
 	//void drawImm();
 	void left();
 	void right();

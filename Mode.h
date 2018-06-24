@@ -15,6 +15,8 @@
 
 
 #include  "Hardware.h"
+#include  "Menu.h"
+#include "MenuItem.h"
 
 class Mode
 {
@@ -26,10 +28,12 @@ public:
 	virtual void right() = 0;
 	virtual void press() = 0;
 	virtual void long_press() = 0;
+	virtual void makeMenu() = 0;
 protected:
 	boolean drawImmed;
 	Mode * parent;
 	Hardware * hardware;
+	Menu menu;
 };
 
 #endif

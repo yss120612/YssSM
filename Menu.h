@@ -8,22 +8,28 @@
 #else
 	#include "WProgram.h"
 #endif
-extern class MenuItem;
+//#include "Mode.h"
+#include "Display.h"
+#include <QList.h>
+
+class MenuItem;
 
 class Menu
 {
 public:
-	Menu(MenuItem * mi);
+	Menu();
 	~Menu();
 	boolean isActive();
+	boolean setActive(boolean acc) { active = acc; }
+	MenuItem * current();
+	void add(MenuItem * mi);
 	void next();
 	void prev();
-	
-private:
-	MenuItem * items;
-	MenuItem * choised;
-	MenuItem * first;
-	Mode * myMode;
+	void display(Display *d);
+protected:
+	QList<MenuItem *> items;
+	int8_t curr;
+	//Mode * myMode;
 	boolean active;
 };
 

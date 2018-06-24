@@ -24,7 +24,7 @@ public:
 	void setup(uint8_t hp, int8_t rp);
 	boolean isON();
 	void setExtender(PinExtender * ex);
-	int dummy;
+	//int dummy;
 private:
 	boolean cy;
 	uint8_t heater_pin;

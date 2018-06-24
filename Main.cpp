@@ -6,25 +6,52 @@
 
 Main::Main(Hardware * h):Mode(h)
 {
+	makeMenu();
+	menu.setActive(true);
 }
 
 char tim[9];
 void Main::draw() {
+	hardware->getDisplay()->getDisplay()->clear();
+	hardware->getDisplay()->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	hardware->getClock()->readTime();
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
-	hardware->getDisplay()->getDisplay()-> clear();
-	hardware->getDisplay()->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
-	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(counter));
 	hardware->getDisplay()->getDisplay()->drawString(60, 0, tim);
-	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
-	hardware->getDisplay()->getDisplay()->drawString(20, 14, "Dummy="+String(hardware->getHeater()->dummy));
-	hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
-	hardware->getDisplay()->getDisplay()->drawString(0, 42, "Extender=" + String(hardware->getExtender()->getAll()));
-	hardware->getDisplay()->getDisplay()->display();
 
-	
+	if (menu.isActive()) {
+		menu.display(hardware->getDisplay());
+	}
+	else {
+		
+		//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(counter));
+
+		hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
+		//hardware->getDisplay()->getDisplay()->drawString(20, 14, "Dummy="+String(hardware->getHeater()->dummy));
+		hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
+		hardware->getDisplay()->getDisplay()->drawString(0, 42, "Extender=" + String(hardware->getExtender()->getAll()));
+		
+
+	}
+	hardware->getDisplay()->getDisplay()->display();
 }
 
+
+void Main::makeMenu()
+{
+	
+	menu.add(new MenuSubmenu("Item1", NULL));
+	menu.add(new MenuSubmenu("Item2", NULL));
+	menu.add(new MenuSubmenu("Item3", NULL));
+	menu.add(new MenuSubmenu("Item4", NULL));
+	menu.add(new MenuSubmenu("Item5", NULL));
+	menu.add(new MenuSubmenu("Item6", NULL));
+	menu.add(new MenuSubmenu("Item7", NULL));
+	menu.add(new MenuSubmenu("Item8", NULL));
+	menu.add(new MenuSubmenu("Item9", NULL));
+	
+
+
+}
 //void Main::drawImm() {
 //	if (!drawImmed) return;
 //	draw();
@@ -35,7 +62,14 @@ void Main::left() {
 #ifdef _SERIAL
 	Serial.println("left in main");
 #endif
-	hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
+	if (menu.isActive())
+	{
+		menu.prev();
+	}
+	else
+	{
+		hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
+	}
 	counter--;
 	drawImmed = true;
 }
@@ -43,10 +77,18 @@ void Main::right() {
 #ifdef _SERIAL
 	Serial.println("right in main");
 #endif
-	hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
+	if (menu.isActive())
+	{
+		menu.next();
+	}
+	else {
+
+		hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
+	}
 	counter++;
 	drawImmed = true;
 }
+
 void Main::press() {
 #ifdef _SERIAL
 	Serial.println("press in main");
