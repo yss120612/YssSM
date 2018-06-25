@@ -12,6 +12,7 @@ Main::Main(Hardware * h):Mode(h)
 
 char tim[9];
 void Main::draw() {
+	hardware->getDisplay()->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
 	hardware->getDisplay()->getDisplay()->clear();
 	hardware->getDisplay()->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	hardware->getClock()->readTime();
@@ -39,6 +40,7 @@ void Main::draw() {
 void Main::makeMenu()
 {
 	
+	menu.add(new MenuCommand("Item0",3));
 	menu.add(new MenuSubmenu("Item1", NULL));
 	menu.add(new MenuSubmenu("Item2", NULL));
 	menu.add(new MenuSubmenu("Item3", NULL));
@@ -48,10 +50,9 @@ void Main::makeMenu()
 	menu.add(new MenuSubmenu("Item7", NULL));
 	menu.add(new MenuSubmenu("Item8", NULL));
 	menu.add(new MenuSubmenu("Item9", NULL));
-	
-
-
 }
+
+
 //void Main::drawImm() {
 //	if (!drawImmed) return;
 //	draw();
@@ -93,14 +94,19 @@ void Main::press() {
 #ifdef _SERIAL
 	Serial.println("press in main");
 #endif
-	if (!hardware->getHeater()->isON()) {
+	/*if (!hardware->getHeater()->isON()) {
 		hardware->getHeater()->start();
 	}	else {
 		hardware->getHeater()->stop();
-	}
+	}*/
 	//hardware->getBeeper()->beep(1000, 500);
 	counter = 100;
 	drawImmed = true;
+	if (menu.isActive() && menu.current()->getKind() == 1) {
+		
+		command(((MenuCommand *)(menu.current()))->getId());
+
+	}
 	//digitalWrite(D6, !digitalRead(D6));
 	//digitalWrite(D7, !digitalRead(D7));
 	//digitalWrite(D8, !digitalRead(D8));
@@ -119,5 +125,17 @@ void Main::long_press() {
 	Serial.println("long_press in main");
 #endif
 	counter = 0;
+	drawImmed = true;
+}
+
+void Main::command(uint8_t id)
+{
+	if (id != 3) return;
+	if (!hardware->getHeater()->isON()) {
+		hardware->getHeater()->start();
+	}
+	else {
+		hardware->getHeater()->stop();
+	}
 	drawImmed = true;
 }

@@ -17,11 +17,11 @@ public:
 
 	void draw();
 	void makeMenu();
-	//void drawImm();
 	void left();
 	void right();
 	void press();
 	void long_press();
+	void command(uint8_t id);
 private:
 	int counter;
 };
