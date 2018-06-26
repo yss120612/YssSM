@@ -40,21 +40,16 @@ MenuSubmenu::~MenuSubmenu()
 
 MenuParameter::MenuParameter(String nm, int i) :MenuItem(nm)
 {
-	current = sm;
 	id = i;
-	kind = 3;
 }
 
 
 
-MenuIParameter::MenuIParameter(String nm,int i, int sm) :MenuItem(nm)
+MenuIParameter::MenuIParameter(String nm,int i, int sm) : MenuParameter(nm,i)
 {
 	current = sm;
-	id = i;
 	kind = 3;
+	step = 1;
 }
 
-Menu * MenuIParameter::select()
-{
-	return parent;
-}
+

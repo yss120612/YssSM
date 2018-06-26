@@ -53,15 +53,10 @@ protected:
 class MenuParameter : public MenuItem {
 public:
 	MenuParameter(String na, int id);
-	Menu * select();
 	void setParent(Menu * m) { parent = m; }
 	Menu * getParent() { return parent; }
-	int getCurrent() { return current; }
-	void setCurrent(int c) { current = c; }
 	uint8_t getId() { return id; }
-
 protected:
-	int current;
 	Menu * parent;
 	uint8_t id;
 };
@@ -71,17 +66,12 @@ protected:
 class MenuIParameter : public MenuParameter {
 public:
 	MenuIParameter(String na, int id, int sm);
-	Menu * select();
-	void setParent(Menu * m) { parent = m; }
-	Menu * getParent(){ return parent; }
+	Menu * select() { return parent; }
 	int getCurrent() { return current; }
 	void setCurrent(int c) { current = c; }
-	uint8_t getId() { return id; }
-
 protected:
 	int current;
-	Menu * parent;
-	uint8_t id;
+	int step;
 };
 
 

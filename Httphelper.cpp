@@ -41,7 +41,7 @@ namespace web_handlers {
 		if (SPIFFS.exists(path)) {
 
 			File file = SPIFFS.open(path, "r");
-			if (server->hasArg)
+			//if (server->hasArg())
 				if (server->hasArg("download"))
 					server->sendHeader("Content-Disposition", " attachment;");
 			if (server->uri().indexOf("nocache") < 0)
@@ -93,17 +93,17 @@ namespace web_handlers {
 		//<script type = "text/javascript" src = "/dygraph.min.js">< / script>
 		resp += "</head>\n<body>\n";
 		resp += "<h2>Прошивка и веб сервер</h2>";
-			resp += "<form method = \"POST\" action = \" / update ? cmd = 0\" enctype = \"multipart / form - data\">";
+			resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">";
 				resp += "<div class = \"btn - group\">";
 				resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">";
-				resp += "<input type = \"submit\" class = \"btn btn - default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
+				resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
 				resp += "</div>";
 			resp += "</form>";
 
-			resp += "<form method = \"POST\" action = \" / update ? cmd = 100\" enctype = \"multipart / form - data\">";
-			resp += "<div class = \"btn - group\">";
+			resp += "<form method = \"POST\" action = \"/update?cmd=100\" enctype = \"multipart/form-data\">";
+			resp += "<div class = \"btn-group\">";
 			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">";
-			resp += "<input type = \"submit\" class = \"btn btn - default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
+			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
 			resp += "</div>";
 			resp += "</form>";
 		resp += "</body></html>\n";

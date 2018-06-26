@@ -12,10 +12,10 @@
 #include "Display.h"
 #include <QList.h>
 
-const int8_t DISP_LINES = 4;
-const int8_t DELTA_Y = 12;
-const int8_t SHIFT_X = 2;
-const int8_t SHIFT_Y = 16;
+const int8_t DISP_LINES = 3;
+const int8_t DELTA_Y = 15;
+const int8_t SHIFT_X = 9;
+const int8_t SHIFT_Y = 15;
 
 class MenuItem;
 
