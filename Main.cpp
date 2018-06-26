@@ -48,9 +48,6 @@ void Main::makeMenu()
 	menu.add(new MenuSubmenu("Item7", NULL));
 	menu.add(new MenuSubmenu("Item8", NULL));
 	menu.add(new MenuSubmenu("Item9", NULL));
-	
-
-
 }
 //void Main::drawImm() {
 //	if (!drawImmed) return;
