@@ -2,6 +2,7 @@
 
 //#define _SERIAL
 
+#include <DS1302.h>
 #define NOSERIAL
 #define NOLED
 #include <QList.h>
@@ -114,12 +115,14 @@ void setup() {
 
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
+
+
+
 	encoder.setHandler(md);
+	//httph.setMode(md);
 	
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
-
 	
-
 	RTC.yyyy = 2018;
 	RTC.dd = 22;
 	RTC.mm = 6;

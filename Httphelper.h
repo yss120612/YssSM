@@ -23,12 +23,18 @@ public:
 
 	void clientHandle();
 	void setup();
+
+	/*void setMode(Mode * m);
+	Mode * getMode();*/
+
 private:
 	Config * conf;
 	ESP8266WebServer * server;
 	ESP8266HTTPUpdateServer * httpUpdater;
-	std::function<void(void)>  root;
-	std::function<void(void)>  page1;
+	//Mode * currentMode;
+	//std::function<void(void)>  root;
+	//std::function<void(void)>  page1;
+	//boolean handleFileRead(String path);
 };
 
 #endif

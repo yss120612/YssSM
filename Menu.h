@@ -31,11 +31,16 @@ public:
 	void next();
 	void prev();
 	void display(Display *d);
+	void setParent(Menu *m);
+	Menu * getParent();
+	void setEditParams(uint8_t ep);
+	uint8_t getEditParams();
 protected:
 	QList<MenuItem *> items;
 	int8_t curr;
-	//Mode * myMode;
+	Menu * parent;
 	boolean active;
+	uint8_t edit_param;
 };
 
 

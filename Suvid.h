@@ -45,6 +45,7 @@ private:
 	void right();
 	void press();
 	void long_press();
+	void makeMenu();
 public:
 	Suvid(Hardware *h);
 	void start(int8_t tm, uint16_t min);

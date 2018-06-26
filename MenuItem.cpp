@@ -32,3 +32,29 @@ Menu * MenuSubmenu::select()
 {
 	return submenu;
 }
+
+MenuSubmenu::~MenuSubmenu()
+{
+	delete submenu;
+}
+
+MenuParameter::MenuParameter(String nm, int i) :MenuItem(nm)
+{
+	current = sm;
+	id = i;
+	kind = 3;
+}
+
+
+
+MenuIParameter::MenuIParameter(String nm,int i, int sm) :MenuItem(nm)
+{
+	current = sm;
+	id = i;
+	kind = 3;
+}
+
+Menu * MenuIParameter::select()
+{
+	return parent;
+}

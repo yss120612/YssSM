@@ -6,10 +6,20 @@
 Menu::Menu()
 {
 	curr = -1;
+	edit_param = 0;
 }
 
 Menu::~Menu()
 {
+}
+
+void Menu::setEditParams(uint8_t ep) {
+	edit_param = ep;
+}
+
+uint8_t Menu::getEditParams()
+{
+	return edit_param;
 }
 
 boolean Menu::isActive()
@@ -61,10 +71,7 @@ void Menu::prev()
 		curr = -1;
 	}
 }
-const int8_t DISP_LINES = 3;
-const int8_t DELTA_Y = 15;
-const int8_t SHIFT_X = 9;
-const int8_t SHIFT_Y = DELTA_Y;
+
 void Menu::display(Display *d)
 {
 	if (curr < 0) return;
@@ -86,9 +93,19 @@ void Menu::display(Display *d)
 	d->getDisplay()->setTextAlignment(TEXT_ALIGN_RIGHT);
 	if (first > 0)
 	{
-		d->getDisplay()->drawString(d->getDisplay()->getWidth() - SHIFT_X , SHIFT_Y, "/\\");
+		d->getDisplay()->drawString(d->getDisplay()->getWidth() , SHIFT_Y, "/\\");
 	}
 	if (first + DISP_LINES < items.size()) {
-		d->getDisplay()->drawString(d->getDisplay()->getWidth()-SHIFT_X, SHIFT_Y+DELTA_Y*(DISP_LINES-1), "\\/");
+		d->getDisplay()->drawString(d->getDisplay()->getWidth(), SHIFT_Y+DELTA_Y*(DISP_LINES-1), "\\/");
 	}
+}
+
+void Menu::setParent(Menu * m)
+{
+	parent = m;
+}
+
+Menu * Menu::getParent()
+{
+	return parent;
 }

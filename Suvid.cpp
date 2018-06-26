@@ -13,16 +13,29 @@ void Suvid::draw() {
 
 }
 void Suvid::left() {
+#ifdef _SERIAL
 	Serial.println("left");
+#endif // _SERIAL
 }
 void Suvid::right() {
+#ifdef _SERIAL
 	Serial.println("right");
+#endif // _SERIAL
+
 }
 void Suvid::press() {
+#ifdef _SERIAL
 	Serial.println("press");
+#endif // _SERIAL
 }
 void Suvid::long_press() {
+#ifdef _SERIAL
 	Serial.println("long_press");
+#endif // _SERIAL
+}
+
+void Suvid::makeMenu()
+{
 }
 
 

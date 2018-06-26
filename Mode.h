@@ -30,11 +30,12 @@ public:
 	virtual void long_press() = 0;
 	virtual void makeMenu() = 0;
 	virtual void command(uint8_t id) = 0;
+	virtual void params(uint8_t id) = 0;
 protected:
 	boolean drawImmed;
 	Mode * parent;
 	Hardware * hardware;
-	Menu menu;
+	Menu * menu;
 };
 
 #endif

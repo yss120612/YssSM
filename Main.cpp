@@ -7,7 +7,6 @@
 Main::Main(Hardware * h):Mode(h)
 {
 	makeMenu();
-	menu.setActive(true);
 }
 
 char tim[9];
@@ -19,8 +18,8 @@ void Main::draw() {
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
 	hardware->getDisplay()->getDisplay()->drawString(60, 0, tim);
 
-	if (menu.isActive()) {
-		menu.display(hardware->getDisplay());
+	if (menu->isActive()) {
+		menu->display(hardware->getDisplay());
 	}
 	else {
 		
@@ -39,54 +38,55 @@ void Main::draw() {
 
 void Main::makeMenu()
 {
-	
-	menu.add(new MenuCommand("Item0",3));
-	menu.add(new MenuSubmenu("Item1", NULL));
-	menu.add(new MenuSubmenu("Item2", NULL));
-	menu.add(new MenuSubmenu("Item3", NULL));
-	menu.add(new MenuSubmenu("Item4", NULL));
-	menu.add(new MenuSubmenu("Item5", NULL));
-	menu.add(new MenuSubmenu("Item6", NULL));
-	menu.add(new MenuSubmenu("Item7", NULL));
-	menu.add(new MenuSubmenu("Item8", NULL));
-	menu.add(new MenuSubmenu("Item9", NULL));
+	menu = new Menu();
+	menu->setActive(true);
+	menu->add(new MenuCommand("Suvid",1));
+	menu->add(new MenuCommand("Brewing",2));
+	menu->add(new MenuCommand("Distill",3));
+	menu->add(new MenuCommand("Rectify",4));
+		Menu * setup = new Menu();
+		setup->setParent(menu);
+		setup->setActive(true);
+		setup->add(new MenuCommand("Date/Time", 11));
+		setup->add(new MenuCommand("T Cube", 12));
+			Menu * triak = new Menu();
+			triak->setParent(setup);
+			triak->setActive(true);
+			triak->add(new MenuCommand("Temperature", 21));
+			triak->add(new MenuCommand("Gisteresis", 22));
+		setup->add(new MenuSubmenu("Triak", triak));
+	menu->add(new MenuSubmenu("Setup", setup));
 }
 
-
-//void Main::drawImm() {
-//	if (!drawImmed) return;
-//	draw();
-//	drawImmed = false;
-//}
 
 void Main::left() {
 #ifdef _SERIAL
 	Serial.println("left in main");
 #endif
-	if (menu.isActive())
+	if (menu->isActive())
 	{
-		menu.prev();
+		menu->prev();
 	}
 	else
 	{
-		hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
+		//hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
 	}
-	counter--;
+	//counter--;
 	drawImmed = true;
 }
 void Main::right() {
 #ifdef _SERIAL
 	Serial.println("right in main");
 #endif
-	if (menu.isActive())
+	if (menu->isActive())
 	{
-		menu.next();
+		menu->next();
 	}
 	else {
 
-		hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
+		//hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
 	}
-	counter++;
+	//counter++;
 	drawImmed = true;
 }
 
@@ -102,10 +102,19 @@ void Main::press() {
 	//hardware->getBeeper()->beep(1000, 500);
 	counter = 100;
 	drawImmed = true;
-	if (menu.isActive() && menu.current()->getKind() == 1) {
-		
-		command(((MenuCommand *)(menu.current()))->getId());
 
+	if (menu->isActive())
+	{
+		if (menu->current()->getKind() == 1) {
+			command(((MenuCommand *)(menu->current()))->getId());
+		}
+		else if (menu->current()->getKind() == 2) {
+			menu = menu->current()->select();
+		}
+		else if (menu->current()->getKind() == 3) {
+			menu->setActive(false);
+			params(((MenuIParameter *)(menu->current()))->getId());
+		}
 	}
 	//digitalWrite(D6, !digitalRead(D6));
 	//digitalWrite(D7, !digitalRead(D7));
@@ -125,17 +134,41 @@ void Main::long_press() {
 	Serial.println("long_press in main");
 #endif
 	counter = 0;
+	if (menu->isActive())
+	{
+		if (menu->getParent() != NULL) menu = menu->getParent();
+	}
 	drawImmed = true;
 }
 
 void Main::command(uint8_t id)
 {
-	if (id != 3) return;
+
+
+	/*if (id != 3) return;
 	if (!hardware->getHeater()->isON()) {
 		hardware->getHeater()->start();
 	}
 	else {
 		hardware->getHeater()->stop();
-	}
+	}*/
+
 	drawImmed = true;
 }
+
+
+void Main::params(uint8_t id)
+{
+	menu->setEditParams(id);
+
+	/*if (id != 3) return;
+	if (!hardware->getHeater()->isON()) {
+	hardware->getHeater()->start();
+	}
+	else {
+	hardware->getHeater()->stop();
+	}*/
+
+	drawImmed = true;
+}
+

@@ -12,6 +12,7 @@
 #include "Menu.h"
 
 //class Mode;
+//typedef void(Mode::*tCommand)();
 
 class MenuItem
 {
@@ -23,12 +24,9 @@ public:
 	String getName() { return name; }
 protected:
 	String name;
-	Menu * child_menu;
 	uint8_t kind;
 	
 };
-
-//typedef void(Mode::*tCommand)();
 
 class MenuCommand : public MenuItem
 {
@@ -45,12 +43,46 @@ class MenuSubmenu : public MenuItem
 {
 public:
 	MenuSubmenu(String na, Menu * sm);
+	~MenuSubmenu();
 	Menu * select();
 protected:
 	Menu * submenu;
-
 };
 
+
+class MenuParameter : public MenuItem {
+public:
+	MenuParameter(String na, int id);
+	Menu * select();
+	void setParent(Menu * m) { parent = m; }
+	Menu * getParent() { return parent; }
+	int getCurrent() { return current; }
+	void setCurrent(int c) { current = c; }
+	uint8_t getId() { return id; }
+
+protected:
+	int current;
+	Menu * parent;
+	uint8_t id;
+};
+
+
+
+class MenuIParameter : public MenuParameter {
+public:
+	MenuIParameter(String na, int id, int sm);
+	Menu * select();
+	void setParent(Menu * m) { parent = m; }
+	Menu * getParent(){ return parent; }
+	int getCurrent() { return current; }
+	void setCurrent(int c) { current = c; }
+	uint8_t getId() { return id; }
+
+protected:
+	int current;
+	Menu * parent;
+	uint8_t id;
+};
 
 
 #endif
