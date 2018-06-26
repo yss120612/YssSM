@@ -20,15 +20,15 @@ void Display::setup()
 }
 
 void Display::draw1(String s) {
-	display->clear();
+	//display->clear();
 	display->drawString(0, 0, s);
-	display->display();
+	//display->display();
 }
 
 void Display::drawXY(uint8_t x, uint8_t y, String s) {
-	display->clear();
+	//display->clear();
 	display->drawString(x, y, s);
-	display->display();
+	//display->display();
 }
 
 SSD1306Wire * Display::getDisplay() {

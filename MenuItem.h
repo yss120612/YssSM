@@ -11,6 +11,8 @@
 
 #include "Menu.h"
 
+//class Mode;
+
 class MenuItem
 {
 public:
@@ -26,13 +28,17 @@ protected:
 	
 };
 
+//typedef void(Mode::*tCommand)();
+
 class MenuCommand : public MenuItem
 {
 public:
-	MenuCommand(String na, void(*func) ());
+	MenuCommand(String na, uint8_t i);
+	uint8_t getId() { return id; }
 	Menu * select();
 protected:
-	void(*selectFunc)();
+	//tCommand selectFunc;
+	uint8_t id;
 };
 
 class MenuSubmenu : public MenuItem

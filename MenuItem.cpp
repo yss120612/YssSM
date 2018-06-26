@@ -10,15 +10,15 @@ MenuItem::~MenuItem()
 {
 }
 
-MenuCommand::MenuCommand(String nm, void(*func) ()):MenuItem(nm)
+MenuCommand::MenuCommand(String nm, uint8_t i):MenuItem(nm)
 {
-	selectFunc = func;
+	id = i;
 	kind = 1;
 }
 
 Menu * MenuCommand::select()
 {
-	if (selectFunc) selectFunc();
+	//if (selectFunc)  selectFunc();
 	return NULL;
 }
 
