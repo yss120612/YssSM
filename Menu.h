@@ -18,6 +18,7 @@ const int8_t SHIFT_X = 9;
 const int8_t SHIFT_Y = 15;
 
 class MenuItem;
+class MenuParameter;
 
 class Menu
 {
@@ -33,14 +34,14 @@ public:
 	void display(Display *d);
 	void setParent(Menu *m);
 	Menu * getParent();
-	void setEditParams(uint8_t ep);
-	uint8_t getEditParams();
+	void setEditParams(MenuParameter * ep);
+	MenuParameter * getEditParams();
 protected:
 	QList<MenuItem *> items;
 	int8_t curr;
 	Menu * parent;
 	boolean active;
-	uint8_t edit_param;
+	MenuParameter * edit_param;
 };
 
 

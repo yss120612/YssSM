@@ -1,29 +1,30 @@
 
 
 //#define _SERIAL
-
-#include <DS1302.h>
 #define NOSERIAL
 #define NOLED
+
+
 #include <QList.h>
-#include "Cooler.h"
-#include "Mode.h"
-#include "Main.h"
-#include "Encoder.h"
-
-#include "Suvid.h"
-
-//#include "Kran.h"
-
 #include <OneWire.h>
 #include <Wire.h>  
 
 
-//#define MODE_MAIN 0
-//#define MODE_SUVID 1
-//#define MODE_DISCIL 2
-//#define MODE_RECTIFY 3
-//#define MODE_SETUP 99
+
+//#include "Hardware.h"
+#include "Mode.h"
+
+
+
+#include "Encoder.h"
+
+#include "Main.h"
+#include "Suvid.h"
+
+
+
+
+
 
 const uint8_t EX_PIN0 = 100;
 const uint8_t EX_PIN1 = 101;
@@ -83,7 +84,7 @@ Encoder encoder;
 Heater heater;
 
 Hardware hard;
-Cooler cool(&hard);
+Cooler cool;
 Mode * md = new Main(&hard);
 
 void setup() {
@@ -91,15 +92,17 @@ void setup() {
 
 	hard.setConfig(&conf);
 	hard.setDisplay(&disp);
-	hard.setHeater(&heater);
+	
 	hard.setTKube(&kube_temp);
 	hard.setTTriak(&kube_temp);
 	hard.setHttpHelper(&httph);
 	hard.setExtender(&extender);
+	hard.setHeater(&heater);//после Экстендер
+	hard.setTCooler(&cool);//после Экстендер
 	hard.setClock(&RTC);
-
-	heater.setExtender(&extender);
-	heater.setup(HEAT_DRV_PIN, HEAT_REL_PIN);
+	
+	
+	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
@@ -107,10 +110,9 @@ void setup() {
 	wifih.setup();
 	httph.setup();
 	disp.setup();
-	//beeper.setup();
-
-	cool.setup(TRIAC_COOL_PIN);
-	cool.setTemperature(30, 1);
+	
+	cool.setup(&hard, TRIAC_COOL_PIN);
+	cool.setParams(30, 1);
 	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);
 
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
@@ -157,18 +159,21 @@ void Button() {
 
 
 long mls;
+
 void loop() {
 	mls = millis();
 	httph.clientHandle();
 	encoder.process(mls);
-	cool.process(mls);
+	
 	md->drawImm();
 
 	
 
 	if (scrLoop + 1000 - mls < 0) {
-		kube_temp.process(mls);
 		md->draw();
+		kube_temp.process(mls);
+		cool.process(mls);
+		
 		scrLoop = millis();
 	}
 

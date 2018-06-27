@@ -1,17 +1,19 @@
 #include "Cooler.h"
 
-Cooler::Cooler(Hardware * hr)
+Cooler::Cooler()
 {
-	hard = hr;
+	
 }
 
 Cooler::~Cooler()
 {
 }
 
-void Cooler::setup( uint8_t pin)
+
+void Cooler::setup(Hardware * h,uint8_t pin)
 {
 	isON = false;
+	hard = h;
 	cooler_pin = pin;
 }
 
@@ -22,14 +24,14 @@ void Cooler::run(boolean swc)
 }
 
 
-void Cooler::setTemperature(float t1, float gis)
+void Cooler::setParams(float t1, float gis)
 {
 	borderT = t1;
 	gesteresis = gis;
 }
 
 
-void Cooler::process(uint16_t ms) 
+void Cooler::process(long ms) 
 {
 	if (hard->getTTriak() == NULL) return;
 	float tm=hard->getTTriak()->getTemp();

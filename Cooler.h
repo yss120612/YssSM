@@ -14,12 +14,14 @@
 class Cooler
 {
 public:
-	Cooler(Hardware * hr);
+	Cooler();
 	~Cooler();
-	void setup(uint8_t pin);
+	void setup(Hardware * h,uint8_t pin);
 	void run(boolean swc);
-	void setTemperature(float t1, float gis);
-	void process(uint16_t ms);
+	void setParams(float t1, float gis);
+	float getTemperature() { return borderT; }
+	float getGesteresis() { return gesteresis; }
+	void process(long ms);
 private:
 	float borderT;
 	float gesteresis;

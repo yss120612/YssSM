@@ -9,6 +9,8 @@
 #include "WProgram.h"
 #endif
 
+#include <DS1302.h>
+#include <MD_DS3231.h>
 #include "Extender.h"
 #include "DallasTerm.h"
 #include "Display.h"
@@ -16,8 +18,11 @@
 #include "Httphelper.h"
 #include "Config.h"
 #include "Beeper.h"
-#include "Heater.h"
-#include <MD_DS3231.h>
+//#include "Cooler.h"
+
+class Cooler;
+class Heater;
+
 
 class Hardware
 {
@@ -35,6 +40,8 @@ public:
 	Beeper * getBeeper();
 	PinExtender * getExtender();
 	MD_DS3231 * getClock();
+	Cooler * getTCooler();
+	SSD1306Wire * getDisp();
 
 	void setHeater(Heater * h);
 	void setDisplay(Display * d);
@@ -47,6 +54,9 @@ public:
 	void setBeeper(Beeper * b);
 	void setExtender(PinExtender * p);
 	void setClock(MD_DS3231 * cl);
+	void setTCooler(Cooler * cl);
+
+
 
 private:
 	Heater * heater;
@@ -60,6 +70,7 @@ private:
 	Config * config;
 	PinExtender * pinExtender;
 	MD_DS3231 * clock;
+	Cooler * tcooler;
 };
 
 
