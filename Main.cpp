@@ -2,7 +2,7 @@
 
 Main::Main(Hardware * h):Mode(h)
 {
-	makeMenu();
+	//makeMenu();
 }
 
 char tim[9];
@@ -14,7 +14,7 @@ void Main::draw() {
 	hardware->getClock()->readTime();
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
 	hardware->getDisplay()->getDisplay()->drawString(60, 0, tim);
-
+	
 	if (menu->isActive()) {
 		menu->display(hardware->getDisplay());
 	}
@@ -124,8 +124,16 @@ void Main::press() {
 			menu->setEditParams((MenuParameter *)(menu->current()));
 		}
 	}
-	else if ((menu->current())->) {
-
+	else if (menu->getEditParams()!=NULL) {
+		switch (menu->getEditParams()->getId())
+		{
+			case 21:
+				hardware->getTCooler()->setParams(((MenuIParameter *)menu->getEditParams())->getCurrent(), 1);
+				break;
+			case 22:
+				break;
+		}
+		menu->setActive(true);
 	}
 	//digitalWrite(D6, !digitalRead(D6));
 	//digitalWrite(D7, !digitalRead(D7));
