@@ -11,9 +11,6 @@
 
 #include "Menu.h"
 
-//class Mode;
-//typedef void(Mode::*tCommand)();
-
 class MenuItem
 {
 public:
@@ -22,20 +19,10 @@ public:
 	virtual Menu * select()=0;
 	uint8_t getKind() { return kind; }
 	String getName() { return name; }
+	uint8_t getId() { return id; }
 protected:
 	String name;
 	uint8_t kind;
-	
-};
-
-class MenuCommand : public MenuItem
-{
-public:
-	MenuCommand(String na, uint8_t i);
-	uint8_t getId() { return id; }
-	Menu * select();
-protected:
-	//tCommand selectFunc;
 	uint8_t id;
 };
 
@@ -49,31 +36,45 @@ protected:
 	Menu * submenu;
 };
 
+class MenuCommand : public MenuItem
+{
+public:
+	MenuCommand(String na, uint8_t i);
+	Menu * select();
+protected:
+
+};
 
 class MenuParameter : public MenuItem {
 public:
-	MenuParameter(String na, int id);
+	MenuParameter(String na, Menu * par, int id);
 	void setParent(Menu * m) { parent = m; }
 	Menu * getParent() { return parent; }
-	uint8_t getId() { return id; }
+	Menu * select() { return parent; }
+	virtual String getStCurr() = 0;
+	virtual void up() = 0;
+	virtual void down() = 0;
 protected:
 	Menu * parent;
-	uint8_t id;
 };
-
-
 
 class MenuIParameter : public MenuParameter {
 public:
-	MenuIParameter(String na, int id, int sm);
-	Menu * select() { return parent; }
-	int getCurrent() { return current; }
-	void setCurrent(int c) { current = c; }
+	MenuIParameter(String na, Menu * par, int id, int sm);
+	int getCurrent() { return current; };
+	void setup(int st, int m_i, int m_a) { step = st; ma = m_a; mi = m_i; }
+	//void setCurrent(int c) { current = c; }
+	//int getStep() { return step; }
+	//void setStep(int s) { step = s; }
+	String getStCurr() { return String(current); };
+	void up() { current + step>ma?ma:current+=step; }
+	void down() { current - step>mi ? mi : current -= step; }
 protected:
 	int current;
 	int step;
+	int mi;
+	int ma;
 };
-
 
 #endif
 

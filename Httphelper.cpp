@@ -1,4 +1,4 @@
-#include "Httphelper.h"
+п»ї#include "Httphelper.h"
 #include <FS.h>
 namespace web_handlers {
 	ESP8266WebServer * server;
@@ -84,26 +84,26 @@ namespace web_handlers {
 			return server->requestAuthentication();
 		String resp = "<html>\n<head>\n";
 			resp += "<meta charset = \"utf-8\">\n";
-			resp += "<title>YssSM прошивка</title>\n";
-			resp += "<meta name = \"description\" content = \"Версия 0.1\">\n";
+			resp += "<title>YssSM РїСЂРѕС€РёРІРєР°</title>\n";
+			resp += "<meta name = \"description\" content = \"Р’РµСЂСЃРёСЏ 0.1\">\n";
 			resp += "<meta name = \"author\" content = \"Yss\">\n";
 			resp += "<link href = \"bootstrap.min.css\" rel = \"stylesheet\">\n";
 			resp += "<script type = \"text/javascript\" src = \"jquery.min.js\"></script>\n";
 			resp += "<script type = \"text/javascript\" src = \"bootstrap.min.js\"></script>\n";
 		//<script type = "text/javascript" src = "/dygraph.min.js">< / script>
 		resp += "</head>\n<body>\n";
-		resp += "<h2>Прошивка и веб сервер</h2>";
+		resp += "<h2>РџСЂРѕС€РёРІРєР° Рё РІРµР± СЃРµСЂРІРµСЂ</h2>";
 			resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">";
 				resp += "<div class = \"btn - group\">";
 				resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">";
-				resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
+				resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"РџСЂРѕС€РёРІРєР°\" onclick = \"this.value = 'РџРѕРґРѕР¶РґРёС‚Рµ...';\" style = \"height: 38px; \">";
 				resp += "</div>";
 			resp += "</form>";
 
 			resp += "<form method = \"POST\" action = \"/update?cmd=100\" enctype = \"multipart/form-data\">";
 			resp += "<div class = \"btn-group\">";
 			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">";
-			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
+			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"РЎРµСЂРІРµСЂ\" onclick = \"this.value = 'РџРѕРґРѕР¶РґРёС‚Рµ...';\" style = \"height: 38px; \">";
 			resp += "</div>";
 			resp += "</form>";
 		resp += "</body></html>\n";

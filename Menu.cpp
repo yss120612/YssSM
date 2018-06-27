@@ -6,18 +6,21 @@
 Menu::Menu()
 {
 	curr = -1;
-	edit_param = 0;
+	edit_param = NULL;
 }
 
 Menu::~Menu()
 {
+	for (uint8_t i = 0; i < items.size(); i++) {
+		delete items.get(i);
+	}
 }
 
-void Menu::setEditParams(uint8_t ep) {
+void Menu::setEditParams(MenuParameter * ep) {
 	edit_param = ep;
 }
 
-uint8_t Menu::getEditParams()
+MenuParameter * Menu::getEditParams()
 {
 	return edit_param;
 }

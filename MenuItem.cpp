@@ -26,6 +26,7 @@ MenuSubmenu::MenuSubmenu(String nm, Menu * sub) :MenuItem(nm)
 {
 	submenu = sub;
 	kind = 2;
+	id = 0;
 }
 
 Menu * MenuSubmenu::select()
@@ -38,14 +39,14 @@ MenuSubmenu::~MenuSubmenu()
 	delete submenu;
 }
 
-MenuParameter::MenuParameter(String nm, int i) :MenuItem(nm)
+MenuParameter::MenuParameter(String nm, Menu * par, int i) :MenuItem(nm)
 {
 	id = i;
+	parent = par;
 }
 
 
-
-MenuIParameter::MenuIParameter(String nm,int i, int sm) : MenuParameter(nm,i)
+MenuIParameter::MenuIParameter(String nm, Menu * par, int i, int sm) : MenuParameter(nm,par,i)
 {
 	current = sm;
 	kind = 3;

@@ -11,10 +11,11 @@
 #else
 	#include "WProgram.h"
 #endif
-
-
-
 #include  "Hardware.h"
+
+#include "Heater.h"
+#include "Cooler.h"
+
 #include  "Menu.h"
 #include  "MenuItem.h"
 
