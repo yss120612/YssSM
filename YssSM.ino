@@ -1,6 +1,6 @@
 
 
-//#define _SERIAL
+#define _SERIAL
 #define NOSERIAL
 #define NOLED
 
