@@ -99,8 +99,8 @@ void setup() {
 	
 	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
 
-	conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
+	//conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
 
 	wifih.setup();

@@ -277,7 +277,6 @@
     <None Include="..\libraries\MD_DS3231\docs\search\variables_6.html">
       <Filter>src\_micro-api-readonly\libraries\MD_DS3231</Filter>
     </None>
-    <None Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266NetBIOS\library.properties" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.YssSM.vsarduino.h">
@@ -607,9 +606,6 @@
     <ClInclude Include="..\libraries\MD_DS3231\src\MD_DS3231.h">
       <Filter>src\_micro-api-readonly\libraries\MD_DS3231</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266NetBIOS\ESP8266NetBIOS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -801,9 +797,6 @@
     <ClCompile Include="..\libraries\MD_DS3231\src\MD_DS3231.cpp">
       <Filter>src\_micro-api-readonly\libraries\MD_DS3231</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266NetBIOS\ESP8266NetBIOS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\libraries\QList\keywords.txt">
@@ -830,6 +823,5 @@
     <Text Include="..\libraries\MD_DS3231\keywords.txt">
       <Filter>src\_micro-api-readonly\libraries\MD_DS3231</Filter>
     </Text>
-    <Text Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266NetBIOS\keywords.txt" />
   </ItemGroup>
 </Project>

@@ -51,30 +51,33 @@ public:
 	void setParent(Menu * m) { parent = m; }
 	Menu * getParent() { return parent; }
 	Menu * select() { return parent; }
+	
 	virtual String getStCurr() = 0;
 	virtual void up() = 0;
 	virtual void down() = 0;
+	virtual boolean next() = 0;
+	void addSubName(String s) { sub_names.push_back(s); }
 protected:
 	Menu * parent;
+	QList <String> sub_names;
+	uint8_t counter;
+	uint8_t	select_counter;
 };
 
 class MenuIParameter : public MenuParameter {
 public:
 	MenuIParameter(String na, Menu * par, int id, int sm);
 	int getCurrent() { return current; };
-	void setup(int st, int m_i, int m_a) { step = st; ma = m_a; mi = m_i; }
-	//void setCurrent(int c) { current = c; }
-	//int getStep() { return step; }
-	//void setStep(int s) { step = s; }
+	void setup(uint8_t st, int m_i, int m_a, uint8_t sc=1) { step = st; ma = m_a; mi = m_i; counter = 0; select_counter = sc; }
 	String getStCurr() { return String(current); };
 	void up() { current + step>ma?ma:current+=step; }
-	void down() { current - step>mi ? mi : current -= step; }
+	void down() { current - step<mi ? mi : current -= step; }
+	boolean next() { counter++; if (counter > select_counter) return true; return false; };
 protected:
 	int current;
-	int step;
+	uint8_t step;
 	int mi;
 	int ma;
 };
-
 #endif
 
