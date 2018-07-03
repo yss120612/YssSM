@@ -23,6 +23,7 @@ namespace web_handlers {
 		else contentType = "text/plain";
 
 		//split filepath and extension
+		
 		String prefix = path, ext = "";
 		int lastPeriod = path.lastIndexOf('.');
 		if (lastPeriod >= 0) {
@@ -60,6 +61,8 @@ namespace web_handlers {
 			file.close();
 			return true;
 		} //if SPIFFS.exists
+
+		//server->send(200, "text/plain", SPIFFS.);
 		return false;
 	} //bool handleFileRead
 
@@ -69,13 +72,28 @@ namespace web_handlers {
 		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
 			return server->requestAuthentication();
 		//server->send(200, "text/plain", "Login OK");
-		handleFileRead("/");
+		if (!handleFileRead("/")) {
+			//server->send(200, "text/plain", "NOT FOUND!!!");
+		}
 	}
+
+	void distill() {
+		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
+			return server->requestAuthentication();
+		//server->send(200, "text/plain", "Login OK");
+		if (!handleFileRead("/distillation.htm")) {
+			//server->send(200, "text/plain", "NOT FOUND!!!");
+		}
+	}
+
 
 	void page1() {
 		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
 			return server->requestAuthentication();
-		server->send(200, "text/plain", "Login OK on Page1");
+		//server->send(200, "text/plain", "Login OK on Page1");
+		if (!handleFileRead("/distillator.png")) {
+			//server->send(200, "text/plain", "NOT FOUND!!!");
+		}
 	}
 
 
@@ -116,12 +134,14 @@ HttpHelper::HttpHelper(Config *c)
 {
 	server = new ESP8266WebServer(80);
 	conf = c;
+	SPIFFS.begin();
 }
 
 HttpHelper::~HttpHelper()
 {
 	delete httpUpdater;
 	delete server;
+	SPIFFS.end();
 }
 
 //void HttpHelper::setMode(Mode * m) {
@@ -132,16 +152,16 @@ HttpHelper::~HttpHelper()
 //}
 
 void HttpHelper::setup() {
-	//ArduinoOTA.begin();
 	if (server == NULL) return;
+
 	web_handlers::conf = conf;
 	web_handlers::server = server;
-	//root = web_handlers::root;
-	//page1 = web_handlers::page1;
 
+	server->on("/distill", web_handlers::distill);
+	
 	server->on("/", web_handlers::root);
 
-	server->on("/aaa", web_handlers::page1);
+	server->on("/pict", web_handlers::page1);
 
 	server->on("/update", web_handlers::pageUpdate);
 	

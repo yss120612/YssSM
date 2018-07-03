@@ -7,14 +7,14 @@
     <meta name="description" content="Версия 0.1">
     <meta name="author" content="Yss">
     <link href="bootstrap.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript" src="/jquery.min.js"></script>
+    <script type="text/javascript" src="/bootstrap.min.js"></script>
 </head>
 <body>
 <ul class="nav nav-tabs">
     <li class="active"><a href="/">Дом</a></li>
-    <li><a href="/pageUpdate">Обновление</a></li>
-    <li><a href="/aaa">Графики</a></li>
+    <li><a href="/update">Обновление</a></li>
+    <li><a href="/pict">Графики</a></li>
 </ul>
  <div class="container-fluid">
  <div class="row">
@@ -26,40 +26,9 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div class="tabbable" id="tabs-256389">
-      <ul class="nav nav-tabs">
-        <li><a href="#panel-171121" data-toggle="tab">Дистилляция</a></li>
-        <li ><a href="#panel-886158" data-toggle="tab">РК</a></li>
-        <li><a href="#panel-993327" data-toggle="tab">Затирание</a></li>
-        <li><a href="#panel-231267" data-toggle="tab">Мощность ТЭНа</a></li>
-       </ul>
-     <div class="tab-content">
-       <div class="tab-pane" id="panel-171121">
-         <div class="embed-responsive embed-responsive-4by3">
-            <iframe class="embed-responsive-item" src="LB_distillation.htm"></iframe>
-         </div>
-        </div>
-
-        <div class="tab-pane active" id="panel-886158">
-          <div class="embed-responsive embed-responsive-4by3">
-            <iframe class="embed-responsive-item" src="LB_reflux.htm"></iframe>
-          </div>
-         </div>
-
-        <div class="tab-pane" id="panel-993327">
-          <div class="embed-responsive embed-responsive-4by3">
-            <iframe class="embed-responsive-item" src="LB_brewing.htm"></iframe>
-          </div>
-        </div>
-
-        <div class="tab-pane" id="panel-231267">
-          <div class="embed-responsive embed-responsive-4by3">
-            <iframe class="embed-responsive-item" src="LB_heater.htm"></iframe>
-          </div>
-        </div>
-       </div>
-     </div>
-    </div>
+  <button type="button" class="btn btn-primary"><a href="/distill">Дистилляция</a></button>
+  <button type="button" class="btn btn-success"><a href="/update">Update</a></button>
+  </div>
    </div>
   </div>
 
