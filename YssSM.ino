@@ -1,13 +1,13 @@
 
 
-//#define _SERIAL
+#define _SERIAL
 #define NOSERIAL
 #define NOLED
 
 
 #include <QList.h>
 #include <OneWire.h>
-#include <Wire.h>  
+//#include <Wire.h>  
 
 
 
@@ -20,11 +20,6 @@
 
 #include "Main.h"
 #include "Suvid.h"
-
-
-
-
-
 
 const uint8_t EX_PIN0 = 100;
 const uint8_t EX_PIN1 = 101;
@@ -104,7 +99,8 @@ void setup() {
 	
 	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
 
-	conf.setWiFi("Yss_GIGA","bqt3bqt3");
+	conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
 
 	wifih.setup();
@@ -164,20 +160,14 @@ void loop() {
 	mls = millis();
 	httph.clientHandle();
 	encoder.process(mls);
-	
 	md->drawImm();
-
-	
 
 	if (scrLoop + 1000 - mls < 0) {
 		md->draw();
 		kube_temp.process(mls);
 		cool.process(mls);
-		
 		scrLoop = millis();
 	}
-
-	
 }
 
 
