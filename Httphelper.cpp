@@ -155,6 +155,7 @@ void HttpHelper::setup() {
 	if (server == NULL) return;
 
 	web_handlers::conf = conf;
+
 	web_handlers::server = server;
 
 	server->on("/distill", web_handlers::distill);
@@ -164,6 +165,8 @@ void HttpHelper::setup() {
 	server->on("/pict", web_handlers::page1);
 
 	server->on("/update", web_handlers::pageUpdate);
+
+	server->serveStatic("heater.htm",FS,"/", NULL);
 	
 	server->begin();
 
