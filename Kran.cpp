@@ -101,10 +101,12 @@ void Kran::setup(PinExtender * pex, uint8_t c_pin, uint8_t o_pin, int8_t m_pin, 
 	pext->registerWrite(close_pin, LOW);
 	pext->registerWrite(open_pin, LOW);
 
-	pext->setPinMode(relay_pin, OUTPUT);
-	pext->registerWrite(relay_pin, LOW);
-	pext->setPinMode(measure_pin, INPUT);
-
+	if (m_pin >= 0 && r_pin >= 0)
+	{
+		pext->setPinMode(relay_pin, OUTPUT);
+		pext->registerWrite(relay_pin, LOW);
+		pext->setPinMode(measure_pin, INPUT);
+	}
 	inProgress = false;
 	inQuantum = false;
 	quantum = 0;

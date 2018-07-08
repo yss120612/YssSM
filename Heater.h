@@ -9,7 +9,7 @@
 	#include "WProgram.h"
 #endif
 
-#include "Hardware.h"
+#include "Extender.h"
 
 class Heater
 {
@@ -21,7 +21,7 @@ public:
 	uint8_t  getPower();
 	void start();
 	void stop();
-	void setup(Hardware * h, uint8_t hp, int8_t rp);
+	void setup(PinExtender * h, uint8_t hp, int8_t rp);
 	boolean isON();
 	
 	
@@ -36,7 +36,7 @@ private:
 	boolean have_relay;
 	void switchRelay(boolean on);
 	boolean relayIsOn();
-	Hardware * hard;
+	PinExtender * pext;
 };
 
 

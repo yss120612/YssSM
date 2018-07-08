@@ -4,6 +4,19 @@ namespace web_handlers {
 	ESP8266WebServer * server;
 	Config * conf;
 
+	/*const char * beginHTML PROGMEM = "<!DOCTYPE html>
+		<html lang = \"en\">\n
+		<head>\n
+		<meta charset = \"utf-8\">\n
+		<title>Система автоматики Yss</title>\n
+		<meta name = \"description\" content = \"Версия 0.1\">\n
+		<meta name = \"author\" content = \"Yss\">\n
+		<link href = \"bootstrap.min.css\" rel = \"stylesheet\" />\n
+		<script type = \"text/javascript\" src = \"/jquery.min.js\"></script>\n
+		<script type = \"text/javascript\" src = \"/bootstrap.min.js\"></script>\n
+		</head>\n
+		<body>\n";*/
+
 	boolean handleFileRead(String path) {
 
 		if (path.endsWith("/")) path += "index.htm";

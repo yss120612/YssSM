@@ -69,6 +69,9 @@ void Main::left() {
 #ifdef _SERIAL
 	Serial.println("left in main");
 #endif
+	hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
+	hardware->getKran()->shiftQuantum(-1);
+	return;
 	if (menu->isActive())
 	{
 		menu->prev();
@@ -88,6 +91,9 @@ void Main::right() {
 #ifdef _SERIAL
 	Serial.println("right in main");
 #endif
+	hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
+	hardware->getKran()->shiftQuantum(1);
+	return;
 	if (menu->isActive())
 	{
 		menu->next();
@@ -107,15 +113,16 @@ void Main::press() {
 #ifdef _SERIAL
 	Serial.println("press in main");
 #endif
-	/*if (!hardware->getHeater()->isON()) {
+	if (!hardware->getHeater()->isON()) {
 		hardware->getHeater()->start();
 	}	else {
 		hardware->getHeater()->stop();
-	}*/
+	}
 	//hardware->getBeeper()->beep(1000, 500);
 	//counter = 100;
 	drawImmed = true;
-
+	hardware->getKran()->close();
+	return;
 	if (menu->isActive())
 	{
 		if (menu->current()->getKind() == 1) {

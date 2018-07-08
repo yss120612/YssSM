@@ -1,8 +1,7 @@
 
 
-#define _SERIAL
-#define NOSERIAL
-#define NOLED
+//#define _SERIAL
+
 
 
 #include <QList.h>
@@ -55,6 +54,10 @@ const uint8_t HEAT_DRV_PIN = D9;
 
 const uint8_t TRIAC_COOL_PIN = EX_PIN2;
 
+const uint8_t KRAN_OPEN_PIN = EX_PIN6;
+const uint8_t KRAN_CLOSE_PIN = EX_PIN7;
+
+
 #define NOSERIAL
 #define NOBLED
 uint8_t  tkube[] = { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 };
@@ -74,6 +77,7 @@ OneWire ds(TEMPERATURE_PIN);
 PinExtender extender;
 DallasTerm kube_temp(tkube, &ds, 2.5);
 Display disp(0x3C);
+Kran kran;
 //Beeper beeper(BEEPER_PIN);
 Encoder encoder;
 Heater heater;
@@ -95,9 +99,12 @@ void setup() {
 	hard.setHeater(&heater);//после Экстендер
 	hard.setTCooler(&cool);//после Экстендер
 	hard.setClock(&RTC);
+	hard.setKran(&kran);
+
+
+	kran.setup(&extender, KRAN_CLOSE_PIN, KRAN_OPEN_PIN);
 	
-	
-	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
+	heater.setup(&extender,HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	//conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
 	conf.setWiFi("Yss_GIGA","bqt3bqt3");
@@ -107,6 +114,8 @@ void setup() {
 	httph.setup();
 	disp.setup();
 	
+
+
 	cool.setup(&hard, TRIAC_COOL_PIN);
 	cool.setParams(30, 1);
 	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);
@@ -160,6 +169,7 @@ void loop() {
 	mls = millis();
 	httph.clientHandle();
 	encoder.process(mls);
+	kran.process(mls);
 	md->drawImm();
 
 	if (scrLoop + 1000 - mls < 0) {
