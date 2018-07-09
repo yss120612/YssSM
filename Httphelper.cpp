@@ -128,7 +128,7 @@ namespace web_handlers {
 	void pageUpdate() {
 		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
 			return server->requestAuthentication();
-		String resp = "<html>\n<head>\n";
+		String resp = "<!DOCTYPE html>\n<html>\n<head>\n";
 			resp += "<meta charset = \"utf-8\">\n";
 			resp += "<title>YssSM прошивка</title>\n";
 			resp += "<meta name = \"description\" content = \"Версия 0.1\">\n";
@@ -197,6 +197,10 @@ void HttpHelper::setup() {
 	server->on("/update", web_handlers::pageUpdate);
 
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
+
+	server->serveStatic("/css/bootstrap.min.css", SPIFFS, "/css/bootstrap.min.css", NULL);
+	server->serveStatic("/js/bootstrap.min.js", SPIFFS, "/js/bootstrap.min.js", NULL);
+	server->serveStatic("/js/jquery.min.js", SPIFFS, "/js/jquery.min.js", NULL);
 	
 	server->begin();
 
