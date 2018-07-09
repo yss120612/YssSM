@@ -1,13 +1,13 @@
 
 
-//#define _SERIAL
+#define _SERIAL
 
 
 
 #include <QList.h>
 #include <OneWire.h>
 //#include <Wire.h>  
-
+#include <EEPROM.h>
 
 
 //#include "Hardware.h"
@@ -99,7 +99,7 @@ void setup() {
 	hard.setHeater(&heater);//после Экстендер
 	hard.setTCooler(&cool);//после Экстендер
 	hard.setClock(&RTC);
-	hard.setKran(&kran);
+	hard.setKran(&kran);//после Экстендер
 
 
 	kran.setup(&extender, KRAN_CLOSE_PIN, KRAN_OPEN_PIN);
@@ -120,15 +120,13 @@ void setup() {
 	cool.setParams(30, 1);
 	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);
 
-	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
-	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
-
-
 
 	encoder.setHandler(md);
 	//httph.setMode(md);
-	
-	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
+
+	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
+	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
+	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний проходу через 0
 	
 	RTC.yyyy = 2018;
 	RTC.dd = 22;
@@ -145,6 +143,8 @@ void setup() {
 	Serial.print("Open http://");
 	Serial.print(WiFi.localIP());
 	Serial.println("/ in your browser to see it working");
+	Serial.print("EPROM=");
+	Serial.println(EEPROM.length());
 #endif
 	
 }

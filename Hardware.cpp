@@ -27,11 +27,7 @@ PinExtender * Hardware::getExtender() { return pinExtender; }
 MD_DS3231 * Hardware::getClock() { return clock; }
 Cooler * Hardware::getTCooler(){ return tcooler;}
 SSD1306Wire * Hardware::getDisp() { return display->getDisplay(); }
-
-Kran * Hardware::getKran()
-{
-	return kran;
-}
+Kran * Hardware::getKran(){	return kran;}
 
 void Hardware::setHeater(Heater * h) { heater = h;}
 void Hardware::setDisplay(Display * d) { display = d; }
@@ -45,8 +41,4 @@ void Hardware::setBeeper(Beeper * b) { beeper = b; }
 void Hardware::setExtender(PinExtender * p) { pinExtender = p; }
 void Hardware::setClock(MD_DS3231 * cl){clock = cl;}
 void Hardware::setTCooler(Cooler * cl){	tcooler = cl;}
-
-void Hardware::setKran(Kran * cr)
-{
-	kran = cr;
-}
+void Hardware::setKran(Kran * cr){	kran = cr;}

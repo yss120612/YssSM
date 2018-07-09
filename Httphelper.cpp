@@ -109,6 +109,21 @@ namespace web_handlers {
 		}
 	}
 
+	void restart()
+	{
+		String restart = server->arg("device");          // Получаем значение device из запроса
+		if (restart == "ok")
+		{                         // Если значение равно Ок
+			server->send(200, "text/plain", "Reset OK"); // Oтправляем ответ Reset OK
+			ESP.restart();                                // перезагружаем модуль
+			
+		}
+		else
+		{                                        // иначе
+			server->send(200, "text/plain", "Boot="+String(ESP.getBootVersion())+ "<br>Ver=" + String(ESP.getFullVersion()) + "<br>VCC=" + String(ESP.getVcc())); // Oтправляем ответ No Reset
+		}
+	}
+
 
 	void pageUpdate() {
 		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
@@ -118,27 +133,27 @@ namespace web_handlers {
 			resp += "<title>YssSM прошивка</title>\n";
 			resp += "<meta name = \"description\" content = \"Версия 0.1\">\n";
 			resp += "<meta name = \"author\" content = \"Yss\">\n";
-			resp += "<link href = \"bootstrap.min.css\" rel = \"stylesheet\">\n";
-			resp += "<script type = \"text/javascript\" src = \"jquery.min.js\"></script>\n";
-			resp += "<script type = \"text/javascript\" src = \"bootstrap.min.js\"></script>\n";
-		//<script type = "text/javascript" src = "/dygraph.min.js">< / script>
-		resp += "</head>\n<body>\n";
-		resp += "<h2>Прошивка и веб сервер</h2>";
-			resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">";
-				resp += "<div class = \"btn - group\">";
-				resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">";
-				resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
-				resp += "</div>";
-			resp += "</form>";
+			resp += "<link href = \"/css/bootstrap.min.css\" type = \"text/css\" rel = \"stylesheet\">\n";
+			resp += "<script type = \"text/javascript\" src = \"/js/jquery.min.js\"></script>\n";
+			resp += "<script type = \"text/javascript\" src = \"/js/bootstrap.min.js\"></script>\n";
+			resp += "</head>\n<body>\n";
+			resp += "<h2>Прошивка и веб сервер</h2>\n";
+			resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">\n";
+			resp += "<div class = \"btn - group\">\n";
+			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
+			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
+			resp += "</div>\n";
+			resp += "</form>\n";
 
 			resp += "<form method = \"POST\" action = \"/update?cmd=100\" enctype = \"multipart/form-data\">";
-			resp += "<div class = \"btn-group\">";
-			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">";
-			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">";
-			resp += "</div>";
-			resp += "</form>";
-		resp += "</body></html>\n";
-		server->send(200, "text/html", resp);
+			resp += "<div class = \"btn-group\">\n";
+			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
+			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
+			resp += "</div>\n";
+			resp += "</form>\n";
+			resp += "</body>\n</html>\n";
+
+			server->send(200, "text/html", resp);
 	}
 
 }
@@ -177,9 +192,11 @@ void HttpHelper::setup() {
 
 	server->on("/pict", web_handlers::page1);
 
+	server->on("/restart", web_handlers::restart);
+
 	server->on("/update", web_handlers::pageUpdate);
 
-	server->serveStatic("heater.htm",FS,"/", NULL);
+	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
 	
 	server->begin();
 
