@@ -66,9 +66,8 @@ void Main::makeMenu()
 }
 
 void Main::left() {
-#ifdef _SERIAL
-	Serial.println("left in main");
-#endif
+	logg.logging("left in main");
+
 	hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
 	hardware->getKran()->shiftQuantum(-1);
 	return;
@@ -88,9 +87,7 @@ void Main::left() {
 }
 
 void Main::right() {
-#ifdef _SERIAL
-	Serial.println("right in main");
-#endif
+	logg.logging("right in main");
 	hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
 	hardware->getKran()->shiftQuantum(1);
 	return;
@@ -110,9 +107,8 @@ void Main::right() {
 }
 
 void Main::press() {
-#ifdef _SERIAL
-	Serial.println("press in main");
-#endif
+	logg.logging("press in main");
+
 	if (!hardware->getHeater()->isON()) {
 		hardware->getHeater()->start();
 	}	else {
@@ -168,9 +164,7 @@ void Main::press() {
 }
 
 void Main::long_press() {
-#ifdef _SERIAL
-	Serial.println("long_press in main");
-#endif
+	logg.logging("long press in main");
 	counter = 0;
 	if (menu->isActive())
 	{

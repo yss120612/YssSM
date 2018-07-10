@@ -606,6 +606,15 @@
     <ClInclude Include="..\libraries\MD_DS3231\src\MD_DS3231.h">
       <Filter>src\_micro-api-readonly\libraries\MD_DS3231</Filter>
     </ClInclude>
+    <ClInclude Include="RTCmemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AT24C32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -796,6 +805,15 @@
     </ClCompile>
     <ClCompile Include="..\libraries\MD_DS3231\src\MD_DS3231.cpp">
       <Filter>src\_micro-api-readonly\libraries\MD_DS3231</Filter>
+    </ClCompile>
+    <ClCompile Include="RTCmemory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AT24C32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

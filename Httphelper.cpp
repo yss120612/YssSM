@@ -109,6 +109,15 @@ namespace web_handlers {
 		}
 	}
 
+	void log() {
+		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
+			return server->requestAuthentication();
+		
+		server->send(200, "text/plain", logg.getAll("\n");
+		
+	}
+
+
 	void restart()
 	{
 		String restart = server->arg("device");          // Получаем значение device из запроса
@@ -191,6 +200,8 @@ void HttpHelper::setup() {
 	server->on("/", web_handlers::root);
 
 	server->on("/pict", web_handlers::page1);
+
+	server->on("/log", web_handlers::log);
 
 	server->on("/restart", web_handlers::restart);
 

@@ -1,0 +1,28 @@
+// Log.h
+
+#ifndef _LOG_h
+#define _LOG_h
+
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "arduino.h"
+#else
+	#include "WProgram.h"
+#endif
+class Logg
+{
+public:
+	Logg(uint16_t max) { maxCount = max; };
+	~Logg() { _log.clear(); }
+	void logging(String s);
+	String getAll(String divider = "");
+private:
+	uint16_t maxCount;
+	QList<String> _log;
+};
+
+
+
+
+
+#endif
+

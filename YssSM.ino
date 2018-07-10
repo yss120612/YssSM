@@ -1,5 +1,8 @@
 
 
+#include "Log.h"
+#include "AT24C32.h"
+#include "RTCmemory.h"
 #define _SERIAL
 
 
@@ -68,6 +71,7 @@ uint8_t  t4[] = { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 };
 uint8_t  t5[] = { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 };
 
 Config conf;
+Logg logg(100);
 
 long scrLoop = 0;
 
@@ -106,8 +110,8 @@ void setup() {
 	
 	heater.setup(&extender,HEAT_DRV_PIN, HEAT_REL_PIN);
 
-	//conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	conf.setWiFi("Yss_GIGA","bqt3bqt3");
+	conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
 	conf.setHttp("admin", "esp");
 
 	wifih.setup();
@@ -140,13 +144,8 @@ void setup() {
 
 #ifdef _SERIAL
 	Serial.begin(115200);
-	Serial.print("Open http://");
-	Serial.print(WiFi.localIP());
-	Serial.println("/ in your browser to see it working");
-	Serial.print("EPROM=");
-	Serial.println(EEPROM.length());
 #endif
-	
+	logg.logging("Open http://"+ String(WiFi.localIP())+ "/ in your browser to see it working");
 }
 
 void nulAC() {
