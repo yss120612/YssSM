@@ -5,9 +5,7 @@
 #include "AT24C32.h"
 
 
-static const uint8_t EEPROM_PAGE_SIZE = 32;
-static const uint8_t EEPROM_WORK_SIZE = EEPROM_PAGE_SIZE / 2;
-static const uint32_t EEPROM_WRITE_TIMEOUT = 10;
+
 
 void AT24C32::init(bool fast) {
 	Wire.begin();
@@ -88,4 +86,4 @@ void AT24C32::write(uint16_t index, const uint8_t* buf, uint16_t len) {
 	}
 }
 
-AT24C32 at24c32;
+//AT24C32 at24c32;

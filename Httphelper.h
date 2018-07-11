@@ -28,6 +28,8 @@ public:
 	Mode * getMode();*/
 
 private:
+	void handleUpdate();
+	void handleLog();
 	Config * conf;
 	ESP8266WebServer * server;
 	ESP8266HTTPUpdateServer * httpUpdater;

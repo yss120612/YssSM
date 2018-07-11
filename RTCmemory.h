@@ -24,7 +24,7 @@ public:
 	}
 };
 
-extern RTCmemory RTCmem;
+//extern RTCmemory RTCmem;
 
 #endif
 

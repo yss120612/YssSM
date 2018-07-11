@@ -1,6 +1,6 @@
 #include "Main.h"
 
-Main::Main(Hardware * h):Mode(h)
+Main::Main(Aggregates * a,Hardware * h):Mode(a,h)
 {
 	makeMenu();
 }
@@ -68,8 +68,8 @@ void Main::makeMenu()
 void Main::left() {
 	logg.logging("left in main");
 
-	hardware->getHeater()->setPower(hardware->getHeater()->getPower() - 1);
-	hardware->getKran()->shiftQuantum(-1);
+	agg->getHeater()->setPower(agg->getHeater()->getPower() - 1);
+	agg->getKran()->shiftQuantum(-1);
 	return;
 	if (menu->isActive())
 	{
@@ -88,8 +88,8 @@ void Main::left() {
 
 void Main::right() {
 	logg.logging("right in main");
-	hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
-	hardware->getKran()->shiftQuantum(1);
+	agg->getHeater()->setPower(agg->getHeater()->getPower() + 1);
+	agg->getKran()->shiftQuantum(1);
 	return;
 	if (menu->isActive())
 	{
@@ -109,15 +109,15 @@ void Main::right() {
 void Main::press() {
 	logg.logging("press in main");
 
-	if (!hardware->getHeater()->isON()) {
-		hardware->getHeater()->start();
+	if (!agg->getHeater()->isON()) {
+		agg->getHeater()->start();
 	}	else {
-		hardware->getHeater()->stop();
+		agg->getHeater()->stop();
 	}
 	//hardware->getBeeper()->beep(1000, 500);
 	//counter = 100;
 	drawImmed = true;
-	hardware->getKran()->close();
+	agg->getKran()->close();
 	return;
 	if (menu->isActive())
 	{
@@ -139,7 +139,7 @@ void Main::press() {
 		switch (menu->getEditParams()->getId())
 		{
 			case 21:
-				hardware->getTCooler()->setParams(((MenuIParameter *)menu->getEditParams())->getCurrent(), 1);
+				agg->getTCooler()->setParams(((MenuIParameter *)menu->getEditParams())->getCurrent(), 1);
 				break;
 			case 22:
 				break;

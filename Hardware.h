@@ -16,22 +16,14 @@
 #include "Display.h"
 #include "WiFiHelper.h"
 #include "Httphelper.h"
-#include "Heater.h"
 #include "Config.h"
 #include "Beeper.h"
-#include "Kran.h"
-//#include "Cooler.h"
-
-class Cooler;
-//class Heater;
-
 
 class Hardware
 {
 public:
 	Hardware();
 	~Hardware();
-	Heater * getHeater();
 	Display * getDisplay();
 	DallasTerm * getTKube();
 	DallasTerm * getTTsarga();
@@ -42,11 +34,9 @@ public:
 	Beeper * getBeeper();
 	PinExtender * getExtender();
 	MD_DS3231 * getClock();
-	Cooler * getTCooler();
 	SSD1306Wire * getDisp();
-	Kran * getKran();
+	
 
-	void setHeater(Heater * h);
 	void setDisplay(Display * d);
 	void setTKube(DallasTerm * k);
 	void setTTsarga(DallasTerm * t);
@@ -57,13 +47,9 @@ public:
 	void setBeeper(Beeper * b);
 	void setExtender(PinExtender * p);
 	void setClock(MD_DS3231 * cl);
-	void setTCooler(Cooler * cl);
-	void setKran(Kran * cr);
-
 
 
 private:
-	Heater * heater;
 	Display * display;
 	DallasTerm * t_kube;
 	DallasTerm * t_tsarga;
@@ -74,8 +60,6 @@ private:
 	Config * config;
 	PinExtender * pinExtender;
 	MD_DS3231 * clock;
-	Cooler * tcooler;
-	Kran * kran;
 };
 
 

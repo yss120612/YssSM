@@ -13,7 +13,7 @@
 
 class Main: public Mode {
 public:
-	Main(Hardware * h);
+	Main(Aggregates * a,Hardware * h);
 
 	void draw();
 	void makeMenu();

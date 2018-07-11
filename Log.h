@@ -8,6 +8,9 @@
 #else
 	#include "WProgram.h"
 #endif
+
+#include<QList.h>
+
 class Logg
 {
 public:
@@ -21,7 +24,7 @@ private:
 };
 
 
-
+extern Logg logg;
 
 
 #endif

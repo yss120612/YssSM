@@ -113,7 +113,7 @@ namespace web_handlers {
 		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
 			return server->requestAuthentication();
 		
-		server->send(200, "text/plain", logg.getAll("\n");
+//		server->send(200, "text/plain",logg.getAll("\n"));
 		
 	}
 
@@ -129,7 +129,7 @@ namespace web_handlers {
 		}
 		else
 		{                                        // иначе
-			server->send(200, "text/plain", "Boot="+String(ESP.getBootVersion())+ "<br>Ver=" + String(ESP.getFullVersion()) + "<br>VCC=" + String(ESP.getVcc())); // Oтправляем ответ No Reset
+			server->send(200, "text/plain", ""); // Oтправляем ответ No Reset
 		}
 	}
 
@@ -201,16 +201,19 @@ void HttpHelper::setup() {
 
 	server->on("/pict", web_handlers::page1);
 
-	server->on("/log", web_handlers::log);
+	server->on("/log", std::bind(&HttpHelper::handleLog, this));
 
 	server->on("/restart", web_handlers::restart);
 
-	server->on("/update", web_handlers::pageUpdate);
+	//server->on("/update", web_handlers::pageUpdate);
+	server->on("/update", std::bind(&HttpHelper::handleUpdate, this));
 
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
 
 	server->serveStatic("/css/bootstrap.min.css", SPIFFS, "/css/bootstrap.min.css", NULL);
+
 	server->serveStatic("/js/bootstrap.min.js", SPIFFS, "/js/bootstrap.min.js", NULL);
+
 	server->serveStatic("/js/jquery.min.js", SPIFFS, "/js/jquery.min.js", NULL);
 	
 	server->begin();
@@ -219,7 +222,40 @@ void HttpHelper::setup() {
 	httpUpdater->setup(server);
 
 }
+void HttpHelper::handleLog()
+{
+	//server->send(200, "text/plain", logg.getAll("\n"));
+}
+void HttpHelper::handleUpdate() {
+	if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
+		return server->requestAuthentication();
+	String resp = "<!DOCTYPE html>\n<html>\n<head>\n";
+	resp += "<meta charset = \"utf-8\">\n";
+	resp += "<title>YssSM прошивка</title>\n";
+	resp += "<meta name = \"description\" content = \"Версия 0.1\">\n";
+	resp += "<meta name = \"author\" content = \"Yss\">\n";
+	resp += "<link href = \"/css/bootstrap.min.css\" type = \"text/css\" rel = \"stylesheet\">\n";
+	resp += "<script type = \"text/javascript\" src = \"/js/jquery.min.js\"></script>\n";
+	resp += "<script type = \"text/javascript\" src = \"/js/bootstrap.min.js\"></script>\n";
+	resp += "</head>\n<body>\n";
+	resp += "<h2>Прошивка и веб сервер</h2>\n";
+	resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">\n";
+	resp += "<div class = \"btn - group\">\n";
+	resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
+	resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
+	resp += "</div>\n";
+	resp += "</form>\n";
 
+	resp += "<form method = \"POST\" action = \"/update?cmd=100\" enctype = \"multipart/form-data\">";
+	resp += "<div class = \"btn-group\">\n";
+	resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
+	resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
+	resp += "</div>\n";
+	resp += "</form>\n";
+	resp += "</body>\n</html>\n";
+
+	server->send(200, "text/html", resp);
+}
 
 void HttpHelper::clientHandle() {
 	if (server!=NULL) server->handleClient();

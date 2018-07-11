@@ -47,7 +47,7 @@ private:
 	void long_press();
 	void makeMenu();
 public:
-	Suvid(Hardware *h);
+	Suvid(Aggregates * a, Hardware *h);
 	void start(int8_t tm, uint16_t min);
 	void stop();
 

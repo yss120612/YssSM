@@ -1,22 +1,18 @@
 
-
-#include "Log.h"
-#include "AT24C32.h"
-#include "RTCmemory.h"
+//#include "Aggregates.h"
 #define _SERIAL
-
-
 
 #include <QList.h>
 #include <OneWire.h>
-//#include <Wire.h>  
+
+
+#include "AT24C32.h"
+#include "RTCmemory.h"
 #include <EEPROM.h>
 
 
 //#include "Hardware.h"
 #include "Mode.h"
-
-
 
 #include "Encoder.h"
 
@@ -71,7 +67,7 @@ uint8_t  t4[] = { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 };
 uint8_t  t5[] = { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 };
 
 Config conf;
-Logg logg(100);
+//Logg logg(100);
 
 long scrLoop = 0;
 
@@ -87,8 +83,9 @@ Encoder encoder;
 Heater heater;
 
 Hardware hard;
+Aggregates agg(&hard);
 Cooler cool;
-Mode * md = new Main(&hard);
+Mode * md = new Main(&agg,&hard);
 
 void setup() {
 	extender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
@@ -100,15 +97,14 @@ void setup() {
 	hard.setTTriak(&kube_temp);
 	hard.setHttpHelper(&httph);
 	hard.setExtender(&extender);
-	hard.setHeater(&heater);//после Экстендер
-	hard.setTCooler(&cool);//после Экстендер
 	hard.setClock(&RTC);
-	hard.setKran(&kran);//после Экстендер
 
+	agg.setHeater(&heater);//после Экстендер
+	agg.setTCooler(&cool);//после Экстендер
+	agg.setKran(&kran);//после Экстендер
 
-	kran.setup(&extender, KRAN_CLOSE_PIN, KRAN_OPEN_PIN);
-	
-	heater.setup(&extender,HEAT_DRV_PIN, HEAT_REL_PIN);
+	kran.setup(&hard, KRAN_CLOSE_PIN, KRAN_OPEN_PIN);
+	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
 
 	conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
 	//conf.setWiFi("Yss_GIGA","bqt3bqt3");

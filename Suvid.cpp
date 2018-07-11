@@ -4,7 +4,7 @@
 
 #include "Suvid.h"
 
-Suvid::Suvid(Hardware *h) : Mode(h) {
+Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	targetT = 0;
 	last_time = 0;
 }
@@ -64,10 +64,10 @@ void Suvid::process_suvid(long ms) {
 
 	if (work_mode)
 	{
-		Serial.print("Curr=");
-		Serial.print(ms);
-		Serial.print("Time=");
-		Serial.println(time);
+		//Serial.print("Curr=");
+		//Serial.print(ms);
+		//Serial.print("Time=");
+		//Serial.println(time);
 	}
 
 	uint8_t need_pw = 100;

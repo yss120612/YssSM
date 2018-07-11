@@ -5,9 +5,10 @@
 #include "Mode.h"
 
 
-Mode::Mode(Hardware * h)
+Mode::Mode(Aggregates * a,Hardware * h)
 {
 	parent = NULL;
+	agg = a;
 	hardware = h;
 }
 

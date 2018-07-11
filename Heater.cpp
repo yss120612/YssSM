@@ -31,13 +31,13 @@ void Heater::processHeater() {
 	}
 }
 
-void Heater::setup(PinExtender * h, uint8_t hp, int8_t rp) {
-	pext = h;
+void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
+	hard = h;
 	heater_pin = hp;
 	pinMode(heater_pin, OUTPUT);
 	have_relay = rp >= 0;
 	relay_pin = rp;
-	pext->setPinMode(relay_pin, OUTPUT);
+	hard->getExtender()->setPinMode(relay_pin, OUTPUT);
 }
 
 void Heater::switchRelay(boolean on) {
@@ -46,14 +46,14 @@ void Heater::switchRelay(boolean on) {
 		boolean hs = heater_stopped;
 		heater_stopped = true;
 		delay(50);
-		pext->registerWrite(relay_pin, on ? HIGH : LOW);
+		hard->getExtender()->registerWrite(relay_pin, on ? HIGH : LOW);
 		heater_stopped = hs;
 	}
 }
 
 //реле включено если его нет вообще или оно есть и включено
 boolean Heater::relayIsOn() {
-	return !have_relay || pext->getPin(relay_pin) == HIGH;
+	return !have_relay || hard->getExtender()->getPin(relay_pin) == HIGH;
 	/*if (relay_pin >= 100) {
 		return extd->getPin(relay_pin - 100);
 	}

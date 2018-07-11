@@ -8,7 +8,9 @@
 #else
 	#include "WProgram.h"
 #endif
-#include "Extender.h"
+
+#include "Hardware.h"
+
 const uint16_t switch_time = 7000;
 const uint8_t quantumT = 70;
 
@@ -22,12 +24,12 @@ public:
 	void shiftQuantum(int8_t oq);
 	void process(long ms);
 	boolean measureState();
-	PinExtender * pext;
-	void setup(PinExtender * pex, uint8_t c_pin, uint8_t o_pin, int8_t m_pin = -1, int8_t r_pin = -1);
+	void setup(Hardware * h, uint8_t c_pin, uint8_t o_pin, int8_t m_pin = -1, int8_t r_pin = -1);
 	void close();
 	void open();
 
 private:
+	Hardware * hard;
 	boolean inQuantum;
 	boolean inProgress;
 	long progress_time;

@@ -28,3 +28,5 @@ void Logg::logging(String s)
 	else
 	_log.push_back(s);
 	}
+
+Logg logg(100);

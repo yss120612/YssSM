@@ -169,6 +169,7 @@
     <ClInclude Include="..\libraries\MD_DS3231\src\MD_DS3231.h" />
     <ClInclude Include="..\libraries\OneWire\OneWire.h" />
     <ClInclude Include="..\libraries\QList\src\QList.h" />
+    <ClInclude Include="Aggregates.h" />
     <ClInclude Include="AT24C32.h" />
     <ClInclude Include="Beeper.h" />
     <ClInclude Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\Arduino.h" />
@@ -273,6 +274,7 @@
     <ClCompile Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src\OLEDDisplayUi.cpp" />
     <ClCompile Include="..\libraries\MD_DS3231\src\MD_DS3231.cpp" />
     <ClCompile Include="..\libraries\OneWire\OneWire.cpp" />
+    <ClCompile Include="Aggregates.cpp" />
     <ClCompile Include="AT24C32.cpp" />
     <ClCompile Include="Beeper.cpp" />
     <ClCompile Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\abi.cpp" />
