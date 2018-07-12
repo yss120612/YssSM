@@ -26,3 +26,5 @@ const String Config::getHttpU() { return www_username; };
 const String Config::getHttpP() { return www_password; };;
 const String Config::getWiFiN() { return wifi_ssid; };
 const String Config::getWiFiP() { return wifi_password; };
+
+Config CONF;

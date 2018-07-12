@@ -1,8 +1,12 @@
 #include "WiFiHelper.h"
+#include "Log.h"
+#include "Config.h"
 
-WiFiHelper::WiFiHelper(Config *c)
+//#define _SERIAL
+
+WiFiHelper::WiFiHelper()
 {
-	conf = c;
+	//conf = c;
 }
 
 WiFiHelper::~WiFiHelper()
@@ -20,29 +24,34 @@ void WiFiHelper::setup()
 	uint8_t modeWiFi = 0;
 	int n_network = WiFi.scanNetworks(); // запрос количества доступных сетей
 	for (int i = 0; i < n_network; ++i) {
-		if (WiFi.SSID(i) == conf->getWiFiN().c_str()) modeWiFi = 1; // наша сеть присутствует
+		logg.logging("network " + WiFi.SSID(i) + " present");
+		if (WiFi.SSID(i).equals(CONF.getWiFiN()))
+		{
+			modeWiFi = 1; // наша сеть присутствует
+			break;
+		}
+		
 	}
 
 if (modeWiFi == 1) {
 		// пробуем подключиться
-#ifdef _SERIAL
-		Serial.printf("Connecting to %s\n", conf->getWiFiN().c_str());
-#endif
+
+		logg.logging("Connecting to "+ CONF.getWiFiN());
+
 		WiFi.disconnect(true);
-		WiFi.begin(conf->getWiFiN().c_str(), conf->getWiFiP().c_str());
+		WiFi.begin(CONF.getWiFiN().c_str(), CONF.getWiFiP().c_str());
 		// ждем N кол-во попыток, если нет, то AP Mode
 		byte tmp_while = 0;
 		while (WiFi.waitForConnectResult() != WL_CONNECTED) {
 			delay(1000);
-#ifdef _SERIAL
-			Serial.print(".");
-#endif
+
+			logg.logging("Connecting to "+CONF.getWiFiN());
+
 			if (tmp_while < 5) tmp_while++;
 			else {
 				modeWiFi = 0;
-#ifdef _SERIAL
-				Serial.printf("Connection to %s failed!\n", conf->getWiFiN().c_str());
-#endif
+			logg.logging("Connection to "+ CONF.getWiFiN() +" failed!");
+
 				break;
 			}
 		}
@@ -56,9 +65,8 @@ void WiFiHelper::reconnect()
 	}
 
 	WiFi.reconnect();
-#ifdef _SERIAL
-	Serial.println("reconnect");
-#endif
+	logg.logging("Reconnect...");
+
 	// При потери связи с базовой станцией переходим в режим точки доступа и пробуем переподключиться
 	/*if (conf->getWiFiN().length() && tCnt >= setRestartWiFi && !WiFi.softAPgetStationNum()) {
 		WiFi.reconnect();

@@ -27,6 +27,7 @@ private:
 	String www_password;
 };
 
+extern Config CONF;
 
 #endif
 

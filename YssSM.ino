@@ -4,6 +4,9 @@
 
 //#include "Const.h"
 //#include "AT24C32.h"
+
+#include "Config.h"
+
 #include "RTCmemory.h"
 #include <EEPROM.h>
 
@@ -21,13 +24,13 @@
 #include "Main.h"
 #include "Suvid.h"
 
-Config conf;
+//Config conf;
 //Logg logg(100);
 
 long scrLoop = 0;
 
-HttpHelper httph(&conf);
-WiFiHelper wifih(&conf);
+HttpHelper httph;
+WiFiHelper wifih;
 
 //PinExtender extender;
 //DallasTerm kube_temp(tkube, &ds, 2.5);
@@ -65,9 +68,16 @@ void setup() {
 	kran.setup(&hard, KRAN_CLOSE_PIN, KRAN_OPEN_PIN);
 	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
 
-	conf.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
 	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
-	conf.setHttp("admin", "esp");
+	CONF.setHttp("admin", "esp");
+
+#ifdef _SERIAL
+	Serial.begin(115200);
+	logg.logging("_SERIAL is defined");
+#else
+	logg.logging("_SERIAL is NOT defined");
+#endif
 
 	wifih.setup();
 	httph.setup();
@@ -98,12 +108,7 @@ void setup() {
 	//RTC.writeTime();
 	md->initDraw();
 
-#ifdef _SERIAL
-	Serial.begin(115200);
-	logg.logging("_SERIAL is defined");
-#else
-	logg.logging("_SERIAL is NOT defined");
-#endif
+
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 }
 

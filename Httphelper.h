@@ -18,7 +18,7 @@
 class HttpHelper
 {
 public:
-	HttpHelper(Config *c);
+	HttpHelper();
 	~HttpHelper();
 
 	void clientHandle();
@@ -30,7 +30,7 @@ public:
 private:
 	void handleUpdate();
 	void handleLog();
-	Config * conf;
+	//Config * conf;
 	ESP8266WebServer * server;
 	ESP8266HTTPUpdateServer * httpUpdater;
 	//Mode * currentMode;

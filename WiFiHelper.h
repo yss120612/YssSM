@@ -12,18 +12,17 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 
-#include "Config.h"
 
 class WiFiHelper
 {
 public:
-	WiFiHelper(Config *c);
+	WiFiHelper();
 	~WiFiHelper();
 	void setup();
 	void reconnect();
 	boolean isConnected();
 private:
-	Config *conf;
+	//Config *conf;
 };
 
 

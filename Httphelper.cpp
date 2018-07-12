@@ -1,6 +1,7 @@
 ﻿#include "Httphelper.h"
 #include <FS.h>
 #include  "Log.h"
+#include  "Config.h"
 
 namespace web_handlers {
 	ESP8266WebServer * server;
@@ -169,10 +170,9 @@ namespace web_handlers {
 
 }
 
-HttpHelper::HttpHelper(Config *c)
+HttpHelper::HttpHelper()
 {
 	server = new ESP8266WebServer(80);
-	conf = c;
 	SPIFFS.begin();
 }
 
@@ -193,7 +193,7 @@ HttpHelper::~HttpHelper()
 void HttpHelper::setup() {
 	if (server == NULL) return;
 
-	web_handlers::conf = conf;
+	web_handlers::conf = &CONF;
 
 	web_handlers::server = server;
 
@@ -224,12 +224,14 @@ void HttpHelper::setup() {
 	httpUpdater->setup(server);
 
 }
+
 void HttpHelper::handleLog()
 {
 	server->send(200, "text/plain", logg.getAll("\n"));
 }
+
 void HttpHelper::handleUpdate() {
-	if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
+	if (!server->authenticate(CONF.getHttpU().c_str(), CONF.getHttpP().c_str()))
 		return server->requestAuthentication();
 	String resp = "<!DOCTYPE html>\n<html>\n<head>\n";
 	resp += "<meta charset = \"utf-8\">\n";
