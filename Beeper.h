@@ -12,8 +12,8 @@
 class Beeper
 {
 public:
-	Beeper(uint8_t pin);
-	void setup();
+	Beeper();
+	void setup(uint8_t pin);
 	void beep(uint16_t freq = 1000, uint16_t dur = 1000);
 	void process(long);
 private:

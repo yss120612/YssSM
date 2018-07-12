@@ -41,6 +41,7 @@ private:
 	long time;
 	void error(uint8_t);
 	void draw();
+	void initDraw();
 	void left();
 	void right();
 	void press();

@@ -9,8 +9,13 @@
 #include "WProgram.h"
 #endif
 
+#include "Const.h"
+
+#include <OneWire.h>
 #include <DS1302.h>
 #include <MD_DS3231.h>
+#include <SSD1306Wire.h>
+
 #include "Extender.h"
 #include "DallasTerm.h"
 #include "Display.h"
@@ -24,42 +29,51 @@ class Hardware
 public:
 	Hardware();
 	~Hardware();
-	Display * getDisplay();
+	void init();
+	void timed_process(long ms);
+	void process(long ms);
+	SSD1306Wire * getDisplay();
 	DallasTerm * getTKube();
 	DallasTerm * getTTsarga();
 	DallasTerm * getTWater();
 	DallasTerm * getTTriak();
-	HttpHelper * getHttpHelper();
+	//HttpHelper * getHttpHelper();
 	Config * getConfig();
 	Beeper * getBeeper();
 	PinExtender * getExtender();
 	MD_DS3231 * getClock();
-	SSD1306Wire * getDisp();
+	//SSD1306Wire * getDisp();
 	
 
-	void setDisplay(Display * d);
-	void setTKube(DallasTerm * k);
-	void setTTsarga(DallasTerm * t);
-	void setTWater(DallasTerm * w);
-	void setTTriak(DallasTerm * w);
-	void setHttpHelper(HttpHelper * h);
-	void setConfig(Config * c);
-	void setBeeper(Beeper * b);
-	void setExtender(PinExtender * p);
-	void setClock(MD_DS3231 * cl);
+	//void setDisplay(SSD1306Wire * d);
+	//void setTKube(DallasTerm * k);
+	//void setTTsarga(DallasTerm * t);
+	//void setTWater(DallasTerm * w);
+	//void setTTriak(DallasTerm * w);
+	//void setHttpHelper(HttpHelper * h);
+	//void setConfig(Config * c);
+	//void setBeeper(Beeper * b);
+	//void setExtender(PinExtender * p);
+	//void setClock(MD_DS3231 * cl);
 
 
-private:
-	Display * display;
-	DallasTerm * t_kube;
-	DallasTerm * t_tsarga;
-	DallasTerm * t_water;
-	DallasTerm * t_triak;
-	HttpHelper * httpHelper;
-	Beeper * beeper;
-	Config * config;
-	PinExtender * pinExtender;
-	MD_DS3231 * clock;
+protected:
+	OneWire ow;
+	//DallasTerm t_tsarga;
+	//DallasTerm t_water;
+	DallasTerm t_triak;
+	//HttpHelper httpHelper;
+	Beeper beeper;
+	Config config;
+	PinExtender pinExtender;
+	
+	SSD1306Wire display;
+	DallasTerm t_kube;
+
+	//OneWire ow(TEMPERATURE_PIN);
+	//SSD1306Wire display(0x3C, SDA, SCL);
+	//DallasTerm t_kube(tkube, &ow, 2.5);
+	//MD_DS3231 clock;
 };
 
 

@@ -1,19 +1,26 @@
 #include "Main.h"
 
+
 Main::Main(Aggregates * a,Hardware * h):Mode(a,h)
 {
 	makeMenu();
 }
 
 char tim[9];
+void Main::initDraw() {
+	hardware->getDisplay()->init();
+	hardware->getDisplay()->flipScreenVertically();
+	hardware->getDisplay()->setFont(ArialMT_Plain_16);
+	hardware->getDisplay()->flipScreenVertically();
+}
 
 void Main::draw() {
-	hardware->getDisplay()->getDisplay()->clear();
-	hardware->getDisp()->setTextAlignment(TEXT_ALIGN_LEFT);
-	hardware->getDisplay()->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
+	hardware->getDisplay()->clear();
+	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
+	hardware->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	hardware->getClock()->readTime();
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
-	hardware->getDisplay()->getDisplay()->drawString(60, 0, tim);
+	hardware->getDisplay()->drawString(60, 0, tim);
 	
 	if (menu != NULL)
 	{
@@ -22,7 +29,7 @@ void Main::draw() {
 		menu->display(hardware->getDisplay());
 	}
 	else if (menu->getEditParams() != NULL) {
-		hardware->getDisp()->drawString(0, hardware->getDisp()->getHeight()/2, menu->getEditParams()->getName()+" : "+menu->getEditParams()->getStCurr());
+		hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight()/2, menu->getEditParams()->getName()+" : "+menu->getEditParams()->getStCurr());
 	}
 
 	//else{
@@ -38,7 +45,7 @@ void Main::draw() {
 	//	
 
 	//}
-	hardware->getDisplay()->getDisplay()->display();
+	hardware->getDisplay()->display();
 }
 
 void Main::makeMenu()

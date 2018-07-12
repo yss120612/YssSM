@@ -4,13 +4,14 @@
 
 #include "Beeper.h"
 
-Beeper::Beeper(uint8_t pin) {
-	beeper_pin = pin;
+Beeper::Beeper() {
+	
 }
 
 
-void Beeper::setup()
+void Beeper::setup(uint8_t pin)
 {
+	beeper_pin = pin;
 	pinMode(beeper_pin, OUTPUT);
 	tone_time = 0;
 }

@@ -13,7 +13,7 @@ float DallasTerm::getTemp() {
 	return summ / dim;
 }
 
-void DallasTerm::process(uint16_t ms) {
+void DallasTerm::process(long ms) {
 //	if (ms - lastWork < interval) return;
 
 	ds->reset(); // Теперь готовимся

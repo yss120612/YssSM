@@ -9,8 +9,9 @@
 	#include "WProgram.h"
 #endif
 //#include "Mode.h"
-#include "Display.h"
+
 #include <QList.h>
+#include <SSD1306Wire.h>
 
 const int8_t DISP_LINES = 3;
 const int8_t DELTA_Y = 15;
@@ -31,7 +32,7 @@ public:
 	void add(MenuItem * mi);
 	void next();
 	void prev();
-	void display(Display *d);
+	void display(SSD1306Wire *d);
 	void setParent(Menu *m);
 	Menu * getParent();
 	void setEditParams(MenuParameter * ep);

@@ -1,5 +1,7 @@
 ﻿#include "Httphelper.h"
 #include <FS.h>
+#include  "Log.h"
+
 namespace web_handlers {
 	ESP8266WebServer * server;
 	Config * conf;
@@ -224,7 +226,7 @@ void HttpHelper::setup() {
 }
 void HttpHelper::handleLog()
 {
-	//server->send(200, "text/plain", logg.getAll("\n"));
+	server->send(200, "text/plain", logg.getAll("\n"));
 }
 void HttpHelper::handleUpdate() {
 	if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))

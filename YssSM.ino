@@ -1,14 +1,16 @@
 
 //#include "Aggregates.h"
-#define _SERIAL
-
-#include <QList.h>
-#include <OneWire.h>
 
 
-#include "AT24C32.h"
+//#include "Const.h"
+//#include "AT24C32.h"
 #include "RTCmemory.h"
 #include <EEPROM.h>
+
+#include <QList.h>
+#include "Hardware.h"
+
+
 
 
 //#include "Hardware.h"
@@ -19,53 +21,6 @@
 #include "Main.h"
 #include "Suvid.h"
 
-const uint8_t EX_PIN0 = 100;
-const uint8_t EX_PIN1 = 101;
-const uint8_t EX_PIN2 = 102;
-const uint8_t EX_PIN3 = 103;
-const uint8_t EX_PIN4 = 104;
-const uint8_t EX_PIN5 = 105;
-const uint8_t EX_PIN6 = 106;
-const uint8_t EX_PIN7 = 107;
-
-const uint8_t EX_PIN8  = 108;
-const uint8_t EX_PIN9  = 109;
-const uint8_t EX_PIN10 = 110;
-const uint8_t EX_PIN11 = 111;
-const uint8_t EX_PIN12 = 112;
-const uint8_t EX_PIN13 = 113;
-const uint8_t EX_PIN14 = 114;
-const uint8_t EX_PIN15 = 115;
-
-const uint8_t TEMPERATURE_PIN = D3;
-
-const uint8_t ENC_A_PIN = D4;
-const uint8_t ENC_B_PIN = D0;
-const uint8_t ENC_BTN_PIN = D5;
-
-const uint8_t EXT_CLC =  D7;
-const uint8_t EXT_LOCK = D6;
-const uint8_t EXT_DATA = D8;
-
-const uint8_t HEAT_NUL_PIN = D10;
-const uint8_t HEAT_REL_PIN = EX_PIN15;
-const uint8_t HEAT_DRV_PIN = D9;
-
-const uint8_t TRIAC_COOL_PIN = EX_PIN2;
-
-const uint8_t KRAN_OPEN_PIN = EX_PIN6;
-const uint8_t KRAN_CLOSE_PIN = EX_PIN7;
-
-
-#define NOSERIAL
-#define NOBLED
-uint8_t  tkube[] = { 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 };
-uint8_t  t1[] = { 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 };
-uint8_t  t2[] = { 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61 };
-uint8_t  t3[] = { 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E };
-uint8_t  t4[] = { 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 };
-uint8_t  t5[] = { 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 };
-
 Config conf;
 //Logg logg(100);
 
@@ -73,10 +28,12 @@ long scrLoop = 0;
 
 HttpHelper httph(&conf);
 WiFiHelper wifih(&conf);
-OneWire ds(TEMPERATURE_PIN);
-PinExtender extender;
-DallasTerm kube_temp(tkube, &ds, 2.5);
-Display disp(0x3C);
+
+//PinExtender extender;
+//DallasTerm kube_temp(tkube, &ds, 2.5);
+//SSD1306Wire display(0x3C, SDA, SCL);
+
+
 Kran kran;
 //Beeper beeper(BEEPER_PIN);
 Encoder encoder;
@@ -88,16 +45,18 @@ Cooler cool;
 Mode * md = new Main(&agg,&hard);
 
 void setup() {
-	extender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
+	//extender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
 
-	hard.setConfig(&conf);
-	hard.setDisplay(&disp);
+	//hard.setConfig(&conf);
+	//hard.setDisplay(&display);
 	
-	hard.setTKube(&kube_temp);
-	hard.setTTriak(&kube_temp);
-	hard.setHttpHelper(&httph);
-	hard.setExtender(&extender);
-	hard.setClock(&RTC);
+	//hard.setTKube(&kube_temp);
+	//hard.setTTriak(&kube_temp);
+	//hard.setHttpHelper(&httph);
+	//hard.setExtender(&extender);
+	//hard.setClock(&RTC);
+
+	hard.init();
 
 	agg.setHeater(&heater);//после Экстендер
 	agg.setTCooler(&cool);//после Экстендер
@@ -112,7 +71,7 @@ void setup() {
 
 	wifih.setup();
 	httph.setup();
-	disp.setup();
+	//disp.setup();
 	
 
 
@@ -122,26 +81,30 @@ void setup() {
 
 
 	encoder.setHandler(md);
-	//httph.setMode(md);
-
+	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
+
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний проходу через 0
 	
-	RTC.yyyy = 2018;
+	/*RTC.yyyy = 2018;
 	RTC.dd = 22;
 	RTC.mm = 6;
 	RTC.h = 23;
 	RTC.m = 53;
 	RTC.s = 0;
-	RTC.dow = 4;
+	RTC.dow = 4;*/
 	//RTC.readRAM
 	//RTC.writeTime();
+	md->initDraw();
 
 #ifdef _SERIAL
 	Serial.begin(115200);
+	logg.logging("_SERIAL is defined");
+#else
+	logg.logging("_SERIAL is NOT defined");
 #endif
-	logg.logging("Open http://"+ String(WiFi.localIP())+ "/ in your browser to see it working");
+	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 }
 
 void nulAC() {
@@ -163,13 +126,15 @@ long mls;
 void loop() {
 	mls = millis();
 	httph.clientHandle();
+	hard.process(mls);
 	encoder.process(mls);
 	kran.process(mls);
 	md->drawImm();
 
 	if (scrLoop + 1000 - mls < 0) {
+		hard.timed_process(mls);
 		md->draw();
-		kube_temp.process(mls);
+		//kube_temp.process(mls);
 		cool.process(mls);
 		scrLoop = millis();
 	}

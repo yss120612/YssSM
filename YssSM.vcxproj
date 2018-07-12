@@ -248,6 +248,7 @@
     <ClInclude Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\Wire\Wire.h" />
     <ClInclude Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\variants\nodemcu\pins_arduino.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Const.h" />
     <ClInclude Include="Cooler.h" />
     <ClInclude Include="DallasTerm.h" />
     <ClInclude Include="Display.h" />
@@ -319,6 +320,7 @@
     <ClCompile Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266WiFi\src\WiFiUdp.cpp" />
     <ClCompile Include="C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\Wire\Wire.cpp" />
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Const.cpp" />
     <ClCompile Include="Cooler.cpp" />
     <ClCompile Include="DallasTerm.cpp" />
     <ClCompile Include="Display.cpp" />

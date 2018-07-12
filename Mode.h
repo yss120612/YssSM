@@ -11,12 +11,12 @@
 #else
 	#include "WProgram.h"
 #endif
-
 #include  "Log.h"
 
 #include  "Hardware.h"
 
 #include  "Aggregates.h"
+
 
 
 #include  "Menu.h"
@@ -29,6 +29,7 @@ class Mode
 public:
 	Mode( Aggregates * a, Hardware *h);
 	virtual void draw() = 0;
+	virtual void initDraw() = 0;
 	virtual void drawImm();
 	virtual void left() = 0;
 	virtual void right() = 0;

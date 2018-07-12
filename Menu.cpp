@@ -75,31 +75,31 @@ void Menu::prev()
 	}
 }
 
-void Menu::display(Display *d)
+void Menu::display(SSD1306Wire *d)
 {
 	if (curr < 0) return;
 	
 	int8_t first = (curr / DISP_LINES) * DISP_LINES;
-	d->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
+	d->setTextAlignment(TEXT_ALIGN_LEFT);
 	for (uint8_t i = 0; i < DISP_LINES && first+i < items.size(); i++) {
 		
 		if (curr == first+i) {
 			//d->getDisplay()->drawRect(SHIFT_X, SHIFT_Y + DELTA_Y*i, d->getDisplay()->getWidth() - SHIFT_X * 2, DELTA_Y);
-			d->drawXY(0, SHIFT_Y+DELTA_Y*i,">"+items.get(first+i)->getName());
+			d->drawString(0, SHIFT_Y+DELTA_Y*i,">"+items.get(first+i)->getName());
 		}
 		else {
 			
-			d->drawXY(SHIFT_X, SHIFT_Y + DELTA_Y*i, items.get(first + i)->getName());
+			d->drawString(SHIFT_X, SHIFT_Y + DELTA_Y*i, items.get(first + i)->getName());
 		}
 
 	}
-	d->getDisplay()->setTextAlignment(TEXT_ALIGN_RIGHT);
+	d->setTextAlignment(TEXT_ALIGN_RIGHT);
 	if (first > 0)
 	{
-		d->getDisplay()->drawString(d->getDisplay()->getWidth() , SHIFT_Y, "/\\");
+		d->drawString(d->getWidth() , SHIFT_Y, "/\\");
 	}
 	if (first + DISP_LINES < items.size()) {
-		d->getDisplay()->drawString(d->getDisplay()->getWidth(), SHIFT_Y+DELTA_Y*(DISP_LINES-1), "\\/");
+		d->drawString(d->getWidth(), SHIFT_Y+DELTA_Y*(DISP_LINES-1), "\\/");
 	}
 }
 

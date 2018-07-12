@@ -9,9 +9,15 @@ Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	last_time = 0;
 }
 
+void Suvid::initDraw() {
+}
+
 void Suvid::draw() {
 
 }
+
+
+
 void Suvid::left() {
 #ifdef _SERIAL
 	Serial.println("left");
