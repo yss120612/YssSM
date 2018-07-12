@@ -21,6 +21,7 @@ Hardware::~Hardware()
 void Hardware::init()
 {
 	pinExtender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
+	encoder.setup(ENC_A_PIN, ENC_B_PIN, ENC_BTN_PIN);
 }
 
 void Hardware::timed_process(long ms)
@@ -30,6 +31,7 @@ void Hardware::timed_process(long ms)
 
 void Hardware::process(long ms)
 {
+	encoder.process(ms);
 }
 
 
@@ -42,6 +44,10 @@ Config * Hardware::getConfig() { return &config; }
 Beeper * Hardware::getBeeper() { return &beeper; }
 PinExtender * Hardware::getExtender() { return &pinExtender; }
 MD_DS3231 * Hardware::getClock() { return &RTC; }
+Encoder * Hardware::getEncoder()
+{
+	return encoder;
+}
 SSD1306Wire * Hardware::getDisplay() { return &display; }
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }

@@ -23,6 +23,7 @@
 #include "Httphelper.h"
 #include "Config.h"
 #include "Beeper.h"
+#include "Encoder.h"
 
 class Hardware
 {
@@ -42,6 +43,7 @@ public:
 	Beeper * getBeeper();
 	PinExtender * getExtender();
 	MD_DS3231 * getClock();
+	Encoder * getEncoder();
 	//SSD1306Wire * getDisp();
 	
 
@@ -69,6 +71,7 @@ protected:
 	
 	SSD1306Wire display;
 	DallasTerm t_kube;
+	Encoder encoder;
 
 	//OneWire ow(TEMPERATURE_PIN);
 	//SSD1306Wire display(0x3C, SDA, SCL);

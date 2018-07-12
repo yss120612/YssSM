@@ -18,19 +18,22 @@ class Aggregates
 public:
 	Aggregates(Hardware * ha);
 	~Aggregates();
-	void setTCooler(Cooler * t) { cool = t; }
+	void init();
+	void timed_process(long ms);
+	void process(long ms);
+	/*void setTCooler(Cooler * t) { cool = t; }
 	void setHeater(Heater * h) { heater = h; }
-	void setKran(Kran * cr) { kran = cr; }
+	void setKran(Kran * cr) { kran = cr; }*/
 
-	Cooler * getTCooler() { return cool; }
-	Heater * getHeater() { return heater; }
-	Kran * getKran() { return kran; }
+	Cooler * getTCooler() { return & cool; }
+	Heater * getHeater() { return & heater; }
+	Kran * getKran() { return & kran; }
 	Hardware * getHardware() { return hard; }
 private:
 	Hardware * hard;
-	Cooler * cool;
-	Heater * heater;
-	Kran * kran;
+	Cooler cool;
+	Heater heater;
+	Kran kran;
 };
 
 

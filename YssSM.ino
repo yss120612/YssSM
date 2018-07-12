@@ -11,21 +11,11 @@
 #include <EEPROM.h>
 
 #include <QList.h>
-#include "Hardware.h"
 
-
-
-
-//#include "Hardware.h"
 #include "Mode.h"
-
-#include "Encoder.h"
 
 #include "Main.h"
 #include "Suvid.h"
-
-//Config conf;
-//Logg logg(100);
 
 long scrLoop = 0;
 
@@ -36,41 +26,15 @@ WiFiHelper wifih;
 //DallasTerm kube_temp(tkube, &ds, 2.5);
 //SSD1306Wire display(0x3C, SDA, SCL);
 
-
-Kran kran;
-//Beeper beeper(BEEPER_PIN);
-Encoder encoder;
-Heater heater;
-
 Hardware hard;
 Aggregates agg(&hard);
-Cooler cool;
+//Cooler cool;
 Mode * md = new Main(&agg,&hard);
 
 void setup() {
-	//extender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
-
-	//hard.setConfig(&conf);
-	//hard.setDisplay(&display);
-	
-	//hard.setTKube(&kube_temp);
-	//hard.setTTriak(&kube_temp);
-	//hard.setHttpHelper(&httph);
-	//hard.setExtender(&extender);
-	//hard.setClock(&RTC);
-
 	hard.init();
-
-	agg.setHeater(&heater);//после Экстендер
-	agg.setTCooler(&cool);//после Экстендер
-	agg.setKran(&kran);//после Экстендер
-
-	kran.setup(&hard, KRAN_CLOSE_PIN, KRAN_OPEN_PIN);
-	heater.setup(&hard,HEAT_DRV_PIN, HEAT_REL_PIN);
-
-	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
-	CONF.setHttp("admin", "esp");
+	agg.init();
+	
 
 #ifdef _SERIAL
 	Serial.begin(115200);
@@ -79,18 +43,14 @@ void setup() {
 	logg.logging("_SERIAL is NOT defined");
 #endif
 
+	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
+	CONF.setHttp("admin", "esp");
+	
 	wifih.setup();
 	httph.setup();
-	//disp.setup();
 	
-
-
-	cool.setup(&hard, TRIAC_COOL_PIN);
-	cool.setParams(30, 1);
-	encoder.setup(ENC_A_PIN,ENC_B_PIN,ENC_BTN_PIN);
-
-
-	encoder.setHandler(md);
+	hard.getEncoder()->setHandler(md);
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
@@ -107,21 +67,19 @@ void setup() {
 	//RTC.readRAM
 	//RTC.writeTime();
 	md->initDraw();
-
-
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 }
 
 void nulAC() {
-	heater.processHeater();
+	agg.getHeater()->processHeater();
 }
 
 void A() {
-	encoder.A();
+	hard.getEncoder()->A();
 }
 
 void Button() {
-	encoder.Button();
+	hard.getEncoder()->Button();
 }
 
 
@@ -132,15 +90,13 @@ void loop() {
 	mls = millis();
 	httph.clientHandle();
 	hard.process(mls);
-	encoder.process(mls);
-	kran.process(mls);
+	agg.process(mls);
 	md->drawImm();
 
 	if (scrLoop + 1000 - mls < 0) {
 		hard.timed_process(mls);
+		agg.timed_process(mls);
 		md->draw();
-		//kube_temp.process(mls);
-		cool.process(mls);
 		scrLoop = millis();
 	}
 }
