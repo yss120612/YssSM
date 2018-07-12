@@ -9,9 +9,16 @@
 	#include "WProgram.h"
 #endif
 
-#include "Mode.h"
+//#include "Mode.h"
 
-
+partial class Mode
+{
+public:
+	virtual void left() = 0;
+	virtual void right() = 0;
+	virtual void press() = 0;
+	virtual void long_press() = 0;
+};
 
 class Encoder
 {
