@@ -22,7 +22,7 @@
 #include  "MenuItem.h"
 
 
-class Mode
+class Mode : public ModeBase
 {
 public:
 	Mode( Aggregates * a, Hardware *h);

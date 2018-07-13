@@ -11,7 +11,7 @@
 
 //#include "Mode.h"
 
-partial class Mode
+class ModeBase
 {
 public:
 	virtual void left() = 0;
@@ -28,13 +28,13 @@ public:
 	void process(long mls);
 	void A();
 	void Button();
-	void setHandler(Mode * m);
+	void setHandler(ModeBase * m);
 private:
 	
 	uint8_t pin_a;
 	uint8_t pin_b;
 	uint8_t pin_btn;
-	Mode * mode;
+	ModeBase * mode;
 	const long timeButtonPressed = 1500; // Долгое удержание кнопки после 1,5 секунд volatile 
 	int8_t state = 0; // Переменная хранящая статус вращения 
 				   // Переменные хранящие состояние действия до его выполнения 

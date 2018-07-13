@@ -44,10 +44,7 @@ Config * Hardware::getConfig() { return &config; }
 Beeper * Hardware::getBeeper() { return &beeper; }
 PinExtender * Hardware::getExtender() { return &pinExtender; }
 MD_DS3231 * Hardware::getClock() { return &RTC; }
-Encoder * Hardware::getEncoder()
-{
-	return encoder;
-}
+Encoder * Hardware::getEncoder(){ return &encoder;}
 SSD1306Wire * Hardware::getDisplay() { return &display; }
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }

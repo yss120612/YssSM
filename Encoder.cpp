@@ -96,6 +96,6 @@ void Encoder::process(long mls) {
 }
 
 
-void Encoder::setHandler(Mode *m) {
+void Encoder::setHandler(ModeBase *m) {
 	mode = m;
 }
