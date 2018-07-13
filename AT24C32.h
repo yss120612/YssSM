@@ -8,18 +8,15 @@
 #else
 	#include "WProgram.h"
 #endif
+
+#include "Const.h"
 #include <Wire.h>
-const uint8_t  AT24C32_ADDRESS = 0x57;
-const uint8_t  EEPROM_PAGE_SIZE = 32;
-const uint8_t  EEPROM_WORK_SIZE = EEPROM_PAGE_SIZE / 2;
-const uint32_t EEPROM_WRITE_TIMEOUT = 10;
 
 class AT24C32 {
 public:
 	
-
-	void init(bool fast = false);
-	void init(int8_t pinSDA, int8_t pinSCL, bool fast = false);
+	//void init(bool fast = false);
+	//void init(int8_t pinSDA, int8_t pinSCL, bool fast = false);
 	bool begin(uint8_t address = AT24C32_ADDRESS);
 	uint8_t read(uint16_t index);
 	void read(uint16_t index, uint8_t* buf, uint16_t len);
@@ -39,7 +36,7 @@ private:
 };
 
 
-//extern AT24C32 at24c32;
+
 
 #endif
 

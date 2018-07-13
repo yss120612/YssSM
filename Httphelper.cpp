@@ -203,7 +203,7 @@ void HttpHelper::setup() {
 
 	server->on("/pict", web_handlers::page1);
 
-	server->on("/log", std::bind(&HttpHelper::handleLog, this));
+	server->on("/log", std::bind(&HttpHelper::handleLog, this, "Lof file:\n"));
 
 	server->on("/restart", web_handlers::restart);
 
@@ -225,9 +225,9 @@ void HttpHelper::setup() {
 
 }
 
-void HttpHelper::handleLog()
+void HttpHelper::handleLog(String s)
 {
-	server->send(200, "text/plain", logg.getAll("\n"));
+	server->send(200, "text/plain", s+logg.getAll("\n"));
 }
 
 void HttpHelper::handleUpdate() {

@@ -8,7 +8,6 @@ Beeper::Beeper() {
 	
 }
 
-
 void Beeper::setup(uint8_t pin)
 {
 	beeper_pin = pin;

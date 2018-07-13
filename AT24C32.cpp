@@ -1,24 +1,18 @@
-// 
-// 
-// 
-
 #include "AT24C32.h"
 
 
-
-
-void AT24C32::init(bool fast) {
-	Wire.begin();
-	if (fast)
-		Wire.setClock(400000);
-}
-
-void AT24C32::init(int8_t pinSDA, int8_t pinSCL, bool fast) {
-	Wire.begin(pinSDA, pinSCL);
-	if (fast)
-		Wire.setClock(400000);
-}
-
+//void AT24C32::init(bool fast) {
+//	//Wire.begin();
+//	if (fast)
+//		Wire.setClock(400000);
+//}
+//
+//void AT24C32::init(int8_t pinSDA, int8_t pinSCL, bool fast) {
+//	//Wire.begin(pinSDA, pinSCL);
+//	if (fast)
+//		Wire.setClock(400000);
+//}
+//
 bool AT24C32::begin(uint8_t address) {
 	_address = address;
 	Wire.beginTransmission(_address);
@@ -86,4 +80,3 @@ void AT24C32::write(uint16_t index, const uint8_t* buf, uint16_t len) {
 	}
 }
 
-//AT24C32 at24c32;

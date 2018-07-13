@@ -20,6 +20,7 @@ public:
 	~Logg() { _log.clear(); }
 	void logging(String s);
 	String getAll(String divider = "");
+	int length();
 private:
 	uint16_t maxCount;
 	QList<String> _log;

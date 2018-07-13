@@ -3,8 +3,8 @@
 // 
 
 #include "RTCmemory.h"
+#include "Const.h"
 
-static const uint16_t RTC_MEM_SIZE = 512;
 
 uint8_t RTCmemory::read(uint16_t index) {
 	if (index < RTC_MEM_SIZE) {

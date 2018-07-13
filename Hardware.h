@@ -10,20 +10,21 @@
 #endif
 
 #include "Const.h"
-
 #include <OneWire.h>
 #include <DS1302.h>
 #include <MD_DS3231.h>
+#include <Wire.h>
 #include <SSD1306Wire.h>
 
 #include "Extender.h"
 #include "DallasTerm.h"
-#include "Display.h"
 #include "WiFiHelper.h"
 #include "Httphelper.h"
 #include "Config.h"
 #include "Beeper.h"
 #include "Encoder.h"
+#include "AT24C32.h"
+#include "RTCmemory.h"
 
 class Hardware
 {
@@ -44,7 +45,9 @@ public:
 	PinExtender * getExtender();
 	MD_DS3231 * getClock();
 	Encoder * getEncoder();
-	//SSD1306Wire * getDisp();
+	AT24C32 * getAT24mem();
+	RTCmemory * getRTCmem();
+	
 	
 
 	//void setDisplay(SSD1306Wire * d);
@@ -64,15 +67,17 @@ protected:
 	//DallasTerm t_tsarga;
 	//DallasTerm t_water;
 	DallasTerm t_triak;
+	DallasTerm t_kube;
 	//HttpHelper httpHelper;
 	Beeper beeper;
 	Config config;
 	PinExtender pinExtender;
 	
 	SSD1306Wire display;
-	DallasTerm t_kube;
+	
 	Encoder encoder;
-
+	AT24C32 at24mem;
+	RTCmemory RTCmem;
 	//OneWire ow(TEMPERATURE_PIN);
 	//SSD1306Wire display(0x3C, SDA, SCL);
 	//DallasTerm t_kube(tkube, &ow, 2.5);

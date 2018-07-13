@@ -1,34 +1,21 @@
 
-//#include "Aggregates.h"
-
-
-//#include "Const.h"
-//#include "AT24C32.h"
-
 #include "Config.h"
 
-#include "RTCmemory.h"
-#include <EEPROM.h>
-
-#include <QList.h>
-
 #include "Mode.h"
-
 #include "Main.h"
 #include "Suvid.h"
 
 long scrLoop = 0;
+long mls;
+
+
 
 HttpHelper httph;
 WiFiHelper wifih;
 
-//PinExtender extender;
-//DallasTerm kube_temp(tkube, &ds, 2.5);
-//SSD1306Wire display(0x3C, SDA, SCL);
-
 Hardware hard;
 Aggregates agg(&hard);
-//Cooler cool;
+
 Mode * md = new Main(&agg,&hard);
 
 void setup() {
@@ -83,9 +70,7 @@ void Button() {
 }
 
 
-
-long mls;
-
+int i = 0;
 void loop() {
 	mls = millis();
 	httph.clientHandle();
@@ -98,6 +83,8 @@ void loop() {
 		agg.timed_process(mls);
 		md->draw();
 		scrLoop = millis();
+		i++;
+		logg.logging("Event " + String(i) + " Length=" + logg.length());
 	}
 }
 

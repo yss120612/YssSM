@@ -29,7 +29,7 @@ public:
 
 private:
 	void handleUpdate();
-	void handleLog();
+	void handleLog(String s);
 	//Config * conf;
 	ESP8266WebServer * server;
 	ESP8266HTTPUpdateServer * httpUpdater;

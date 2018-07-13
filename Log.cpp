@@ -21,8 +21,13 @@ String Logg::getAll(String divider) {
 	return result;
 }
 
+int Logg::length()
+{
+	return _log.length();
+}
+
 void Logg::logging(String s)
- {
+{
 #ifdef _SERIAL
 	Serial.println(s);
 #endif // _SERIAL
@@ -30,8 +35,7 @@ void Logg::logging(String s)
 	if (_log.length() >= maxCount) {
 		_log.pop_front();
 	}
-	else
 	_log.push_back(s);
-	}
+}
 
 Logg logg(100);

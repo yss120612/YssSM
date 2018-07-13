@@ -7,8 +7,8 @@
 
 Hardware::Hardware()
 	:ow(TEMPERATURE_PIN),
-	t_kube(tkube, &ow, 2.5),
-	t_triak(tkube, &ow, 2.5),
+	t_kube(term_addr[T_KUBE], &ow, 2.5),
+	t_triak(term_addr[T_TRIAK], &ow, 2.5),
 	display(0x3C, SDA, SCL)
 	
 {
@@ -46,6 +46,8 @@ PinExtender * Hardware::getExtender() { return &pinExtender; }
 MD_DS3231 * Hardware::getClock() { return &RTC; }
 Encoder * Hardware::getEncoder(){ return &encoder;}
 SSD1306Wire * Hardware::getDisplay() { return &display; }
+AT24C32 * Hardware::getAT24mem() { return &at24mem; }
+RTCmemory * Hardware::getRTCmem() { return &RTCmem; }
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }
