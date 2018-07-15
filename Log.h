@@ -20,6 +20,7 @@ public:
 	~Logg() { _log.clear(); }
 	void logging(String s);
 	String getAll(String divider = "");
+	String getAll2Web(String divider = "li");
 	int length();
 private:
 	uint16_t maxCount;

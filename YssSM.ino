@@ -11,7 +11,7 @@ long mls;
 
 
 HttpHelper httph;
-WiFiHelper wifih;
+
 
 Hardware hard;
 Aggregates agg(&hard);
@@ -30,11 +30,10 @@ void setup() {
 	logg.logging("_SERIAL is NOT defined");
 #endif
 
-	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	//conf.setWiFi("Yss_GIGA","bqt3bqt3");
+	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	CONF.setWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.setHttp("admin", "esp");
 	
-	wifih.setup();
 	httph.setup();
 	
 	hard.getEncoder()->setHandler(md);

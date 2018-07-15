@@ -75,9 +75,9 @@ void Main::makeMenu()
 void Main::left() {
 	logg.logging("left in main");
 
-	agg->getHeater()->setPower(agg->getHeater()->getPower() - 1);
-	agg->getKran()->shiftQuantum(-1);
-	return;
+	//agg->getHeater()->setPower(agg->getHeater()->getPower() - 1);
+	//agg->getKran()->shiftQuantum(-1);
+	
 	if (menu->isActive())
 	{
 		menu->prev();
@@ -95,9 +95,9 @@ void Main::left() {
 
 void Main::right() {
 	logg.logging("right in main");
-	agg->getHeater()->setPower(agg->getHeater()->getPower() + 1);
-	agg->getKran()->shiftQuantum(1);
-	return;
+	//agg->getHeater()->setPower(agg->getHeater()->getPower() + 1);
+	//agg->getKran()->shiftQuantum(1);
+	
 	if (menu->isActive())
 	{
 		menu->next();
@@ -116,16 +116,16 @@ void Main::right() {
 void Main::press() {
 	logg.logging("press in main");
 
-	if (!agg->getHeater()->isON()) {
-		agg->getHeater()->start();
-	}	else {
-		agg->getHeater()->stop();
-	}
-	//hardware->getBeeper()->beep(1000, 500);
-	//counter = 100;
-	drawImmed = true;
-	agg->getKran()->close();
-	return;
+	//if (!agg->getHeater()->isON()) {
+	//	agg->getHeater()->start();
+	//}	else {
+	//	agg->getHeater()->stop();
+	//}
+	////hardware->getBeeper()->beep(1000, 500);
+	////counter = 100;
+	//drawImmed = true;
+	//agg->getKran()->close();
+	
 	if (menu->isActive())
 	{
 		if (menu->current()->getKind() == 1) {

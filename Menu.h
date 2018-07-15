@@ -35,14 +35,16 @@ public:
 	void display(SSD1306Wire *d);
 	void setParent(Menu *m);
 	Menu * getParent();
-	void setEditParams(MenuParameter * ep);
-	MenuParameter * getEditParams();
+	void setEditParams(QList<MenuParameter> * ep);
+	int8_t currenntParams() { if (edit_param && edit_param->size() > 0) return curr_edit; }
+	QList<MenuParameter> * getEditParams();
 protected:
 	QList<MenuItem *> items;
 	int8_t curr;
 	Menu * parent;
 	boolean active;
-	MenuParameter * edit_param;
+	QList<MenuParameter> * edit_param;
+	int8_t curr_edit;
 };
 
 

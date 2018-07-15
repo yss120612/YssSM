@@ -1,7 +1,10 @@
 ﻿#include "Httphelper.h"
 #include <FS.h>
+#include <ArduinoJson.h>
 #include  "Log.h"
 #include  "Config.h"
+
+
 
 namespace web_handlers {
 	ESP8266WebServer * server;
@@ -121,6 +124,7 @@ namespace web_handlers {
 	}
 
 
+
 	void restart()
 	{
 		String restart = server->arg("device");          // Получаем значение device из запроса
@@ -136,6 +140,8 @@ namespace web_handlers {
 		}
 	}
 
+
+	
 
 	void pageUpdate() {
 		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
@@ -193,6 +199,8 @@ HttpHelper::~HttpHelper()
 void HttpHelper::setup() {
 	if (server == NULL) return;
 
+	WiFiconnect();
+
 	web_handlers::conf = &CONF;
 
 	web_handlers::server = server;
@@ -203,7 +211,7 @@ void HttpHelper::setup() {
 
 	server->on("/pict", web_handlers::page1);
 
-	server->on("/log", std::bind(&HttpHelper::handleLog, this, "Lof file:\n"));
+	server->on("/logdata", std::bind(&HttpHelper::handleLog, this));
 
 	server->on("/restart", web_handlers::restart);
 
@@ -211,6 +219,8 @@ void HttpHelper::setup() {
 	server->on("/update", std::bind(&HttpHelper::handleUpdate, this));
 
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
+
+	server->serveStatic("/log", SPIFFS, "/log.htm", NULL);
 
 	server->serveStatic("/css/bootstrap.min.css", SPIFFS, "/css/bootstrap.min.css", NULL);
 
@@ -225,9 +235,95 @@ void HttpHelper::setup() {
 
 }
 
-void HttpHelper::handleLog(String s)
+boolean HttpHelper::isConnected()
 {
-	server->send(200, "text/plain", s+logg.getAll("\n"));
+	return WiFi.status() == WL_CONNECTED;
+}
+
+
+void HttpHelper::handleLog()
+{
+
+
+	String str = "{\"logdata\":\"<ul>" + logg.getAll2Web() + "</ul>\"}";
+
+	//StaticJsonBuffer<2000> jsonBuffer;
+
+	//JsonObject& root = jsonBuffer.createObject();
+
+	//root["logdata"] = logg.getAll("<br>");
+
+	//root.printTo(Serial);
+
+	//Serial.println();
+
+	//root.prettyPrintTo(Serial);
+	
+	//root.prettyPrintTo(str);
+
+	server->send(200, "text/json",str); // Oтправляем ответ No Reset
+}
+
+
+
+void HttpHelper::WiFiconnect()
+{
+	WiFi.disconnect();
+	//IPAddress apIP(192, 168, 0, 100);
+	WiFi.mode(WIFI_STA);
+	//WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+	//WiFi.softAP(conf->getWiFiN().c_str(), conf->getWiFiP().c_str());
+	uint8_t modeWiFi = 0;
+	int n_network = WiFi.scanNetworks(); // запрос количества доступных сетей
+	for (int i = 0; i < n_network; ++i) {
+		logg.logging("network " + WiFi.SSID(i) + " present");
+		if (WiFi.SSID(i).equals(CONF.getWiFiN()))
+		{
+			modeWiFi = 1; // наша сеть присутствует
+			break;
+		}
+
+	}
+
+	if (modeWiFi == 1) {
+		// пробуем подключиться
+
+		logg.logging("Connecting to " + CONF.getWiFiN());
+
+		WiFi.disconnect(true);
+		WiFi.begin(CONF.getWiFiN().c_str(), CONF.getWiFiP().c_str());
+		// ждем N кол-во попыток, если нет, то AP Mode
+		byte tmp_while = 0;
+		while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+			delay(1000);
+
+			logg.logging("Connecting to " + CONF.getWiFiN());
+
+			if (tmp_while < 5) tmp_while++;
+			else {
+				modeWiFi = 0;
+				logg.logging("Connection to " + CONF.getWiFiN() + " failed!");
+
+				break;
+			}
+		}
+	}
+}
+
+void HttpHelper::WiFiReconnect()
+{
+	if (isConnected()) {
+		return;
+	}
+
+	WiFi.reconnect();
+	logg.logging("Reconnect...");
+
+	// При потери связи с базовой станцией переходим в режим точки доступа и пробуем переподключиться
+	/*if (conf->getWiFiN().length() && tCnt >= setRestartWiFi && !WiFi.softAPgetStationNum()) {
+	WiFi.reconnect();
+	Serial.println("reconnect");
+	}*/
 }
 
 void HttpHelper::handleUpdate() {

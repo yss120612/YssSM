@@ -21,6 +21,23 @@ String Logg::getAll(String divider) {
 	return result;
 }
 
+String Logg::getAll2Web(String divider) {
+	String result = "";
+	if (_log.length() > 0) {
+		for (uint16_t i = 0; i < _log.length(); i++) {
+			result += "<"+divider+">";
+			result += _log[i];
+			result += "</"+divider+">";
+			
+		}
+	}
+	else {
+		result = "Log is empty...";
+	}
+	return result;
+}
+
+
 int Logg::length()
 {
 	return _log.length();
