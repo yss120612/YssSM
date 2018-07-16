@@ -28,7 +28,8 @@ public:
 	~MenuItem();
 	virtual Menu * select()=0;
 	uint8_t getKind() { return kind; }
-	String getName() { return name; }
+	String getName() { return name.indexOf(';')<0?name:name.substring(0, name.indexOf(';')); }
+	String getMyName() { return name.indexOf(';')<0 ? name : name.substring(name.indexOf(';')+1); }
 	uint8_t getId() { return id; }
 protected:
 	String name;

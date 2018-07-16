@@ -27,7 +27,7 @@ void Main::draw() {
 	
 	if (menu->isActive()) {
 		if (menu->isEditMode()) {
-			hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getName() + " : " + menu->getEditParams()->getStCurr());
+			hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
 		}
 		else {
 			menu->display(hardware->getDisplay());
@@ -62,24 +62,18 @@ void Main::makeMenu()
 		setup->setParent(menu);
 		setup->setActive(true);
 
-		MenuIParameter * iDay = new MenuIParameter("Day", setup, 40);
-		iDay->setup(1, 1, 1, 31);
+		MenuIParameter * iDay = new MenuIParameter("Date;Day", setup, 40);
 		MenuIParameter * iMon = new MenuIParameter("Month", setup, 41);
-		iMon->setup(1, 1, 1, 12);
 		MenuIParameter * iYe = new MenuIParameter("Year", setup, 42);
-		iYe->setup(2010, 1, 2010, 2050);
 		iDay->setNext(iMon);
 		iMon->setNext(iYe);
 		setup->add(iDay);
 
 		//setup->add(new MenuCommand("Date", 11));
 		
-		MenuIParameter * iHour = new MenuIParameter("Hour", setup, 30);
-		iHour->setup(0, 1, 0, 23);
+		MenuIParameter * iHour = new MenuIParameter("Time;Hour", setup, 30);
 		MenuIParameter * iMin = new MenuIParameter("Min", setup, 31);
-		iMin->setup(0, 1, 0, 59);
 		MenuIParameter * iSec = new MenuIParameter("Sec", setup, 32);
-		iSec->setup(0, 1, 0, 59);
 		iHour->setNext(iMin);
 		iMin->setNext(iSec);
 		setup->add(iHour);
@@ -165,24 +159,24 @@ void Main::press() {
 						case 22:
 							break;
 						case 30:
-							RTC.readTime();
-							RTC.h = ((MenuIParameter *)mp)->getCurrent();
 							break;
 						case 31:
-							RTC.m = ((MenuIParameter *)mp)->getCurrent();
 							break;
 						case 32:
+							RTC.readTime();
+							RTC.h = ((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent();
+							RTC.m = ((MenuIParameter *)mp->getPrev())->getCurrent();
 							RTC.s = ((MenuIParameter *)mp)->getCurrent();
 							RTC.writeTime();
 							break;
 						case 40:
-							RTC.readTime();
-							RTC.dd = ((MenuIParameter *)mp)->getCurrent();
 							break;
 						case 41:
-							RTC.mm = ((MenuIParameter *)mp)->getCurrent();
 							break;
 						case 42:
+							RTC.readTime();
+							RTC.dd = ((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent();
+							RTC.mm = ((MenuIParameter *)mp->getPrev())->getCurrent();
 							RTC.yyyy = ((MenuIParameter *)mp)->getCurrent();
 							RTC.writeTime();
 							break;
@@ -198,7 +192,7 @@ void Main::press() {
 			{
 				menu->setEditParams((MenuParameter *)(menu->current()));
 			}
-			
+			initParams(menu->getEditParams());
 		}
 	}
 	else {//MENU IS NOT ACTIVE
@@ -213,8 +207,40 @@ void Main::press() {
 		  //drawImmed = true;
 		  //agg->getKran()->close();
 	}
-			
+	drawImmed = true;
 }
+
+void Main::initParams(MenuParameter * mp) {
+	if (mp == NULL) return;
+	switch (mp->getId()) {
+	case 30:
+		RTC.readTime();
+		((MenuIParameter *)mp)->setup(RTC.h, 1, 0, 23);
+		break;
+	case 31:
+		RTC.readTime();
+		((MenuIParameter *)mp)->setup(RTC.m, 1, 0, 59);
+		break;
+	case 32:
+		RTC.readTime();
+		((MenuIParameter *)mp)->setup(RTC.s, 1, 0, 59);
+		break;
+	case 40:
+		RTC.readTime();
+		((MenuIParameter *)mp)->setup(RTC.dd, 1, 1, 31);
+		break;
+	case 41:
+		RTC.readTime();
+		((MenuIParameter *)mp)->setup(RTC.mm, 1, 1, 12);
+		break;
+	case 42:
+		RTC.readTime();
+		((MenuIParameter *)mp)->setup(RTC.yyyy, 1, 2010, 2030);
+		break;
+
+	}
+}
+
 
 void Main::long_press() {
 	logg.logging("long press in main");
