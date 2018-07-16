@@ -16,11 +16,11 @@ Menu::~Menu()
 	}
 }
 
-void Menu::setEditParams(QList<MenuParameter> * ep) {
+void Menu::setEditParams(MenuParameter * ep) {
 	edit_param = ep;
 }
 
-QList<MenuParameter> * Menu::getEditParams()
+MenuParameter * Menu::getEditParams()
 {
 	return edit_param;
 }

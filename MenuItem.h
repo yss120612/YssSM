@@ -11,6 +11,16 @@
 
 #include "Menu.h"
 
+enum MI_Kind {
+	ABSTRACT,
+	SUBMENU,
+	COMMAND,
+	PARAMETRINT,
+	PARAMETRFLOAT,
+	PARAMETRSTR
+};
+
+
 class MenuItem
 {
 public:
@@ -49,24 +59,33 @@ class MenuParameter : public MenuItem {
 public:
 	MenuParameter(String na, Menu * par, int id);
 	void setParent(Menu * m) { parent = m; }
+
+	void setNext(MenuParameter * _n) { _next = _n; _n->setPrev(this); }
+	MenuParameter * getNext() { return _next; }
+	void setPrev(MenuParameter * _p) { _prev = _p; }
+	MenuParameter * getPrev() { return _prev; }
+
 	Menu * getParent() { return parent; }
-	Menu * select() { return parent; }
+	Menu * select() { return parent;}
 	virtual String getStCurr() = 0;
 	virtual void up() = 0;
 	virtual void down() = 0;
 protected:
+	MenuParameter * _next;
+	MenuParameter * _prev;
 	Menu * parent;
 };
 
 class MenuIParameter : public MenuParameter {
 public:
-	MenuIParameter(String na, Menu * par, int id, int sm);
+	MenuIParameter(String na, Menu * par, int id);
 	int getCurrent() { return current; };
-	void setup(uint8_t st, int m_i, int m_a) { step = st; ma = m_a; mi = m_i;}
+	void setup(int curr, uint8_t st, int m_i, int m_a) {current=curr, step = st; ma = m_a; mi = m_i;}
 	String getStCurr() { return String(current); };
 	void up() { current + step>ma?ma:current+=step; }
 	void down() { current - step<mi ? mi : current -= step; }
 protected:
+	
 	int current;
 	uint8_t step;
 	int mi;

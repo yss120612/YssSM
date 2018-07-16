@@ -3,7 +3,7 @@
 MenuItem::MenuItem(String nm)
 {
 	name = nm;
-	kind = 0;
+	kind = ABSTRACT;
 }
 
 MenuItem::~MenuItem()
@@ -13,7 +13,7 @@ MenuItem::~MenuItem()
 MenuCommand::MenuCommand(String nm, uint8_t i):MenuItem(nm)
 {
 	id = i;
-	kind = 1;
+	kind = COMMAND;
 }
 
 Menu * MenuCommand::select()
@@ -25,7 +25,7 @@ Menu * MenuCommand::select()
 MenuSubmenu::MenuSubmenu(String nm, Menu * sub) :MenuItem(nm)
 {
 	submenu = sub;
-	kind = 2;
+	kind = SUBMENU;
 	id = 0;
 }
 
@@ -43,14 +43,13 @@ MenuParameter::MenuParameter(String nm, Menu * par, int i) :MenuItem(nm)
 {
 	id = i;
 	parent = par;
+	_next = NULL;
 }
 
 
-MenuIParameter::MenuIParameter(String nm, Menu * par, int i, int sm) : MenuParameter(nm,par,i)
+MenuIParameter::MenuIParameter(String nm, Menu * par, int i) : MenuParameter(nm,par,i)
 {
-	current = sm;
-	kind = 3;
-	step = 1;
+	kind = PARAMETRINT;
 }
 
 

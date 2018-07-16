@@ -27,6 +27,7 @@ public:
 	Menu();
 	~Menu();
 	boolean isActive();
+	boolean isEditMode() { return edit_param != NULL; }
 	boolean setActive(boolean acc) { active = acc; }
 	MenuItem * current();
 	void add(MenuItem * mi);
@@ -35,16 +36,14 @@ public:
 	void display(SSD1306Wire *d);
 	void setParent(Menu *m);
 	Menu * getParent();
-	void setEditParams(QList<MenuParameter> * ep);
-	int8_t currenntParams() { if (edit_param && edit_param->size() > 0) return curr_edit; }
-	QList<MenuParameter> * getEditParams();
+	void setEditParams(MenuParameter * ep);
+	MenuParameter * getEditParams();
 protected:
-	QList<MenuItem *> items;
 	int8_t curr;
+	QList<MenuItem *> items;
 	Menu * parent;
 	boolean active;
-	QList<MenuParameter> * edit_param;
-	int8_t curr_edit;
+	MenuParameter * edit_param;
 };
 
 
