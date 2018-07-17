@@ -33,20 +33,7 @@ void Main::draw() {
 			menu->display(hardware->getDisplay());
 		}
 	}
-
-	//else{
-	//	
-	//	//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(counter));
-
-		//hardware->getDisplay()->getDisplay()->drawString(0, 14, String(hardware->getHeater()->getPower()));
-	//	//hardware->getDisplay()->getDisplay()->drawString(20, 14, "Dummy="+String(hardware->getHeater()->dummy));
 	}	
-	//hardware->getDisplay()->getDisplay()->drawString(20, 14, "Counter="+String(counter));
-	//	hardware->getDisplay()->getDisplay()->drawString(0, 28, "HeaterOn=" + String(hardware->getHeater()->isON()));
-	//	hardware->getDisplay()->getDisplay()->drawString(0, 42, "Extender=" + String(hardware->getExtender()->getAll()));
-	//	
-
-	//}
 	hardware->getDisplay()->display();
 }
 
@@ -79,14 +66,18 @@ void Main::makeMenu()
 		setup->add(iHour);
 
 		setup->add(new MenuCommand("T Cube", 13));
-			Menu * triak = new Menu();
-			triak->setParent(setup);
-			triak->setActive(true);
-			MenuIParameter * iPar = new MenuIParameter("Temperature", triak, 21);
-			iPar->setup(30, 1, 20, 100);
-			triak->add(iPar);
-			triak->add(new MenuCommand("Gisteresis", 22));
-		setup->add(new MenuSubmenu("Triak", triak));
+
+		MenuIParameter * iTemp = new MenuIParameter("Triak;Temperature", setup, 21);
+		MenuIParameter * iGis = new MenuIParameter("Gisteresis", setup, 22);
+		iTemp->setNext(iGis);
+		setup->add(iTemp);
+			//Menu * triak = new Menu();
+			//triak->setParent(setup);
+			//triak->setActive(true);
+			
+
+		//triak->add(new MenuCommand("Gisteresis", 22));
+		//setup->add(new MenuSubmenu("Triak", triak));
 	menu->add(new MenuSubmenu("Setup", setup));
 }
 
@@ -139,7 +130,7 @@ void Main::press() {
 	if (menu->isActive())
 	{
 		if (menu->current()->getKind() == COMMAND) {
-			command(((MenuCommand *)(menu->current()))->getId());
+			command(menu->current()->getId());
 		}
 		else if (menu->current()->getKind() == SUBMENU) {
 			menu = menu->current()->select();
@@ -151,38 +142,7 @@ void Main::press() {
 					mp = menu->getEditParams();
 					while (mp != NULL)
 					{
-						switch (mp->getId())
-						{
-						case 21:
-							agg->getTCooler()->setParams(((MenuIParameter *)mp)->getCurrent(), 1);
-							break;
-						case 22:
-							break;
-						case 30:
-							break;
-						case 31:
-							break;
-						case 32:
-							RTC.readTime();
-							RTC.h = ((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent();
-							RTC.m = ((MenuIParameter *)mp->getPrev())->getCurrent();
-							RTC.s = ((MenuIParameter *)mp)->getCurrent();
-							RTC.writeTime();
-							break;
-						case 40:
-							break;
-						case 41:
-							break;
-						case 42:
-							RTC.readTime();
-							RTC.dd = ((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent();
-							RTC.mm = ((MenuIParameter *)mp->getPrev())->getCurrent();
-							RTC.yyyy = ((MenuIParameter *)mp)->getCurrent();
-							RTC.writeTime();
-							break;
-						default:
-							break;
-						}
+						acceptParams(mp);
 						mp = mp->getPrev();
 					}
 				}
@@ -210,9 +170,36 @@ void Main::press() {
 	drawImmed = true;
 }
 
+void Main::long_press() {
+	logg.logging("long press in main");
+	counter = 0;
+	if (menu->isActive())
+	{
+		if (menu->isEditMode()) {
+			menu->setEditParams(NULL);
+		}
+		else if (menu->getParent() != NULL) {
+			menu = menu->getParent();
+		}
+		else {
+			menu->setActive(false);
+		}
+	}
+	else{
+		menu->setActive(true);
+	}
+	drawImmed = true;
+}
+
 void Main::initParams(MenuParameter * mp) {
 	if (mp == NULL) return;
 	switch (mp->getId()) {
+	case 21:
+		((MenuIParameter *)mp)->setup(agg->getTCooler()->getTemperature(), 1,10,100);
+		break;
+	case 22:
+		((MenuIParameter *)mp)->setup(agg->getTCooler()->getGesteresis(), 1, 0, 20);
+		break;
 	case 30:
 		RTC.readTime();
 		((MenuIParameter *)mp)->setup(RTC.h, 1, 0, 23);
@@ -241,26 +228,40 @@ void Main::initParams(MenuParameter * mp) {
 	}
 }
 
-
-void Main::long_press() {
-	logg.logging("long press in main");
-	counter = 0;
-	if (menu->isActive())
+void Main::acceptParams(MenuParameter * mp) {
+	if (mp == NULL) return;
+	switch (mp->getId())
 	{
-		if (menu->isEditMode()) {
-			menu->setEditParams(NULL);
-		}
-		else if (menu->getParent() != NULL) {
-			menu = menu->getParent();
-		}
-		else {
-			menu->setActive(false);
-		}
+	case 21:
+		break;
+	case 22:
+		agg->getTCooler()->setParams(((MenuIParameter *)mp->getPrev())->getCurrent(), ((MenuIParameter *)mp)->getCurrent());
+		break;
+	case 30:
+		break;
+	case 31:
+		break;
+	case 32:
+		RTC.readTime();
+		RTC.h = ((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent();
+		RTC.m = ((MenuIParameter *)mp->getPrev())->getCurrent();
+		RTC.s = ((MenuIParameter *)mp)->getCurrent();
+		RTC.writeTime();
+		break;
+	case 40:
+		break;
+	case 41:
+		break;
+	case 42:
+		RTC.readTime();
+		RTC.dd = ((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent();
+		RTC.mm = ((MenuIParameter *)mp->getPrev())->getCurrent();
+		RTC.yyyy = ((MenuIParameter *)mp)->getCurrent();
+		RTC.writeTime();
+		break;
+	default:
+		break;
 	}
-	else{
-		menu->setActive(true);
-	}
-	drawImmed = true;
 }
 
 void Main::command(uint8_t id)
@@ -278,20 +279,5 @@ void Main::command(uint8_t id)
 	drawImmed = true;
 }
 
-void Main::params(uint8_t id)
-{
-	
-	if (id == 21) {
 
-	}
-	/*if (id != 3) return;
-	if (!hardware->getHeater()->isON()) {
-	hardware->getHeater()->start();
-	}
-	else {
-	hardware->getHeater()->stop();
-	}*/
-
-	drawImmed = true;
-}
 

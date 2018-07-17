@@ -31,7 +31,9 @@ public:
 	virtual void drawImm();
 	virtual void makeMenu() = 0;
 	virtual void command(uint8_t id) = 0;
-	virtual void params(uint8_t id) = 0;
+	virtual void initParams(MenuParameter * mp)=0;
+	virtual void acceptParams(MenuParameter * mp)=0;
+
 protected:
 	boolean drawImmed;
 	Mode * parent;

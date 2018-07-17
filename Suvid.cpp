@@ -7,6 +7,7 @@
 Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	targetT = 0;
 	last_time = 0;
+	makeMenu();
 }
 
 void Suvid::initDraw() {
@@ -19,28 +20,53 @@ void Suvid::draw() {
 
 
 void Suvid::left() {
-#ifdef _SERIAL
-	Serial.println("left");
-#endif // _SERIAL
+
+logg.logging("suvid left");
+
 }
 void Suvid::right() {
-#ifdef _SERIAL
-	Serial.println("right");
-#endif // _SERIAL
+
+	logg.logging("suvid right");
+
 
 }
 void Suvid::press() {
-#ifdef _SERIAL
-	Serial.println("press");
-#endif // _SERIAL
+
+	logg.logging("suvid press");
+
 }
 void Suvid::long_press() {
-#ifdef _SERIAL
-	Serial.println("long_press");
-#endif // _SERIAL
+	logg.logging("long_press");
 }
 
 void Suvid::makeMenu()
+{
+	menu = new Menu();
+	menu->setActive(true);
+	menu->add(new MenuCommand("Start", 1));
+	menu->add(new MenuCommand("Return", 2));
+	Menu * setup = new Menu();
+	setup->setParent(menu);
+	setup->setActive(true);
+
+	MenuIParameter * iHo = new MenuIParameter("Duration;Hours", setup, 10);
+	MenuIParameter * iMi = new MenuIParameter("Minutes", setup, 11);
+	
+	iHo->setNext(iMi);
+	setup->add(iHo);
+	
+	menu->add(new MenuSubmenu("Setup", setup));
+}
+
+void Suvid::command(uint8_t id)
+{
+}
+
+void Suvid::initParams(MenuParameter * mp)
+{
+}
+
+void Suvid::acceptParams(MenuParameter * mp)
 {
 }
 

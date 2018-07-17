@@ -47,6 +47,9 @@ private:
 	void press();
 	void long_press();
 	void makeMenu();
+	void command(uint8_t id);
+	void initParams(MenuParameter * mp);
+	void acceptParams(MenuParameter * mp);
 public:
 	Suvid(Aggregates * a, Hardware *h);
 	void start(int8_t tm, uint16_t min);
