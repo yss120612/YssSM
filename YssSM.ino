@@ -33,7 +33,7 @@ void setup() {
 	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
 	CONF.setWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.setHttp("admin", "esp");
-	
+	CONF.setScrSavMin(1);
 	httph.setup();
 	
 	hard.getEncoder()->setHandler(md);
@@ -75,12 +75,12 @@ void loop() {
 	httph.clientHandle();
 	hard.process(mls);
 	agg.process(mls);
-	md->drawImm();
+	md->drawImm(mls);
 
 	if (scrLoop + 1000 - mls < 0) {
 		hard.timed_process(mls);
 		agg.timed_process(mls);
-		md->draw();
+		md->draw(mls);
 		scrLoop = millis();
 		i++;
 		logg.logging("Event " + String(i) + " Length=" + logg.length());

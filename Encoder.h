@@ -14,10 +14,12 @@
 class ModeBase
 {
 public:
-	virtual void left() = 0;
-	virtual void right() = 0;
-	virtual void press() = 0;
-	virtual void long_press() = 0;
+	virtual void left() { last_action = millis(); }
+	virtual void right() { last_action = millis(); }
+	virtual void press() { last_action = millis(); }
+	virtual void long_press() { last_action = millis(); }
+protected:
+	long last_action;
 };
 
 class Encoder

@@ -26,9 +26,9 @@ class Mode : public ModeBase
 {
 public:
 	Mode( Aggregates * a, Hardware *h);
-	virtual void draw() = 0;
+	virtual void draw(long m) = 0;
 	virtual void initDraw() = 0;
-	virtual void drawImm();
+	virtual void drawImm(long m);
 	virtual void makeMenu() = 0;
 	virtual void command(uint8_t id) = 0;
 	virtual void initParams(MenuParameter * mp)=0;

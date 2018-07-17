@@ -13,29 +13,30 @@ Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 void Suvid::initDraw() {
 }
 
-void Suvid::draw() {
+void Suvid::draw(long m) {
 
 }
 
 
 
 void Suvid::left() {
-
+	Mode::left();
 logg.logging("suvid left");
 
 }
 void Suvid::right() {
-
+	Mode::right();
 	logg.logging("suvid right");
 
 
 }
 void Suvid::press() {
-
+	Mode::press();
 	logg.logging("suvid press");
 
 }
 void Suvid::long_press() {
+	Mode::long_press();
 	logg.logging("long_press");
 }
 

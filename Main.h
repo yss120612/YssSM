@@ -15,7 +15,7 @@ class Main: public Mode {
 public:
 	Main(Aggregates * a,Hardware * h);
 
-	void draw();
+	void draw(long m);
 	void initDraw();
 	void makeMenu();
 	void left();

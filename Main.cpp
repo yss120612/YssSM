@@ -14,12 +14,20 @@ void Main::initDraw() {
 	hardware->getDisplay()->flipScreenVertically();
 }
 
-void Main::draw() {
+void Main::draw(long m) {
 	hardware->getDisplay()->clear();
-	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
-	hardware->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	hardware->getClock()->readTime();
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
+	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
+	if (m - last_action > CONF.getScrSavMin()*1000*60) {
+		//int x = rand() % (hardware->getDisplay()->width() - 10);
+		//int y = 13 + rand() % (hardware->getDisplay()->height() - 26);
+		hardware->getDisplay()->drawString(rand() % (80), 0, "Main...");
+		hardware->getDisplay()->drawString(rand() % (65), 13 + rand() % (hardware->getDisplay()->height() - 27), tim);
+	}//SCREEN SAVER
+	else 
+	{
+	hardware->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	hardware->getDisplay()->drawString(60, 0, tim);
 	
 	if (menu != NULL)
@@ -34,6 +42,9 @@ void Main::draw() {
 		}
 	}
 	}	
+
+	}//NOT SCREEN SAVER
+
 	hardware->getDisplay()->display();
 }
 
@@ -82,6 +93,7 @@ void Main::makeMenu()
 }
 
 void Main::left() {
+	Mode::left();
 	logg.logging("left in main");
 
 	//agg->getHeater()->setPower(agg->getHeater()->getPower() - 1);
@@ -104,6 +116,7 @@ void Main::left() {
 }
 
 void Main::right() {
+	Mode::right();
 	logg.logging("right in main");
 	//agg->getHeater()->setPower(agg->getHeater()->getPower() + 1);
 	//agg->getKran()->shiftQuantum(1);
@@ -125,6 +138,7 @@ void Main::right() {
 }
 
 void Main::press() {
+	Mode::press();
 	logg.logging("press in main");
 	MenuParameter * mp;
 	if (menu->isActive())
@@ -171,6 +185,7 @@ void Main::press() {
 }
 
 void Main::long_press() {
+	Mode::long_press();
 	logg.logging("long press in main");
 	counter = 0;
 	if (menu->isActive())

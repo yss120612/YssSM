@@ -40,7 +40,7 @@ private:
 	int8_t err;
 	long time;
 	void error(uint8_t);
-	void draw();
+	void draw(long m);
 	void initDraw();
 	void left();
 	void right();
