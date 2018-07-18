@@ -18,7 +18,7 @@
 
 #include "Extender.h"
 #include "DallasTerm.h"
-#include "WiFiHelper.h"
+//#include "WiFiHelper.h"
 #include "Httphelper.h"
 #include "Config.h"
 #include "Beeper.h"
@@ -78,6 +78,7 @@ protected:
 	Encoder encoder;
 	AT24C32 at24mem;
 	RTCmemory RTCmem;
+
 	//OneWire ow(TEMPERATURE_PIN);
 	//SSD1306Wire display(0x3C, SDA, SCL);
 	//DallasTerm t_kube(tkube, &ow, 2.5);

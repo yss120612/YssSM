@@ -618,6 +618,12 @@
     <ClInclude Include="Const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Termopause.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Workmodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -819,6 +825,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Termopause.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Workmodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

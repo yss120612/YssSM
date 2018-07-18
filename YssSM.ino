@@ -1,9 +1,12 @@
 
+
+#include "Termopause.h"
 #include "Config.h"
 
 #include "Mode.h"
 #include "Main.h"
 #include "Suvid.h"
+#include "Workmodes.h"
 
 long scrLoop = 0;
 long mls;
@@ -16,7 +19,9 @@ HttpHelper httph;
 Hardware hard;
 Aggregates agg(&hard);
 
-Mode * md = new Main(&agg,&hard);
+Mode * main = new Main(&agg, &hard);
+Mode * suvid = new Suvid(&agg, &hard);
+Mode * md = main;
 
 void setup() {
 	hard.init();
@@ -34,6 +39,8 @@ void setup() {
 	CONF.setWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.setHttp("admin", "esp");
 	CONF.setScrSavMin(1);
+	CONF.setSuvidMin(60);
+	CONF.setSuvidTemp(50);
 	httph.setup();
 	
 	hard.getEncoder()->setHandler(md);
@@ -69,7 +76,7 @@ void Button() {
 }
 
 
-int i = 0;
+//int i = 0;
 void loop() {
 	mls = millis();
 	httph.clientHandle();
@@ -80,10 +87,11 @@ void loop() {
 	if (scrLoop + 1000 - mls < 0) {
 		hard.timed_process(mls);
 		agg.timed_process(mls);
+		md->process(mls);
 		md->draw(mls);
 		scrLoop = millis();
-		i++;
-		logg.logging("Event " + String(i) + " Length=" + logg.length());
+		//i++;
+		//logg.logging("Event " + String(i) + " Length=" + logg.length());
 	}
 }
 

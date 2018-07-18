@@ -15,6 +15,8 @@
 #include "Beeper.h"
 #include "Display.h"
 #include "Mode.h"
+#include "Termopause.h"
+
 
 #define SU_OFF  0 //начало
 #define SU_FORSAJ  1 //разгон до temp_start
@@ -29,16 +31,26 @@
 #define SUERR_NOHEATER 2 //нет тена
 
 
-const uint16_t test_time = 1000;
+
+const uint16_t test_time = 5000;//5 секунд
 
 class Suvid : public Mode {
-private:
-	int8_t targetT;
+public:
+	Suvid(Aggregates * a, Hardware *h);
+	void start();
+	void stop();
+
+	
+	void process(long ms);
+	//int getHeaterPower() { return hardware->getHeater()->getPower(); };
+protected:
+	void armAlarm();
+	TermoPause tpause;
 	long last_time;
 	int8_t work_mode;
 	int8_t end_reason;
 	int8_t err;
-	long time;
+	//long time;
 	void error(uint8_t);
 	void draw(long m);
 	void initDraw();
@@ -50,14 +62,6 @@ private:
 	void command(uint8_t id);
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
-public:
-	Suvid(Aggregates * a, Hardware *h);
-	void start(int8_t tm, uint16_t min);
-	void stop();
-
-	
-	void process_suvid(long);
-	//int getHeaterPower() { return hardware->getHeater()->getPower(); };
 };
 
 

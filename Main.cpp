@@ -19,7 +19,8 @@ void Main::draw(long m) {
 	hardware->getClock()->readTime();
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
 	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
-	if (m - last_action > CONF.getScrSavMin()*1000*60) {
+	if (ss_active || m - last_action > CONF.getScrSavMin()*60000) {
+		ss_active = true;
 		//int x = rand() % (hardware->getDisplay()->width() - 10);
 		//int y = 13 + rand() % (hardware->getDisplay()->height() - 26);
 		hardware->getDisplay()->drawString(rand() % (80), 0, "Main...");
@@ -94,6 +95,12 @@ void Main::makeMenu()
 
 void Main::left() {
 	Mode::left();
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
 	logg.logging("left in main");
 
 	//agg->getHeater()->setPower(agg->getHeater()->getPower() - 1);
@@ -101,12 +108,7 @@ void Main::left() {
 	
 	if (menu->isActive())
 	{
-		if (menu->isEditMode()) {
-			menu->getEditParams()->down();
-		}
-		else {
-			menu->prev();
-		}
+		processMenuChange(false);
 	}
 	else
 	{// MENU IS NOT ACTIVE
@@ -117,18 +119,19 @@ void Main::left() {
 
 void Main::right() {
 	Mode::right();
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
 	logg.logging("right in main");
 	//agg->getHeater()->setPower(agg->getHeater()->getPower() + 1);
 	//agg->getKran()->shiftQuantum(1);
 	
 	if (menu->isActive())
 	{
-		if (menu->isEditMode()) {
-			menu->getEditParams()->up();
-		}
-		else {
-			menu->next();
-		}
+		processMenuChange(true);
 	}
 	else {//MENU IS NOT ACTIVE
 
@@ -139,35 +142,17 @@ void Main::right() {
 
 void Main::press() {
 	Mode::press();
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
 	logg.logging("press in main");
-	MenuParameter * mp;
+	
 	if (menu->isActive())
 	{
-		if (menu->current()->getKind() == COMMAND) {
-			command(menu->current()->getId());
-		}
-		else if (menu->current()->getKind() == SUBMENU) {
-			menu = menu->current()->select();
-		}
-		else if (menu->current()->getKind() >= PARAMETRINT && menu->current()->getKind() <= PARAMETRSTR) {
-			if (menu->isEditMode())
-			{
-				if (menu->getEditParams()->getNext() == NULL) {//следующего параметра нет. запоминаем...
-					mp = menu->getEditParams();
-					while (mp != NULL)
-					{
-						acceptParams(mp);
-						mp = mp->getPrev();
-					}
-				}
-				menu->setEditParams(menu->getEditParams()->getNext());
-			}
-			else 
-			{
-				menu->setEditParams((MenuParameter *)(menu->current()));
-			}
-			initParams(menu->getEditParams());
-		}
+		processMenuPress();
 	}
 	else {//MENU IS NOT ACTIVE
 
@@ -186,19 +171,17 @@ void Main::press() {
 
 void Main::long_press() {
 	Mode::long_press();
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
 	logg.logging("long press in main");
-	counter = 0;
+	
 	if (menu->isActive())
 	{
-		if (menu->isEditMode()) {
-			menu->setEditParams(NULL);
-		}
-		else if (menu->getParent() != NULL) {
-			menu = menu->getParent();
-		}
-		else {
-			menu->setActive(false);
-		}
+		processMenuLong();
 	}
 	else{
 		menu->setActive(true);
