@@ -1,5 +1,6 @@
 
 
+#include "Distillation.h"
 #include "Termopause.h"
 #include "Config.h"
 
@@ -21,7 +22,7 @@ Aggregates agg(&hard);
 
 Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
-Mode * md = main;
+//Mode * md = main;
 
 void setup() {
 	hard.init();
@@ -41,9 +42,14 @@ void setup() {
 	CONF.setScrSavMin(1);
 	CONF.setSuvidMin(60);
 	CONF.setSuvidTemp(50);
+
+	CONF.setDistKranOpened(20);
+	CONF.setDistStopTemp(98);
+	CONF.setDistWorkPower(50);
+
 	httph.setup();
 	
-	hard.getEncoder()->setHandler(md);
+	//hard.getEncoder()->setHandler(md);
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
@@ -59,7 +65,11 @@ void setup() {
 	RTC.dow = 4;*/
 	//RTC.readRAM
 	//RTC.writeTime();
-	md->initDraw();
+	//md->initDraw();
+	workMode.setup(hard.getEncoder());
+	workMode.addMode(main);
+	workMode.addMode(suvid);
+	workMode.setCurrent(MODE_MAIN);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 }
 
@@ -82,13 +92,13 @@ void loop() {
 	httph.clientHandle();
 	hard.process(mls);
 	agg.process(mls);
-	md->drawImm(mls);
+	workMode.getCurrent()->drawImm(mls);
 
 	if (scrLoop + 1000 - mls < 0) {
 		hard.timed_process(mls);
 		agg.timed_process(mls);
-		md->process(mls);
-		md->draw(mls);
+		workMode.getCurrent()->process(mls);
+		workMode.getCurrent()->draw(mls);
 		scrLoop = millis();
 		//i++;
 		//logg.logging("Event " + String(i) + " Length=" + logg.length());

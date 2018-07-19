@@ -79,5 +79,29 @@ const uint32_t EEPROM_WRITE_TIMEOUT = 10;
 
 const uint16_t RTC_MEM_SIZE = 512;
 
+enum mo{
+	MODE_MAIN,
+	MODE_SUVID,
+	MODE_DISTILL
+};
+
+
+#define PROC_OFF  0 //начало
+#define PROC_FORSAJ  1 //разгон до temp_start
+#define PROC_WORK 2
+
+#define PROCEND_NO 0 //работаем
+#define PROCEND_TIME 1 //закончили по времени
+#define PROCEND_ERROR 2 //закончили с ошибкой
+#define PROCEND_FAULT 4 //закончили аварийно
+#define PROCEND_TEMPERATURE 4 //закончили по температуре
+#define PROCEND_MANUAL 5 //закончили вручную
+
+#define PROCERR_OK 0 //нет ошибок
+#define PROCERR_NOTKUB 1 //нет градусника в кубе
+#define PROCERR_NOHEATER 2 //нет тена
+
+
+
 #endif
 

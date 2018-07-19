@@ -14,7 +14,18 @@ void Suvid::draw(long m) {
 		ss_active = true;
 	}
 	else {
-
+		if (menu != NULL && menu->isActive()) {
+			if (menu->isEditMode()) {
+				hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
+			}
+			else {
+				menu->display(hardware->getDisplay());
+			}
+		}
+		else
+		{
+			
+		}
 	}
 	hardware->getDisplay()->display();
 }
@@ -123,11 +134,17 @@ void Suvid::command(uint8_t id)
 {
 	switch (id) {
 	case 1:
+		if (work_mode != PROC_OFF) return;
 		menu->setActive(false);
 		start();
 		break;
 	case 2:
-		stop();
+		if (work_mode == PROC_OFF) return;
+		stop(PROCEND_MANUAL);
+		break;
+	case 3:
+		stop(PROCEND_MANUAL);
+		workMode.setCurrent(MODE_MAIN);
 		break;
 	}
 }
@@ -225,14 +242,38 @@ void Suvid::armAlarm()
 	hardware->getClock()->writeAlarm2(DS3231_ALM_DDHM);
 }
 
+void Suvid::timeLeft() {
+	hardware->getClock()->readAlarm2();
+	int8_t dd = hardware->getClock()->dd;
+	int8_t h = hardware->getClock()->h;
+	int8_t m = hardware->getClock()->m;
+	int8_t s = 0;
+	hardware->getClock()->now();
+	s -= hardware->getClock()->s;
+	if (s < 0)
+	{
+		m -= 1;
+		s += 60;
+	}
+
+	m -= hardware->getClock()->m;
+	if (m < 0)
+	{
+		h -= 1;
+		m += 60;
+	}
+	h -= hardware->getClock()->h;
+	if (h < 0) h += 24;
+	sprintf(tleft, "%02d:%02d:%02d", h, m, s);
+}
+
 void Suvid::process(long ms) {
-	if (work_mode == SU_OFF) return;
+	if (work_mode == PROC_OFF) return;
 	if (last_time + test_time - ms >0) return;
 	last_time = ms;
 
-	if (work_mode == SU_WORK && hardware->getClock()->checkAlarm2()) {
-		end_reason = SUEND_TIME;
-		stop();
+	if (work_mode == PROC_WORK && hardware->getClock()->checkAlarm2()) {
+		stop(PROCEND_TIME);
 		hardware->getBeeper()->beep(1000, 5000);
 		return;
 	}
@@ -240,8 +281,8 @@ void Suvid::process(long ms) {
 
 	float tmp = hardware->getTKube()->getTemp();
 
-	if (tmp >= tpause.getTemp() && work_mode == SU_FORSAJ) {//вышли на рабочий режим
-		work_mode = SU_WORK;
+	if (tmp >= tpause.getTemp() && work_mode == PROC_FORSAJ) {//вышли на рабочий режим
+		work_mode = PROC_WORK;
 		hardware->getBeeper()->beep(1000, 500);
 		armAlarm();//Завели будильник
 	}
@@ -261,30 +302,31 @@ void Suvid::process(long ms) {
 
 void Suvid::error(uint8_t er) {
 	err = er;
-	end_reason = SUEND_ERROR;
+	end_reason = PROCEND_ERROR;
 
 }
 
 void Suvid::start() {
-	work_mode = SU_OFF;
-	err = SUERR_OK;
-	end_reason = SUEND_NO;
+	work_mode = PROC_OFF;
+	err = PROCERR_OK;
+	end_reason = PROCEND_NO;
 
 	if (agg->getHeater() == NULL) {
-		error(SUERR_NOHEATER);
+		error(PROCERR_NOHEATER);
 		return;
 	}
 
 	if (hardware->getTKube() == NULL) {
-		error(SUERR_NOTKUB);
+		error(PROCERR_NOTKUB);
 		return;
 	}
-	work_mode = SU_FORSAJ;
+	work_mode = PROC_FORSAJ;
 }
 
-void Suvid::stop() {
+void Suvid::stop(uint8_t reason) {
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
-	work_mode = SU_OFF;
+	work_mode = PROC_OFF;
+	end_reason = reason;
 }
 

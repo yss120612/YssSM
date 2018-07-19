@@ -13,5 +13,22 @@
 
 
 
+class WorkModes
+{
+public:
+	WorkModes();
+	~WorkModes();
+	void addMode(Mode * m);
+	void setup(Encoder * enc);
+	void setCurrent(uint8_t i);
+	Mode * getCurrent();
+private:
+	Mode * current;
+	QList <Mode *> _modes;
+	Encoder * encoder;
+};
+
+extern WorkModes workMode;
+
 #endif
 

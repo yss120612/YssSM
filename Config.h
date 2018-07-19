@@ -19,6 +19,13 @@ public:
 	void setScrSavMin(int ss);
 	void setSuvidMin(int sm);
 	void setSuvidTemp(uint8_t st);
+
+	void setDistWorkPower(uint8_t st);
+	void setDistStopTemp(uint8_t st);
+	void setDistKranOpened(uint8_t st);
+
+	
+
 	const String getHttpU();
 	const String getHttpP();
 	const String getWiFiN();
@@ -26,6 +33,12 @@ public:
 	const int getScrSavMin();
 	const int getSuvidMin();
 	const uint8_t getSuvidTemp();
+
+	const uint8_t getDistWorkPower();
+	const uint8_t getDistStopTemp();
+	const uint8_t getDistKranOpened();
+
+
 private:
 	String wifi_ssid;
 	String wifi_password;
@@ -35,6 +48,11 @@ private:
 	int suvidMin;
 	uint8_t suvidTemp;
 	boolean changed;
+
+	uint8_t distWorkPower;
+	uint8_t distStopTemp;
+	uint8_t distKranOpened;
+
 };
 
 extern Config CONF;

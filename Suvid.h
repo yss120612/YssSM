@@ -16,20 +16,7 @@
 #include "Display.h"
 #include "Mode.h"
 #include "Termopause.h"
-
-
-#define SU_OFF  0 //начало
-#define SU_FORSAJ  1 //разгон до temp_start
-#define SU_WORK 2
-
-#define SUEND_NO 0 //работаем
-#define SUEND_TIME 1 //закончили по времени
-#define SUEND_ERROR 2 //закончили аварийно
-
-#define SUERR_OK 0 //нет ошибок
-#define SUERR_NOTKUB 1 //нет градусника в кубе
-#define SUERR_NOHEATER 2 //нет тена
-
+#include "Workmodes.h"
 
 
 const uint16_t test_time = 5000;//5 секунд
@@ -38,18 +25,18 @@ class Suvid : public Mode {
 public:
 	Suvid(Aggregates * a, Hardware *h);
 	void start();
-	void stop();
+	void stop(uint8_t reason);
 
 	
 	void process(long ms);
 	//int getHeaterPower() { return hardware->getHeater()->getPower(); };
 protected:
+	
 	void armAlarm();
+	void timeLeft();
 	TermoPause tpause;
 	long last_time;
-	int8_t work_mode;
-	int8_t end_reason;
-	int8_t err;
+	
 	//long time;
 	void error(uint8_t);
 	void draw(long m);

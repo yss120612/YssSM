@@ -39,11 +39,16 @@ public:
 	virtual void process(long ms) = 0;
 
 protected:
+	char tim[9];
+	char tleft[9];
 	boolean drawImmed;
 	Mode * parent;
 	Hardware * hardware;
 	Aggregates * agg;
 	Menu * menu;
+	int8_t work_mode;
+	int8_t end_reason;
+	int8_t err;
 };
 
 #endif

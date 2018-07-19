@@ -624,6 +624,9 @@
     <ClInclude Include="Workmodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Distillation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -831,6 +834,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Workmodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Distillation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

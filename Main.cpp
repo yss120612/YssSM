@@ -6,7 +6,8 @@ Main::Main(Aggregates * a,Hardware * h):Mode(a,h)
 	makeMenu();
 }
 
-char tim[9];
+
+
 void Main::initDraw() {
 	hardware->getDisplay()->init();
 	hardware->getDisplay()->flipScreenVertically();
@@ -31,10 +32,9 @@ void Main::draw(long m) {
 	hardware->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
 	hardware->getDisplay()->drawString(60, 0, tim);
 	
-	if (menu != NULL)
-	{
 	
-	if (menu->isActive()) {
+	
+	if (menu != NULL && menu->isActive()) {
 		if (menu->isEditMode()) {
 			hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
 		}
@@ -42,7 +42,7 @@ void Main::draw(long m) {
 			menu->display(hardware->getDisplay());
 		}
 	}
-	}	
+		
 
 	}//NOT SCREEN SAVER
 
@@ -265,6 +265,11 @@ void Main::acceptParams(MenuParameter * mp) {
 void Main::command(uint8_t id)
 {
 
+	switch (id) {
+	case 1:
+		workMode.setCurrent(MODE_SUVID);
+		break;
+	}
 
 	/*if (id != 3) return;
 	if (!hardware->getHeater()->isON()) {

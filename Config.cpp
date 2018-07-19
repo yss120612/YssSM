@@ -42,21 +42,34 @@ void Config::setSuvidTemp(uint8_t st)
 	suvidTemp = st;
 }
 
+void Config::setDistWorkPower(uint8_t st)
+{
+	if (distWorkPower != st) changed = true;
+	distWorkPower = st;
+}
+
+void Config::setDistStopTemp(uint8_t st)
+{
+	if (distStopTemp != st) changed = true;
+	distStopTemp = st;
+}
+
+void Config::setDistKranOpened(uint8_t st)
+{
+	if (distKranOpened != st) changed = true;
+	distKranOpened = st;
+}
+
 
 const String Config::getHttpU() { return www_username; };
 const String Config::getHttpP() { return www_password; };
 const String Config::getWiFiN() { return wifi_ssid; };
 const String Config::getWiFiP() { return wifi_password; }
 const int Config::getScrSavMin(){ return scrSaverMin;}
-
-const int Config::getSuvidMin()
-{
-	return suvidMin;
-}
-
-const uint8_t Config::getSuvidTemp()
-{
-	return suvidTemp;
-}
+const int Config::getSuvidMin(){ return suvidMin;}
+const uint8_t Config::getSuvidTemp(){return suvidTemp;}
+const uint8_t Config::getDistWorkPower(){ return distWorkPower;}
+const uint8_t Config::getDistStopTemp() { return distStopTemp;}
+const uint8_t Config::getDistKranOpened(){	return distKranOpened;}
 
 Config CONF;

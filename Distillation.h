@@ -1,7 +1,7 @@
-// Main.h
+// Distillation.h
 
-#ifndef _MAIN_h
-#define _MAIN_h
+#ifndef _DISTILLATION_h
+#define _DISTILLATION_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -12,27 +12,27 @@
 #include "Mode.h"
 #include "Workmodes.h"
 
-class Main: public Mode {
+class Distillation : public Mode
+{
 public:
-	Main(Aggregates * a,Hardware * h);
+	Distillation(Aggregates * a, Hardware *h);
+	~Distillation();
 
+protected:
 	void draw(long m);
 	void initDraw();
-	void makeMenu();
 	void left();
 	void right();
 	void press();
 	void long_press();
+	void makeMenu();
 	void command(uint8_t id);
+	void stop(uint8_t reason);
+	void start();
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
-	void process(long ms) {};
-private:
 	
-	int counter;
 };
-
-
 
 
 

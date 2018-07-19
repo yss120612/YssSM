@@ -252,6 +252,7 @@
     <ClInclude Include="Cooler.h" />
     <ClInclude Include="DallasTerm.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Distillation.h" />
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="Extender.h" />
     <ClInclude Include="Hardware.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="Cooler.cpp" />
     <ClCompile Include="DallasTerm.cpp" />
     <ClCompile Include="Display.cpp" />
+    <ClCompile Include="Distillation.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Extender.cpp" />
     <ClCompile Include="Hardware.cpp" />
