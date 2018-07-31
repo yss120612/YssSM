@@ -1,6 +1,6 @@
 // Log.h
 
-#define _SERIAL
+
 
 #ifndef _LOG_h
 #define _LOG_h

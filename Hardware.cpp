@@ -7,8 +7,10 @@
 
 Hardware::Hardware()
 	:ow(TEMPERATURE_PIN),
-	t_kube(term_addr[T_KUBE], &ow, 2.5),
+	t_kube(term_addr[T_KUBE], &ow, 1.94),
 	t_triak(term_addr[T_TRIAK], &ow, 2.5),
+	t_tsarga(term_addr[T_TSARGA], &ow, 1.29),
+	t_tsa(term_addr[T_TSA], &ow, 1.53),
 	display(0x3C, SDA, SCL)
 	
 {
@@ -27,6 +29,8 @@ void Hardware::init()
 void Hardware::timed_process(long ms)
 {
 	t_kube.process(ms);
+	t_tsarga.process(ms);
+	t_tsa.process(ms);
 }
 
 void Hardware::process(long ms)
@@ -36,9 +40,10 @@ void Hardware::process(long ms)
 
 
 DallasTerm * Hardware::getTKube() { return &t_kube; }
-DallasTerm * Hardware::getTTsarga() { return NULL; }
+DallasTerm * Hardware::getTTsarga() { return &t_tsarga; }
 DallasTerm * Hardware::getTWater() { return NULL; }
 DallasTerm * Hardware::getTTriak() { return &t_triak; }
+DallasTerm * Hardware::getTTSA() { return &t_tsa; }
 //HttpHelper * Hardware::getHttpHelper() { return &httpHelper; }
 Config * Hardware::getConfig() { return &config; }
 Beeper * Hardware::getBeeper() { return &beeper; }

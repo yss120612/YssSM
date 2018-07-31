@@ -17,10 +17,12 @@ class Distillation : public Mode
 public:
 	Distillation(Aggregates * a, Hardware *h);
 	~Distillation();
-
+	String getData(uint w) { return Mode::getData(w); }
 protected:
 	void draw(long m);
 	void initDraw();
+	void showState();
+	void process(long ms);
 	void left();
 	void right();
 	void press();

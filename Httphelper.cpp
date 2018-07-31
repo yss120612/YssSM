@@ -213,6 +213,8 @@ void HttpHelper::setup() {
 
 	server->on("/logdata", std::bind(&HttpHelper::handleLog, this));
 
+	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
+
 	server->on("/restart", web_handlers::restart);
 
 	//server->on("/update", web_handlers::pageUpdate);
@@ -221,6 +223,8 @@ void HttpHelper::setup() {
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
 
 	server->serveStatic("/log", SPIFFS, "/log.htm", NULL);
+
+	server->serveStatic("/distill", SPIFFS, "/distillation.htm", NULL);
 
 	server->serveStatic("/css/bootstrap.min.css", SPIFFS, "/css/bootstrap.min.css", NULL);
 
@@ -262,6 +266,13 @@ void HttpHelper::handleLog()
 	//root.prettyPrintTo(str);
 
 	server->send(200, "text/json",str); // Oтправляем ответ No Reset
+}
+
+
+void HttpHelper::handleDistill()
+{
+	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + "}";
+	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
 

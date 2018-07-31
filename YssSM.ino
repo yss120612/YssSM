@@ -1,12 +1,12 @@
 
-
-#include "Distillation.h"
 #include "Termopause.h"
 #include "Config.h"
+//#include "DataSource.h"
 
 #include "Mode.h"
 #include "Main.h"
 #include "Suvid.h"
+#include "Distillation.h"
 #include "Workmodes.h"
 
 long scrLoop = 0;
@@ -22,6 +22,7 @@ Aggregates agg(&hard);
 
 Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
+Mode * distill = new Distillation(&agg, &hard);
 //Mode * md = main;
 
 void setup() {
@@ -69,7 +70,9 @@ void setup() {
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
 	workMode.addMode(suvid);
+	workMode.addMode(distill);
 	workMode.setCurrent(MODE_MAIN);
+	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 }
 

@@ -40,6 +40,7 @@ public:
 	float getTemp();
 	void process(long ms);
 	void set12bit();
+	
 private:
 	OneWire * ds;
 	uint8_t address[8];

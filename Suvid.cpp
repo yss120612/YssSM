@@ -1,20 +1,27 @@
 #include "Suvid.h"
 
 Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
-	tpause.setup(CONF.getSuvidMin(),CONF.getSuvidTemp());
+	
 	makeMenu();
 }
 
 void Suvid::initDraw() {
+	tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
+	last_action = millis();
+	ss_active = false;
 }
 
 void Suvid::draw(long m) {
 	hardware->getDisplay()->clear();
+	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
 	if (ss_active || m - last_action > CONF.getScrSavMin() * 60000) {
 		ss_active = true;
+		showState();
 	}
 	else {
+				
 		if (menu != NULL && menu->isActive()) {
+			hardware->getDisplay()->drawString(0, 0, "Suvid");
 			if (menu->isEditMode()) {
 				hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
 			}
@@ -24,10 +31,72 @@ void Suvid::draw(long m) {
 		}
 		else
 		{
-			
+		showState();
 		}
 	}
 	hardware->getDisplay()->display();
+}
+
+void Suvid::showState() {
+	uint8_t X;
+	uint8_t Y;
+	if (ss_active) {
+		X = rand() % 25;
+		Y = 13 + rand() % (hardware->getDisplay()->height() - 44);
+		hardware->getDisplay()->drawString(rand() % (80), 0, "Suvid...");
+	}
+	else {
+		hardware->getDisplay()->drawString(0, 0, "Suvid");
+		X = 0;
+		Y = 15;
+	}
+	
+	//X = 25;
+	//Y = 13 + (hardware->getDisplay()->height() - 44);
+
+	uint8_t t = String(hardware->getTKube()->getTemp() > 0 && hardware->getTKube()->getTemp() < 110) ? hardware->getTKube()->getTemp() : 0;
+
+	switch (work_mode)
+	{
+	case PROC_OFF:
+		switch (end_reason) {
+		case PROCEND_NO: //работаем
+		hardware->getDisplay()->drawString(X, Y, "Ready 2 start");
+		break;
+		case	PROCEND_TIME: //закончили по времени
+		hardware->getDisplay()->drawString(X, Y, "End by time");
+		break;
+		case	PROCEND_ERROR: //закончили с ошибкой
+		hardware->getDisplay()->drawString(X, Y, "End by error");
+		break;
+		case  PROCEND_FAULT: //закончили аварийно
+		hardware->getDisplay()->drawString(X, Y, "End by fault");
+		break;
+		case PROCEND_TEMPERATURE: //закончили по температуре
+		hardware->getDisplay()->drawString(X, Y, "End by temp");
+		break;
+		case  PROCEND_MANUAL: //закон
+		hardware->getDisplay()->drawString(X, Y, "End manual");
+		break;
+		}
+		//hardware->getDisplay()->drawString(X, Y, "Ready");
+		hardware->getDisplay()->drawString(X, Y+16, "T="+String(t));
+		break;
+	case PROC_FORSAJ:
+		hardware->getDisplay()->drawString(X, Y, "Forsaj T:" + String(t));
+		//hardware->getDisplay()->drawString(X, Y + 12, "T=" + String(t));
+		hardware->getDisplay()->drawString(X, Y + 16," NOW:" + String(tim));
+		break;
+	case PROC_WORK:
+		
+		timeLeft();
+		hardware->getDisplay()->drawString(X, Y, "Working T:" + String(t));
+		hardware->getDisplay()->drawString(X, Y + 16, " Left:"+ String(tleft));
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Suvid::left() {
@@ -38,7 +107,9 @@ void Suvid::left() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("suvid left");
+#endif
 	if (menu->isActive())
 	{
 		processMenuChange(false);
@@ -58,7 +129,9 @@ void Suvid::right() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("suvid right");
+#endif
 
 	if (menu->isActive())
 	{
@@ -80,7 +153,9 @@ void Suvid::press() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("suvid press");
+#endif
 	
 	if (menu->isActive())
 	{
@@ -101,8 +176,9 @@ void Suvid::long_press() {
 		drawImmed = true;
 		return;
 	}
-
-	logg.logging("long_press");
+#ifdef ENCODER_LOG
+	logg.logging("suvid long_press");
+#endif
 	if (menu->isActive()) {
 		processMenuLong();
 	}
@@ -125,7 +201,7 @@ void Suvid::makeMenu()
 	MenuIParameter * iMi = new MenuIParameter("Minutes", setup, 11);
 	iHo->setNext(iMi);
 	setup->add(iHo);
-	MenuIParameter * iTm = new MenuIParameter("Temp-ra;Temperature", setup, 12);
+	MenuIParameter * iTm = new MenuIParameter("Temp-ra;Temp-ra", setup, 12);
 	setup->add(iTm);
 	menu->add(new MenuSubmenu("Setup", setup));
 }
@@ -151,6 +227,7 @@ void Suvid::command(uint8_t id)
 
 void Suvid::initParams(MenuParameter * mp)
 {
+	if (mp == NULL) return;
 	switch (mp->getId()) {
 	case 10:
 		((MenuIParameter *)mp)->setup(tpause.getTime()/60, 1, 0, 11);
@@ -166,13 +243,17 @@ void Suvid::initParams(MenuParameter * mp)
 
 void Suvid::acceptParams(MenuParameter * mp)
 {
+	if (mp == NULL) return;
 	switch (mp->getId()) {
 	case 10:
 		break;
 	case 11:
+		logg.logging("Hours="+String(((MenuIParameter *)mp->getPrev())->getCurrent()));
+		logg.logging("Minutes=" + String(((MenuIParameter *)mp)->getCurrent()));
 		tpause.setTime(((MenuIParameter *)mp->getPrev())->getCurrent()*60+((MenuIParameter *)mp)->getCurrent());
 		break;
 	case 12:
+		logg.logging("Temp-ra=" + String(((MenuIParameter *)mp)->getCurrent()));
 		tpause.setTemp(((MenuIParameter *)mp)->getCurrent());
 		break;
 	}
@@ -239,7 +320,9 @@ void Suvid::armAlarm()
 		break;
 	
 	}
-	hardware->getClock()->writeAlarm2(DS3231_ALM_DDHM);
+	hardware->getClock()->writeAlarm2(DS3231_ALM_DTHM);
+	//hardware->getClock() ->
+	
 }
 
 void Suvid::timeLeft() {

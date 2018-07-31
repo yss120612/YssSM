@@ -3,119 +3,44 @@
   <head>
     <meta charset="utf-8">
     <title>Система автоматики Yss</title>
-
     <meta name="description" content="Версия 0.1">
     <meta name="author" content="Yss">
-    <link href="/bootstrap.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript" src="bootstrap.min.js"></script>
-    <script type="text/javascript" src="distillation.js"></script>
-   
-  </head>
-  <body onload="process();">
-	
+    <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body>
 	<div class="container-fluid">
-	<div class="row">
-	
-			
-						
-						<p>
-							<h3>Дистилляция</h3>
-						<p>
-	
-						<div class="row">
-      				<div class="col-md-6">
-      				   <img alt="Изображение колонны" src="distillator.png" align="left" 
-      				   hspace="5" vspace="7" />
-      				</div>
-      				
-      				<div class="col-md-6">
-      				 <dl>
-      				  <dt>
-        					Подключите датчики согласно рисунка 
-        					<p></p>
-        				</dt>
-        				<dt>
-        					3 - T воды на выходе из дефлегматора
-        				</dt>
-        				<dt>
-        					2 - Т в узле отбора 
-        				</dt>
-        				<dt>
-        					1 - Т в кубе
-        				</dt>
-			         </dl>
-      				</div>
-    			 </div>
-		         <p></p>
-		         
-	
-		         
-		   <div class="col-md-12">
-		    <table class="table">
-				<thead>
-					<tr>
-						<th>
-							Температура
-						</th>
-						<th>
-							Значение
-						</th>
-						<th>
-							Установка
-						</th>
-						<th>
-							Уставка
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							Т&#176 Воды на выходе
-						</td>
-						<td>
-							<input type="text" id='temperatureWater' value ='??' name='temperatureWater' size="6" readonly> <span>&#176С</span>
-						</td>
-						<td>
-							
-						</td>
-						<td>
-							
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Т&#176 в узле отбора
-						</td>
-						<td>
-							<input type="text" id='temperatureTakeOff' value ='??' name='temperatureTakeOff' size="6" align ="right" readonly> <span>&#176С</span>
-						</td>
-						<td>
-						</td>
-						<td>
-						</td>
-					</tr>
-					<tr class="success" id='statusTank'>
-						<td>
-							Т&#176 в кубе
-						</td>
-						<td>
-							<input type="text" id='temperatureTank' value ='??' name='temperatureTank' size="6" readonly> <span>&#176С</span>
-						</td>
-						<td>
-						  <input type="number" id="setTank" value="" min="0"  max="103"  size="6"><span>&#176С</span>
-							<input type="submit" name ="setTank" value="Задать"  onclick="set_Tank()" > 
-						</td>
-						<td>
-						  <input type="text" id='settingTank' value='??' name='settingTank' size="6" readonly><span>&#176С</span>
-						</td>
-					</tr>
-				</tbody>
-			 </table>
-      </div>        
-		 </div>
+	<div class="col-md-12">
+		<a href="/" class="btn btn-normal">Дом</a>
 	</div>
-
-  </body>
+	<div class="row">
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TTSA"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TDEF"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TKUBE"></div>		
+		</div>
+	</div>
+	</div>
+ </body>
+ <script type="text/javascript">
+	$(document).ready(function(){
+	process();
+	});
+	
+	function process(){
+		$.getJSON(
+		"/distilldata",
+		function(data){
+		$('#TTSA').html('Температура TSA <b>'+data['tsa_data']+'&deg;C</b>');
+		$('#TDEF').html('Температура в дефлегматоре <b>'+data['def_data']+'&deg;C</b>');
+		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
+		});
+		setTimeout('process()',3000);
+	}
+	</script>
 </html>

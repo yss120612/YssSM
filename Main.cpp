@@ -13,6 +13,8 @@ void Main::initDraw() {
 	hardware->getDisplay()->flipScreenVertically();
 	hardware->getDisplay()->setFont(ArialMT_Plain_16);
 	hardware->getDisplay()->flipScreenVertically();
+	last_action = millis();
+	ss_active = false;
 }
 
 void Main::draw(long m) {
@@ -29,7 +31,7 @@ void Main::draw(long m) {
 	}//SCREEN SAVER
 	else 
 	{
-	hardware->getDisplay()->drawString(0, 0, String(hardware->getTKube()->getTemp()));
+	hardware->getDisplay()->drawString(0, 0, String(hardware->getTTSA()->getTemp()));
 	hardware->getDisplay()->drawString(60, 0, tim);
 	
 	
@@ -68,7 +70,8 @@ void Main::makeMenu()
 		iMon->setNext(iYe);
 		setup->add(iDay);
 
-		//setup->add(new MenuCommand("Date", 11));
+		setup->add(new MenuCommand("1Wire dev", 11));
+		setup->add(new MenuCommand("i2c dev", 12));
 		
 		MenuIParameter * iHour = new MenuIParameter("Time;Hour", setup, 30);
 		MenuIParameter * iMin = new MenuIParameter("Min", setup, 31);
@@ -101,7 +104,11 @@ void Main::left() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("left in main");
+#endif // ENCODER_LOG
+
+	
 
 	//agg->getHeater()->setPower(agg->getHeater()->getPower() - 1);
 	//agg->getKran()->shiftQuantum(-1);
@@ -125,7 +132,9 @@ void Main::right() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("right in main");
+#endif
 	//agg->getHeater()->setPower(agg->getHeater()->getPower() + 1);
 	//agg->getKran()->shiftQuantum(1);
 	
@@ -148,7 +157,9 @@ void Main::press() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("press in main");
+#endif
 	
 	if (menu->isActive())
 	{
@@ -177,7 +188,9 @@ void Main::long_press() {
 		drawImmed = true;
 		return;
 	}
+#ifdef ENCODER_LOG
 	logg.logging("long press in main");
+#endif
 	
 	if (menu->isActive())
 	{
@@ -264,11 +277,49 @@ void Main::acceptParams(MenuParameter * mp) {
 
 void Main::command(uint8_t id)
 {
-
+	String result = "";
+	uint8_t i;
 	switch (id) {
 	case 1:
 		workMode.setCurrent(MODE_SUVID);
 		break;
+	case 3:
+		workMode.setCurrent(MODE_DISTILL);
+		break;
+	case 11:
+		byte addr[8];
+		logg.logging("begin of OneWire devices");
+		hardware->getOneWire()->reset_search();
+		while (hardware->getOneWire()->search(addr))
+		{
+			for (i = 0; i < 8; i++)
+			{
+				result += "0x";
+				result += hex[(addr[i] >> 4) & 0x0F];
+				result += hex[addr[i] & 0x0F];
+				if (i < 7) result += ", ";
+			}
+			logg.logging(result);
+			result = "";
+		}
+		logg.logging("end of OneWire devices");
+		break;
+	case 12:
+		logg.logging("begin of i2c devices");
+		for (i = 8; i < 127; i++) {
+			Wire.beginTransmission(i);
+			if (Wire.endTransmission() == 0) {
+				result += "0x";
+				result += hex[(i >> 4) & 0x0F];
+				result += hex[i & 0x0F];
+				result += ", ";
+				logg.logging(result);
+				result = "";
+			}
+		}
+		logg.logging("end of i2c devices");
+		break;
+
 	}
 
 	/*if (id != 3) return;

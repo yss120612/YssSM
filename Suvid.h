@@ -26,7 +26,7 @@ public:
 	Suvid(Aggregates * a, Hardware *h);
 	void start();
 	void stop(uint8_t reason);
-
+	String getData(uint w) { return Mode::getData(w); }
 	
 	void process(long ms);
 	//int getHeaterPower() { return hardware->getHeater()->getPower(); };
@@ -40,6 +40,7 @@ protected:
 	//long time;
 	void error(uint8_t);
 	void draw(long m);
+	void showState();
 	void initDraw();
 	void left();
 	void right();

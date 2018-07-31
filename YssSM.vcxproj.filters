@@ -627,6 +627,9 @@
     <ClInclude Include="Distillation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DataSrc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -837,6 +840,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Distillation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSrc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

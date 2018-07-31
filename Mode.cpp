@@ -10,8 +10,7 @@ Mode::Mode(Aggregates * a,Hardware * h)
 	parent = NULL;
 	agg = a;
 	hardware = h;
-	last_action = millis();
-	ss_active = false;
+	
 }
 
 void Mode::drawImm(long m)
@@ -82,5 +81,20 @@ void Mode::processMenuLong()
 	}
 	else {
 		menu->setActive(false);
+	}
+}
+
+String Mode::getData(uint w)
+{
+	switch (w) {
+	case DS_TKUBE:
+		return String(hardware->getTKube()->getTemp(), 1);
+		break;
+	case DS_TTSA:
+		return String(hardware->getTTSA()->getTemp(), 1);
+		break;
+	case DS_TTSARGA:
+		return String(hardware->getTTsarga()->getTemp(), 1);
+		break;
 	}
 }

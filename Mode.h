@@ -37,6 +37,7 @@ public:
 	virtual void processMenuChange(boolean isUp);
 	virtual void processMenuLong();
 	virtual void process(long ms) = 0;
+	virtual String getData(uint w);
 
 protected:
 	char tim[9];

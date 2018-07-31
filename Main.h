@@ -27,6 +27,7 @@ public:
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
 	void process(long ms) {};
+	String getData(uint w) { return Mode::getData(w); }
 private:
 	
 	int counter;

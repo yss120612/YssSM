@@ -16,8 +16,9 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPUpdateServer.h>
 
-#include "Config.h"
 
+#include "Config.h"
+#include "DataSrc.h"
 
 class HttpHelper
 {
@@ -27,6 +28,7 @@ public:
 
 	void clientHandle();
 	void setup();
+	void setDataSource(DataSrc * d) { ds = d; };
 	boolean isConnected();
 	/*void setMode(Mode * m);
 	Mode * getMode();*/
@@ -37,9 +39,13 @@ private:
 	void WiFiconnect();
 	void WiFiReconnect();
 	void handleLog();
+	void handleDistill();
 	//Config * conf;
 	ESP8266WebServer * server;
 	ESP8266HTTPUpdateServer * httpUpdater;
+	DataSrc * ds;
+	//Hardware * hard;
+	//Aggregates * agg;
 	//Mode * currentMode;
 	//std::function<void(void)>  root;
 	//std::function<void(void)>  page1;

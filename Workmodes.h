@@ -11,9 +11,9 @@
 
 #include "Mode.h";
 
+#include "DataSrc.h"
 
-
-class WorkModes
+class WorkModes : public DataSrc
 {
 public:
 	WorkModes();
@@ -22,6 +22,7 @@ public:
 	void setup(Encoder * enc);
 	void setCurrent(uint8_t i);
 	Mode * getCurrent();
+	String getData(uint w);
 private:
 	Mode * current;
 	QList <Mode *> _modes;

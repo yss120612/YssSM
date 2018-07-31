@@ -9,6 +9,11 @@
 	#include "WProgram.h"
 #endif
 
+
+#define ENCODER_LOG1
+#define _SERIAL1
+
+
 const uint8_t EX_PIN0 = 100;
 const uint8_t EX_PIN1 = 101;
 const uint8_t EX_PIN2 = 102;
@@ -49,19 +54,24 @@ const uint8_t KRAN_CLOSE_PIN = EX_PIN7;
 
 const uint8_t term_addr [][8]={
 	{ 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 },
-	{ 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 },//1
+	{ 0x28, 0xFF, 0x36, 0x1E, 0xC0, 0x17, 0x02, 0x10 },//in capsule tsarga
+	{ 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 },//TSA
 	{ 0x28, 0xFF, 0xC1, 0x57, 0x50, 0x17, 0x04, 0x61 },//2
 	{ 0x28, 0xFF, 0x66, 0x5A, 0x50, 0x17, 0x04, 0x9E },//3
 	{ 0x28, 0xFF, 0xBC, 0x96, 0x50, 0x17, 0x04, 0x56 },//4
 	{ 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 } //5
 };
 
+
+const char hex[]{ '0','1','2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C','D','E','F' };
+
 enum taddr{
 	T_KUBE,
-	T_TRIAK,
 	T_TSARGA,
-	T_WATER,
 	T_TSA,
+	T_TRIAK,
+	T_WATER,
+	
 	T_DEF
 };
 
@@ -85,6 +95,12 @@ enum mo{
 	MODE_DISTILL
 };
 
+enum mydata {
+	DS_TKUBE,
+	DS_TTSA,
+	DS_TTSARGA
+};
+
 
 #define PROC_OFF  0 //начало
 #define PROC_FORSAJ  1 //разгон до temp_start
@@ -93,7 +109,7 @@ enum mo{
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени
 #define PROCEND_ERROR 2 //закончили с ошибкой
-#define PROCEND_FAULT 4 //закончили аварийно
+#define PROCEND_FAULT 3 //закончили аварийно
 #define PROCEND_TEMPERATURE 4 //закончили по температуре
 #define PROCEND_MANUAL 5 //закончили вручную
 

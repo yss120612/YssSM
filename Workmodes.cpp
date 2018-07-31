@@ -39,5 +39,10 @@ Mode * WorkModes::getCurrent()
 	return current;
 }
 
+String WorkModes::getData(uint w)
+{
+	return current->getData(w);
+}
+
 
 WorkModes workMode;

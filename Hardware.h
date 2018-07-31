@@ -9,7 +9,8 @@
 #include "WProgram.h"
 #endif
 
-#include "Const.h"
+
+
 #include <OneWire.h>
 #include <DS1302.h>
 #include <MD_DS3231.h>
@@ -39,6 +40,7 @@ public:
 	DallasTerm * getTTsarga();
 	DallasTerm * getTWater();
 	DallasTerm * getTTriak();
+	DallasTerm * getTTSA();
 	//HttpHelper * getHttpHelper();
 	Config * getConfig();
 	Beeper * getBeeper();
@@ -47,7 +49,7 @@ public:
 	Encoder * getEncoder();
 	AT24C32 * getAT24mem();
 	RTCmemory * getRTCmem();
-	
+	OneWire * getOneWire() { return &ow; }
 	
 
 	//void setDisplay(SSD1306Wire * d);
@@ -63,10 +65,12 @@ public:
 
 
 protected:
+	
 	OneWire ow;
-	//DallasTerm t_tsarga;
+	DallasTerm t_tsarga;
 	//DallasTerm t_water;
 	DallasTerm t_triak;
+	DallasTerm t_tsa;
 	DallasTerm t_kube;
 	//HttpHelper httpHelper;
 	Beeper beeper;
