@@ -27,7 +27,7 @@ public:
 	void setup(Hardware * h, uint8_t c_pin, uint8_t o_pin, int8_t m_pin = -1, int8_t r_pin = -1);
 	void close();
 	void open();
-
+	uint8_t getState() { return state; }
 private:
 	Hardware * hard;
 	boolean inQuantum;

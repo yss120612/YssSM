@@ -42,13 +42,25 @@ void Config::setSuvidTemp(uint8_t st)
 	suvidTemp = st;
 }
 
+void Config::setTriakCoolerTemp(uint8_t st)
+{
+	if (triakCoolerTemp != st) changed = true;
+	triakCoolerTemp = st;
+}
+
+void Config::setTriakCoolerGist(uint8_t st)
+{
+	if (triakCoolerGist != st) changed = true;
+	triakCoolerGist = st;
+}
+
 void Config::setDistWorkPower(uint8_t st)
 {
 	if (distWorkPower != st) changed = true;
 	distWorkPower = st;
 }
 
-void Config::setDistStopTemp(uint8_t st)
+void Config::setDistStopTemp(float st)
 {
 	if (distStopTemp != st) changed = true;
 	distStopTemp = st;
@@ -60,6 +72,19 @@ void Config::setDistKranOpened(uint8_t st)
 	distKranOpened = st;
 }
 
+void Config::setDistTSAmax(uint8_t st)
+{
+	if (distTSAmax != st) changed = true;
+	distTSAmax = st;
+}
+
+void Config::setDistForsajTemp(uint8_t st)
+{
+	if (distForsajTemp != st) changed = true;
+	distForsajTemp = st;
+}
+
+
 
 const String Config::getHttpU() { return www_username; };
 const String Config::getHttpP() { return www_password; };
@@ -69,7 +94,27 @@ const int Config::getScrSavMin(){ return scrSaverMin;}
 const int Config::getSuvidMin(){ return suvidMin;}
 const uint8_t Config::getSuvidTemp(){return suvidTemp;}
 const uint8_t Config::getDistWorkPower(){ return distWorkPower;}
-const uint8_t Config::getDistStopTemp() { return distStopTemp;}
+const float Config::getDistStopTemp() { return distStopTemp;}
 const uint8_t Config::getDistKranOpened(){	return distKranOpened;}
+
+const uint8_t Config::getDistTSAmax()
+{
+	return distTSAmax;
+}
+
+const uint8_t Config::getDistForsajTemp()
+{
+	return distForsajTemp;
+}
+
+const uint8_t Config::getTriakCoolerTemp()
+{
+	return triakCoolerTemp;
+}
+
+const uint8_t Config::getTriakCoolerGist()
+{
+	return triakCoolerGist;
+}
 
 Config CONF;

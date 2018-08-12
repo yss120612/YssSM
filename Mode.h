@@ -29,8 +29,9 @@ public:
 	virtual void draw(long m) = 0;
 	virtual void initDraw() = 0;
 	virtual void drawImm(long m);
+	void readTime();
 	virtual void makeMenu() = 0;
-	virtual void command(uint8_t id) = 0;
+	virtual void command(MenuCommand * id) = 0;
 	virtual void initParams(MenuParameter * mp)=0;
 	virtual void acceptParams(MenuParameter * mp)=0;
 	virtual void processMenuPress();

@@ -206,9 +206,9 @@ void Suvid::makeMenu()
 	menu->add(new MenuSubmenu("Setup", setup));
 }
 
-void Suvid::command(uint8_t id)
+void Suvid::command(MenuCommand * id)
 {
-	switch (id) {
+	switch (id->getId()) {
 	case 1:
 		if (work_mode != PROC_OFF) return;
 		menu->setActive(false);

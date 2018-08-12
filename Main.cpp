@@ -10,7 +10,7 @@ Main::Main(Aggregates * a,Hardware * h):Mode(a,h)
 
 void Main::initDraw() {
 	hardware->getDisplay()->init();
-	hardware->getDisplay()->flipScreenVertically();
+	//hardware->getDisplay()->flipScreenVertically();
 	hardware->getDisplay()->setFont(ArialMT_Plain_16);
 	hardware->getDisplay()->flipScreenVertically();
 	last_action = millis();
@@ -19,8 +19,7 @@ void Main::initDraw() {
 
 void Main::draw(long m) {
 	hardware->getDisplay()->clear();
-	hardware->getClock()->readTime();
-	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
+	readTime();//update tim 
 	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
 	if (ss_active || m - last_action > CONF.getScrSavMin()*60000) {
 		ss_active = true;
@@ -206,10 +205,10 @@ void Main::initParams(MenuParameter * mp) {
 	if (mp == NULL) return;
 	switch (mp->getId()) {
 	case 21:
-		((MenuIParameter *)mp)->setup(agg->getTCooler()->getTemperature(), 1,10,100);
+		((MenuIParameter *)mp)->setup(CONF.getTriakCoolerTemp(), 1,10,100);
 		break;
 	case 22:
-		((MenuIParameter *)mp)->setup(agg->getTCooler()->getGesteresis(), 1, 0, 20);
+		((MenuIParameter *)mp)->setup(CONF.getTriakCoolerGist(), 1, 0, 20);
 		break;
 	case 30:
 		RTC.readTime();
@@ -246,7 +245,9 @@ void Main::acceptParams(MenuParameter * mp) {
 	case 21:
 		break;
 	case 22:
-		agg->getTCooler()->setParams(((MenuIParameter *)mp->getPrev())->getCurrent(), ((MenuIParameter *)mp)->getCurrent());
+		CONF.setTriakCoolerTemp(((MenuIParameter *)mp->getPrev())->getCurrent());
+		CONF.setTriakCoolerGist(((MenuIParameter *)mp)->getCurrent());
+		//agg->getTCooler()->setParams(((MenuIParameter *)mp->getPrev())->getCurrent(), ((MenuIParameter *)mp)->getCurrent());
 		break;
 	case 30:
 		break;
@@ -275,11 +276,11 @@ void Main::acceptParams(MenuParameter * mp) {
 	}
 }
 
-void Main::command(uint8_t id)
+void Main::command(MenuCommand * id)
 {
 	String result = "";
 	uint8_t i;
-	switch (id) {
+	switch (id->getId()) {
 	case 1:
 		workMode.setCurrent(MODE_SUVID);
 		break;

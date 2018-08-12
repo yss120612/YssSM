@@ -1,3 +1,4 @@
+#include "Log.h"
 #include "Heater.h"
 
 
@@ -48,6 +49,7 @@ void Heater::switchRelay(boolean on) {
 		delay(50);
 		hard->getExtender()->registerWrite(relay_pin, on ? HIGH : LOW);
 		heater_stopped = hs;
+		logg.logging("relay is "+String(on));
 	}
 }
 

@@ -31,6 +31,9 @@ public:
 	String getName() { return name.indexOf(';')<0?name:name.substring(0, name.indexOf(';')); }
 	String getMyName() { return name.indexOf(';')<0 ? name : name.substring(name.indexOf(';')+1); }
 	uint8_t getId() { return id; }
+	String getRAWName() {return name; }
+	void setName(String s) { name=s; }
+	void setId(uint8_t i) { id=i; }
 protected:
 	String name;
 	uint8_t kind;
@@ -79,7 +82,7 @@ protected:
 
 class MenuIParameter : public MenuParameter {
 public:
-	MenuIParameter(String na, Menu * par, int id);
+	MenuIParameter(String nm, Menu * par, int i);
 	int getCurrent() { return current; };
 	void setup(int curr, uint8_t st, int m_i, int m_a) {current=curr, step = st; ma = m_a; mi = m_i;}
 	String getStCurr() { return String(current); };
@@ -92,5 +95,22 @@ protected:
 	int mi;
 	int ma;
 };
+
+class MenuFParameter : public MenuParameter {
+public:
+	MenuFParameter(String nm, Menu * par, int i);
+	float getCurrent() { return current; };
+	void setup(float curr, float st, int m_i, int m_a) { current = curr, step = st; ma = m_a; mi = m_i; }
+	String getStCurr() { return String(current,1); };
+	void up() { current + step>ma ? ma : current += step; }
+	void down() { current - step<mi ? mi : current -= step; }
+protected:
+
+	float current;
+	float step;
+	int mi;
+	int ma;
+};
+
 #endif
 

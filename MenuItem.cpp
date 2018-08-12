@@ -52,4 +52,7 @@ MenuIParameter::MenuIParameter(String nm, Menu * par, int i) : MenuParameter(nm,
 	kind = PARAMETRINT;
 }
 
-
+MenuFParameter::MenuFParameter(String nm, Menu * par, int i) : MenuParameter(nm, par, i)
+{
+	kind = PARAMETRFLOAT;
+}

@@ -20,9 +20,15 @@ public:
 	void setSuvidMin(int sm);
 	void setSuvidTemp(uint8_t st);
 
+	void setTriakCoolerTemp(uint8_t st);
+	void setTriakCoolerGist(uint8_t st);
+
 	void setDistWorkPower(uint8_t st);
-	void setDistStopTemp(uint8_t st);
+	void setDistStopTemp(float st);
 	void setDistKranOpened(uint8_t st);
+	void setDistTSAmax(uint8_t st);
+	void setDistForsajTemp(uint8_t st);
+	
 
 	
 
@@ -35,9 +41,13 @@ public:
 	const uint8_t getSuvidTemp();
 
 	const uint8_t getDistWorkPower();
-	const uint8_t getDistStopTemp();
+	const float getDistStopTemp();
 	const uint8_t getDistKranOpened();
+	const uint8_t getDistTSAmax();
+	const uint8_t getDistForsajTemp();
 
+	const uint8_t getTriakCoolerTemp();
+	const uint8_t getTriakCoolerGist();
 
 private:
 	String wifi_ssid;
@@ -50,9 +60,13 @@ private:
 	boolean changed;
 
 	uint8_t distWorkPower;
-	uint8_t distStopTemp;
+	float distStopTemp;
 	uint8_t distKranOpened;
+	uint8_t distTSAmax;
+	uint8_t distForsajTemp;
 
+	uint8_t triakCoolerTemp;
+	uint8_t triakCoolerGist;
 };
 
 extern Config CONF;

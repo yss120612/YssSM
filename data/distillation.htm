@@ -12,7 +12,7 @@
 <body>
 	<div class="container-fluid">
 	<div class="col-md-12">
-		<a href="/" class="btn btn-normal">Дом</a>
+		<a href="/" class="btn btn-info">Дом</a>
 	</div>
 	<div class="row">
 		<div class="col-md-offset-1 col-md-10">
@@ -23,6 +23,15 @@
 		</div>
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TKUBE"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TTRIAK"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="HPOWER"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="KSTATE"></div>		
 		</div>
 	</div>
 	</div>
@@ -39,6 +48,9 @@
 		$('#TTSA').html('Температура TSA <b>'+data['tsa_data']+'&deg;C</b>');
 		$('#TDEF').html('Температура в дефлегматоре <b>'+data['def_data']+'&deg;C</b>');
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
+		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
+		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
+		$('#KSTATE').html('Кран охладителя открыт на <b>'+data['kran_data']+'%</b>');
 		});
 		setTimeout('process()',3000);
 	}

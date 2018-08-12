@@ -23,7 +23,7 @@ public:
 	void right();
 	void press();
 	void long_press();
-	void command(uint8_t id);
+	void command(MenuCommand * id);
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
 	void process(long ms) {};

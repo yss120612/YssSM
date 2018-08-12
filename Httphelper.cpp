@@ -271,7 +271,7 @@ void HttpHelper::handleLog()
 
 void HttpHelper::handleDistill()
 {
-	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + "}";
+	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + "}";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 

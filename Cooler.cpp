@@ -24,11 +24,11 @@ void Cooler::run(boolean swc)
 }
 
 
-void Cooler::setParams(int t1, int8_t gis)
-{
-	borderT = t1;
-	gesteresis = gis;
-}
+//void Cooler::setParams(int t1, int8_t gis)
+//{
+//	borderT = t1;
+//	gesteresis = gis;
+//}
 
 
 void Cooler::process(long ms) 
@@ -36,13 +36,13 @@ void Cooler::process(long ms)
 	if (hard->getTTriak() == NULL) return;
 	int tm=hard->getTTriak()->getTemp();
 	if (isON) {
-		if (tm < borderT - gesteresis)
+		if (tm < CONF.getTriakCoolerTemp() - CONF.getTriakCoolerGist())
 		{
 			run(false);
 		}
 	}
 	else {
-		if (tm > borderT)
+		if (tm > CONF.getTriakCoolerTemp())
 		{
 			run(true);
 		}

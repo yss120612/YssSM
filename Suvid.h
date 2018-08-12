@@ -19,7 +19,7 @@
 #include "Workmodes.h"
 
 
-const uint16_t test_time = 5000;//5 секунд
+
 
 class Suvid : public Mode {
 public:
@@ -47,7 +47,7 @@ protected:
 	void press();
 	void long_press();
 	void makeMenu();
-	void command(uint8_t id);
+	void command(MenuCommand * id);
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
 };

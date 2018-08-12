@@ -20,11 +20,16 @@ void Mode::drawImm(long m)
 	drawImmed = false;
 }
 
+void Mode::readTime() {
+	hardware->getClock()->readTime();
+	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
+}
+
 void Mode::processMenuPress()
 {
 	MenuParameter * mp;
 	if (menu->current()->getKind() == COMMAND) {
-		command(menu->current()->getId());
+		command((MenuCommand *)menu->current());
 	}
 	else if (menu->current()->getKind() == SUBMENU) {
 		menu = menu->current()->select();
@@ -96,5 +101,14 @@ String Mode::getData(uint w)
 	case DS_TTSARGA:
 		return String(hardware->getTTsarga()->getTemp(), 1);
 		break;
+	case DS_TTRIAK:
+		return String(hardware->getTTriak()->getTemp(), 1);
+	break;
+	case DS_HPOWER:
+		return String(agg->getHeater()->getPower());
+	break;
+	case DS_KRANSTATE:
+		return String(agg->getKran()->getState());
+	break;
 	}
 }

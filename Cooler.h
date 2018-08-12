@@ -18,13 +18,13 @@ public:
 	~Cooler();
 	void setup(Hardware * h,uint8_t pin);
 	void run(boolean swc);
-	void setParams(int t1, int8_t gis);
-	int getTemperature() { return borderT; }
-	uint8_t getGesteresis() { return gesteresis; }
+	//void setParams(int t1, int8_t gis);
+	//int getTemperature() { return borderT; }
+	//uint8_t getGesteresis() { return gesteresis; }
 	void process(long ms);
 private:
-	int borderT;
-	int8_t gesteresis;
+	//int borderT;
+	//int8_t gesteresis;
 	uint8_t cooler_pin;
 	Hardware * hard;
 	boolean isON;

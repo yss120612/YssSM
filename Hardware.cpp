@@ -24,6 +24,10 @@ void Hardware::init()
 {
 	pinExtender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
 	encoder.setup(ENC_A_PIN, ENC_B_PIN, ENC_BTN_PIN);
+	t_kube.set12bit();
+	t_tsarga.set12bit();
+	t_tsa.set12bit();
+	t_triak.set12bit();
 }
 
 void Hardware::timed_process(long ms)
@@ -31,6 +35,7 @@ void Hardware::timed_process(long ms)
 	t_kube.process(ms);
 	t_tsarga.process(ms);
 	t_tsa.process(ms);
+	t_triak.process(ms);
 }
 
 void Hardware::process(long ms)

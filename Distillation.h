@@ -19,6 +19,8 @@ public:
 	~Distillation();
 	String getData(uint w) { return Mode::getData(w); }
 protected:
+	long last_time;
+
 	void draw(long m);
 	void initDraw();
 	void showState();
@@ -28,12 +30,13 @@ protected:
 	void press();
 	void long_press();
 	void makeMenu();
-	void command(uint8_t id);
+	void command(MenuCommand * id);
 	void stop(uint8_t reason);
 	void start();
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
-	
+	MenuCommand * mcmd;
+	float tcube;
 };
 
 

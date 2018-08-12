@@ -1,5 +1,6 @@
 
 #include "Extender.h"
+#include "Log.h"
 
 PinExtender::PinExtender()
 {
@@ -13,6 +14,7 @@ void PinExtender::setPinMode(int8_t pin, uint8_t mode)
 {
 	if (pin<0 || pin >= 100) return;
 	pinMode(pin, mode);
+	
 }
 
 void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
@@ -46,6 +48,7 @@ void PinExtender::setAll(uint16_t bitsToSend) {
 
 void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
 	if (whichPin < 0)  return;
+	logg.logging("Set pin " + String(whichPin) + " to " + String(whichState));
 	if (whichPin < 100) {
 		digitalWrite(whichPin, whichState);
 		return;
