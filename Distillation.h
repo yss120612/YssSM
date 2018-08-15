@@ -37,6 +37,7 @@ protected:
 	void acceptParams(MenuParameter * mp);
 	MenuCommand * mcmd;
 	float tcube;
+	float ttsa;
 };
 
 

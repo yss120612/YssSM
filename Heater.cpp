@@ -68,6 +68,11 @@ boolean Heater::isON() {
 	return !heater_stopped;
 }
 
+void Heater::shiftPower(uint8_t sh)
+{
+	if (power + sh <= max_power && power + sh>=0) power += sh;
+}
+
 void Heater::start() {
 	switchRelay(true);
 	heater_stopped = false;

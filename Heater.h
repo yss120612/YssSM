@@ -23,7 +23,7 @@ public:
 	void stop();
 	void setup(Hardware * h, uint8_t hp, int8_t rp);
 	boolean isON();
-	
+	void shiftPower(uint8_t sh);
 	
 private:
 	boolean cy;

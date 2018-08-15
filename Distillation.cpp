@@ -216,7 +216,22 @@ void Distillation::command(MenuCommand * id)
 
 void Distillation::stop(uint8_t reason) {
 	work_mode = PROC_OFF;
-	end_reason = PROCEND_NO;
+	end_reason = reason;
+	readTime();
+	switch (end_reason)
+	{
+	case PROCEND_FAULT:
+		logg.logging("Distill fault and finished at " + String(tim));
+		break;
+	case PROCEND_MANUAL:
+		logg.logging("Distill manually stopped at " + String(tim));
+		break;
+	case PROCEND_TEMPERATURE:
+		logg.logging("Distill normal finished at " + String(tim));
+		break;
+	default:
+		break;
+	}
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
 	agg->getKran()->forceClose();
@@ -283,27 +298,32 @@ void Distillation::process(long ms) {
 	if (last_time + test_time - ms >0) return;
 	last_time = ms;
 
-	/*if (work_mode == PROC_WORK && hardware->getClock()->checkAlarm2()) {
-		stop(PROCEND_TIME);
-		hardware->getBeeper()->beep(1000, 5000);
-		return;
-	}*/
+	
 	tcube = hardware->getTKube()->getTemp();
-
+	ttsa = hardware->getTTSA()->getTemp();
 	switch (work_mode) {
 	case PROC_FORSAJ:
 		if (tcube > CONF.getDistForsajTemp()){//end of forsaj
 			agg->getHeater()->setPower(CONF.getDistWorkPower());
 			agg->getKran()->openQuantum(CONF.getDistKranOpened());
 			readTime();
-			logg.logging("Distill forsaj finished at ")
+			logg.logging("Distill forsaj finished at "+String(tim));
 			work_mode = PROC_WORK;
 		}
 		break;
 	case PROC_WORK:
+		if (tcube > CONF.getDistStopTemp()) {//end of forsaj
+			stop(PROCEND_TEMPERATURE);
+		}
+		
 		break;
 	}
 
+	if (ttsa > CONF.getDistTSAmax()) {
+		
+		agg->getHeater()->shiftPower(-3);
+		agg->getKran()->shiftQuantum(3);
+	}
 	
 
 	//if (tmp >= tpause.getTemp() && work_mode == PROC_FORSAJ) {//вышли на рабочий режим
