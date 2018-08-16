@@ -19,7 +19,8 @@ class Distillation : public Mode
 public:
 	Distillation(Aggregates * a, Hardware *h);
 	~Distillation();
-	String getData(uint w) { return Mode::getData(w); }
+	String getData(uint w);
+	
 protected:
 	long last_time;
 

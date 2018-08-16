@@ -60,9 +60,9 @@ void Distillation::showState()
 		y = 0;
 	}
 	hardware->getDisplay()->drawString(x, 0, "Dist");
-	hardware->getDisplay()->drawString(x+30, 0, String(agg->getHeater()->getPower()));
+	hardware->getDisplay()->drawString(x+40, 0, String(agg->getHeater()->getPower()));
 
-	hardware->getDisplay()->drawString(x, y + 13, "TRI=" + String(hardware->getTTriak()->getTemp()));
+	hardware->getDisplay()->drawString(x, y + 13, "TSA=" + String(hardware->getTTSA()->getTemp()));
 	hardware->getDisplay()->drawString(x, y + 29, "KUB=" + String(hardware->getTKube()->getTemp()));
 	switch (work_mode) {
 	case PROC_OFF:
@@ -86,8 +86,19 @@ String Distillation::getData(uint w)
 	
 	if (w > DS_DISTSTART && w < DS_DISTEND) {
 		switch (w) {
-		//case DS_TKUBE:
-		//	return String(hardware->getTKube()->getTemp(), 1);
+		case DS_DISTSTATE:
+			switch (work_mode) {
+			case PROC_OFF:
+				return "OFF";
+				break;
+			case PROC_FORSAJ:
+				return "FORSAJ";
+				break;
+			case PROC_WORK:
+				return "WORKING";
+				break;
+			}
+
 		//	break;
 		//case DS_TTSA:
 		//	return String(hardware->getTTSA()->getTemp(), 1);
