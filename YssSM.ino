@@ -47,8 +47,14 @@ void setup() {
 	CONF.setDistKranOpened(20);
 	CONF.setDistStopTemp(98);
 	CONF.setDistWorkPower(50);
-	CONF.setDistTSAmax(50);
+
+	CONF.setTSAmax(50);
+	CONF.setTSAcritical(90);
+
 	CONF.setDistForsajTemp(57);
+
+	
+
 
 	CONF.setTriakCoolerTemp(50);
 	CONF.setTriakCoolerGist(10);

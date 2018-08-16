@@ -85,6 +85,11 @@ void Main::makeMenu()
 		MenuIParameter * iGis = new MenuIParameter("Gisteresis", setup, 22);
 		iTemp->setNext(iGis);
 		setup->add(iTemp);
+
+		MenuIParameter * mTsa = new MenuIParameter("TSA;Maximum", setup, 23);
+		MenuIParameter * cTsa = new MenuIParameter("Critical", setup, 24);
+		mTsa->setNext(cTsa);
+		setup->add(mTsa);
 			//Menu * triak = new Menu();
 			//triak->setParent(setup);
 			//triak->setActive(true);
@@ -205,11 +210,18 @@ void Main::initParams(MenuParameter * mp) {
 	if (mp == NULL) return;
 	switch (mp->getId()) {
 	case 21:
-		((MenuIParameter *)mp)->setup(CONF.getTriakCoolerTemp(), 1,10,100);
+		((MenuIParameter *)mp)->setup(CONF.getTriakCoolerTemp(), 1, 10, 100);
 		break;
 	case 22:
 		((MenuIParameter *)mp)->setup(CONF.getTriakCoolerGist(), 1, 0, 20);
 		break;
+	case 23:
+		((MenuIParameter *)mp)->setup(CONF.getTSAmax(), 1, 20, 70);
+		break;
+	case 24:
+		((MenuIParameter *)mp)->setup(CONF.getTSAcritical(), 1, 40, 99);
+		break;
+	
 	case 30:
 		RTC.readTime();
 		((MenuIParameter *)mp)->setup(RTC.h, 1, 0, 23);
@@ -247,8 +259,14 @@ void Main::acceptParams(MenuParameter * mp) {
 	case 22:
 		CONF.setTriakCoolerTemp(((MenuIParameter *)mp->getPrev())->getCurrent());
 		CONF.setTriakCoolerGist(((MenuIParameter *)mp)->getCurrent());
-		//agg->getTCooler()->setParams(((MenuIParameter *)mp->getPrev())->getCurrent(), ((MenuIParameter *)mp)->getCurrent());
 		break;
+	case 23:
+		break;
+	case 24:
+		CONF.setTSAmax(((MenuIParameter *)mp->getPrev())->getCurrent());
+		CONF.setTSAcritical(((MenuIParameter *)mp)->getCurrent());
+		break;
+
 	case 30:
 		break;
 	case 31:
@@ -322,14 +340,6 @@ void Main::command(MenuCommand * id)
 		break;
 
 	}
-
-	/*if (id != 3) return;
-	if (!hardware->getHeater()->isON()) {
-		hardware->getHeater()->start();
-	}
-	else {
-		hardware->getHeater()->stop();
-	}*/
 
 	drawImmed = true;
 }

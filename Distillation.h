@@ -12,6 +12,8 @@
 #include "Mode.h"
 #include "Workmodes.h"
 
+const long checkTSA = 1000 * 60 * 3;//через 3 минуты проверяем TSA
+
 class Distillation : public Mode
 {
 public:
@@ -38,6 +40,8 @@ protected:
 	MenuCommand * mcmd;
 	float tcube;
 	float ttsa;
+	long TSAchecked;
+	uint8_t tsa_alarms;
 };
 
 

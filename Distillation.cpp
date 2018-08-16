@@ -62,11 +62,45 @@ void Distillation::showState()
 	hardware->getDisplay()->drawString(x, 0, "Dist");
 	hardware->getDisplay()->drawString(x+30, 0, String(agg->getHeater()->getPower()));
 
-	hardware->getDisplay()->drawString(x, y+13, "TRI="+String(hardware->getTTriak()->getTemp()));
-	hardware->getDisplay()->drawString(x, y+29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
-	hardware->getDisplay()->drawString(x, y+45, "KUB=" + String(hardware->getTKube()->getTemp()));
+	hardware->getDisplay()->drawString(x, y + 13, "TRI=" + String(hardware->getTTriak()->getTemp()));
+	hardware->getDisplay()->drawString(x, y + 29, "KUB=" + String(hardware->getTKube()->getTemp()));
+	switch (work_mode) {
+	case PROC_OFF:
+		hardware->getDisplay()->drawString(x, y + 45, "OFF");
+		break;
+	case PROC_FORSAJ:
+		hardware->getDisplay()->drawString(x, y + 45, "FORSAJ");
+		break;
+	case PROC_WORK:
+		hardware->getDisplay()->drawString(x, y + 45, "WORKING");
+		break;
+	}
+	
+	//hardware->getDisplay()->drawString(x, y+29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
+	//hardware->getDisplay()->drawString(x, y+45, "KUB=" + String(hardware->getTKube()->getTemp()));
 	
 }
+
+String Distillation::getData(uint w)
+{
+	
+	if (w > DS_DISTSTART && w < DS_DISTEND) {
+		switch (w) {
+		//case DS_TKUBE:
+		//	return String(hardware->getTKube()->getTemp(), 1);
+		//	break;
+		//case DS_TTSA:
+		//	return String(hardware->getTTSA()->getTemp(), 1);
+		//	break;
+		default:
+			return "";
+		break;
+		}
+		
+	}
+	return Mode::getData(w);
+}
+
 
 
 
@@ -173,11 +207,13 @@ void Distillation::makeMenu()
 	setup->setParent(menu);
 	setup->setActive(true);
 	MenuIParameter * tTSA = new MenuIParameter("T MaxTsa", setup, 11);
+	MenuIParameter * cTSA = new MenuIParameter("T CritTsa", setup, 16);
 	MenuIParameter * tFor = new MenuIParameter("T Forsaj", setup, 12);
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 13);
 	MenuIParameter * pwWork = new MenuIParameter("WorkPower", setup, 14);
 	MenuIParameter * pwKran = new MenuIParameter("OpenKran", setup, 15);
 	setup->add(tTSA);
+	setup->add(cTSA);
 	setup->add(tFor);
 	setup->add(tEnd);
 	setup->add(pwWork);
@@ -245,6 +281,8 @@ void Distillation::start() {
 	agg->getHeater()->setPower(98);
 	agg->getHeater()->start();
 	mcmd->setName("Stop");
+	TSAchecked = 0;
+	tsa_alarms = 0;
 //	if (hardware->getTTsarga()>CONF.)
 }
 
@@ -253,7 +291,10 @@ void Distillation::initParams(MenuParameter * mp)
 	if (mp == NULL) return;
 	switch (mp->getId()) {
 	case 11:
-		((MenuIParameter *)mp)->setup(CONF.getDistTSAmax(),1,20,100);
+		((MenuIParameter *)mp)->setup(CONF.getTSAmax(),1,20,100);
+		break;
+	case 16:
+		((MenuIParameter *)mp)->setup(CONF.getTSAcritical(), 1, 40, 100);
 		break;
 	case 12:
 		((MenuIParameter *)mp)->setup(CONF.getDistForsajTemp(), 1, 20, 100);
@@ -276,7 +317,10 @@ void Distillation::acceptParams(MenuParameter * mp)
 	switch (mp->getId())
 	{
 	case 11:
-		CONF.setDistTSAmax(((MenuIParameter *)mp)->getCurrent());
+		CONF.setTSAmax(((MenuIParameter *)mp)->getCurrent());
+		break;
+	case 16:
+		CONF.setTSAcritical(((MenuIParameter *)mp)->getCurrent());
 		break;
 	case 12:
 		CONF.setDistForsajTemp(((MenuIParameter *)mp)->getCurrent());
@@ -315,32 +359,39 @@ void Distillation::process(long ms) {
 		if (tcube > CONF.getDistStopTemp()) {//end of forsaj
 			stop(PROCEND_TEMPERATURE);
 		}
-		
 		break;
 	}
 
-	if (ttsa > CONF.getDistTSAmax()) {
-		
+	
+	if (ttsa > CONF.getTSAmax()) {
+		if (TSAchecked == 0 || (ms - TSAchecked) > checkTSA){
+		readTime();
+		logg.logging("TSA alarm ("+String(ttsa)+"C) at " + String(tim));
 		agg->getHeater()->shiftPower(-3);
 		agg->getKran()->shiftQuantum(3);
+		TSAchecked = ms;
+		tsa_alarms++;
+		}
+	}
+	else {
+		if (tsa_alarms > 0)
+		{
+			logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
+			tsa_alarms = 0;
+		}
+		TSAchecked = 0;
 	}
 	
+	if (tsa_alarms > 3)
+	{
+		logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
+		stop(PROCEND_FAULT);
+	}
 
-	//if (tmp >= tpause.getTemp() && work_mode == PROC_FORSAJ) {//вышли на рабочий режим
-	//	work_mode = PROC_WORK;
-	//	hardware->getBeeper()->beep(1000, 500);
-	//	armAlarm();//«авели будильник
-	//}
+	if (tsa_alarms > 3 || ttsa > CONF.getTSAcritical())
+	{
+		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + String(tim));
+		stop(PROCEND_FAULT);
+	}
 
-	//uint8_t need_pw = 100;
-
-	//if (tpause.getTemp() <= tmp) {
-	//	need_pw = 0;
-	//}
-
-	//else if (tpause.getTemp() - tmp < 10)
-	//{
-	//	need_pw = (tpause.getTemp() - tmp) * 10 + 5;
-	//}
-	//agg->getHeater()->setPower(need_pw);
 }

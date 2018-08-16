@@ -72,10 +72,16 @@ void Config::setDistKranOpened(uint8_t st)
 	distKranOpened = st;
 }
 
-void Config::setDistTSAmax(uint8_t st)
+void Config::setTSAmax(uint8_t st)
 {
-	if (distTSAmax != st) changed = true;
-	distTSAmax = st;
+	if (TSAmax != st) changed = true;
+	TSAmax = st;
+}
+
+void Config::setTSAcritical(uint8_t st)
+{
+	if (TSAcritical != st) changed = true;
+	TSAcritical = st;
 }
 
 void Config::setDistForsajTemp(uint8_t st)
@@ -97,9 +103,14 @@ const uint8_t Config::getDistWorkPower(){ return distWorkPower;}
 const float Config::getDistStopTemp() { return distStopTemp;}
 const uint8_t Config::getDistKranOpened(){	return distKranOpened;}
 
-const uint8_t Config::getDistTSAmax()
+const uint8_t Config::getTSAmax()
 {
-	return distTSAmax;
+	return TSAmax;
+}
+
+const uint8_t Config::getTSAcritical()
+{
+	return TSAcritical;
 }
 
 const uint8_t Config::getDistForsajTemp()
