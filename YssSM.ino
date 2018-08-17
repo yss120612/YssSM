@@ -22,14 +22,10 @@ Aggregates agg(&hard);
 
 Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
-//Mode * distill = new Distillation(&agg, &hard);
+Mode * distill = new Distillation(&agg, &hard);
 //Mode * md = main;
 
 void setup() {
-	hard.init();
-	agg.init();
-	
-
 #ifdef _SERIAL
 	Serial.begin(115200);
 	logg.logging("_SERIAL is defined");
@@ -37,8 +33,14 @@ void setup() {
 	logg.logging("_SERIAL is NOT defined");
 #endif
 
-	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	CONF.setWiFi("Yss_GIGA","bqt3bqt3");
+	hard.init();
+	agg.init();
+	
+
+
+
+	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	//CONF.setWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.setHttp("admin", "esp");
 	CONF.setScrSavMin(1);
 	CONF.setSuvidMin(60);
@@ -81,7 +83,7 @@ void setup() {
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
 	workMode.addMode(suvid);
-//	workMode.addMode(distill);
+	workMode.addMode(distill);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");

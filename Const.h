@@ -11,7 +11,7 @@
 
 
 #define ENCODER_LOG1
-#define _SERIAL1
+#define _SERIAL
 
 
 const uint8_t EX_PIN0 = 100;
