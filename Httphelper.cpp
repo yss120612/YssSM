@@ -143,36 +143,7 @@ namespace web_handlers {
 
 	
 
-	void pageUpdate() {
-		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
-			return server->requestAuthentication();
-		String resp = "<!DOCTYPE html>\n<html>\n<head>\n";
-			resp += "<meta charset = \"utf-8\">\n";
-			resp += "<title>YssSM прошивка</title>\n";
-			resp += "<meta name = \"description\" content = \"Версия 0.1\">\n";
-			resp += "<meta name = \"author\" content = \"Yss\">\n";
-			resp += "<link href = \"/css/bootstrap.min.css\" type = \"text/css\" rel = \"stylesheet\">\n";
-			resp += "<script type = \"text/javascript\" src = \"/js/jquery.min.js\"></script>\n";
-			resp += "<script type = \"text/javascript\" src = \"/js/bootstrap.min.js\"></script>\n";
-			resp += "</head>\n<body>\n";
-			resp += "<h2>Прошивка и веб сервер</h2>\n";
-			resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">\n";
-			resp += "<div class = \"btn - group\">\n";
-			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
-			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
-			resp += "</div>\n";
-			resp += "</form>\n";
-
-			resp += "<form method = \"POST\" action = \"/update?cmd=100\" enctype = \"multipart/form-data\">";
-			resp += "<div class = \"btn-group\">\n";
-			resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
-			resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
-			resp += "</div>\n";
-			resp += "</form>\n";
-			resp += "</body>\n</html>\n";
-
-			server->send(200, "text/html", resp);
-	}
+	
 
 }
 
@@ -184,17 +155,12 @@ HttpHelper::HttpHelper()
 
 HttpHelper::~HttpHelper()
 {
-	delete httpUpdater;
+	//delete httpUpdater;
+	delete httpSpiffsUpdater;
 	delete server;
 	SPIFFS.end();
 }
 
-//void HttpHelper::setMode(Mode * m) {
-//	currentMode = m;
-//}
-//Mode * HttpHelper::getMode() {
-//	return currentMode;
-//}
 
 void HttpHelper::setup() {
 	if (server == NULL) return;
@@ -218,7 +184,7 @@ void HttpHelper::setup() {
 	server->on("/restart", web_handlers::restart);
 
 	//server->on("/update", web_handlers::pageUpdate);
-	server->on("/update", std::bind(&HttpHelper::handleUpdate, this));
+	server->on("/upd", std::bind(&HttpHelper::handleUpdate, this));
 
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
 
@@ -234,16 +200,16 @@ void HttpHelper::setup() {
 	
 	server->begin();
 
-	httpUpdater = new ESP8266HTTPUpdateServer();
-	httpUpdater->setup(server);
-
+	//httpUpdater = new ESP8266HTTPUpdateServer();
+	//httpUpdater->setup(server);
+	httpSpiffsUpdater = new ESP8266WebSpiffsUpdater();
+	httpSpiffsUpdater->setup(server);
 }
 
 boolean HttpHelper::isConnected()
 {
 	return WiFi.status() == WL_CONNECTED;
 }
-
 
 void HttpHelper::handleLog()
 {
@@ -268,14 +234,11 @@ void HttpHelper::handleLog()
 	server->send(200, "text/json",str); // Oтправляем ответ No Reset
 }
 
-
 void HttpHelper::handleDistill()
 {
-	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":'" + ds->getData(DS_DISTSTATE) + "'}";
+	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
-
-
 
 void HttpHelper::WiFiconnect()
 {
@@ -349,20 +312,24 @@ void HttpHelper::handleUpdate() {
 	resp += "<script type = \"text/javascript\" src = \"/js/jquery.min.js\"></script>\n";
 	resp += "<script type = \"text/javascript\" src = \"/js/bootstrap.min.js\"></script>\n";
 	resp += "</head>\n<body>\n";
-	resp += "<h2>Прошивка и веб сервер</h2>\n";
-	resp += "<form method = \"POST\" action = \"/update?cmd=0\" enctype = \"multipart/form-data\">\n";
-	resp += "<div class = \"btn - group\">\n";
-	resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
-	resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Прошивка\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
-	resp += "</div>\n";
-	resp += "</form>\n";
-
-	resp += "<form method = \"POST\" action = \"/update?cmd=100\" enctype = \"multipart/form-data\">";
+	resp += "<div class = \"alert alert-info\" role = \"alert\">";
+	resp += "<h3>Прошивка</h3>\n";
+	resp += "<form method = \"POST\" action = \"/update\" enctype = \"multipart/form-data\" class=\"form-inline\">\n";
 	resp += "<div class = \"btn-group\">\n";
-	resp += "<input type = \"file\" class = \"btn btn-success\" name = \"update\" style = \"height: 38px;\">\n";
-	resp += "<input type = \"submit\" class = \"btn btn-default active\" value = \"Сервер\" onclick = \"this.value = 'Подождите...';\" style = \"height: 38px; \">\n";
+	resp += "<input type = \"file\" class = \"btn\" name = \"update\">\n";
+	resp += "<input type = \"submit\" class = \"btn\" value = \"Прошить\" onclick = \"this.value = 'Подождите...';\">\n";
 	resp += "</div>\n";
 	resp += "</form>\n";
+	resp += "</div>\n";
+	resp += "<div class = \"alert alert-success\" role = \"alert\">";
+	resp += "<h3>WEB сервер</h3>\n";
+	resp += "<form method = \"POST\" action = \"/spiffs\" enctype = \"multipart/form-data\" class=\"form-inline\">";
+	resp += "<div class = \"btn-group\">\n";
+	resp += "<input type = \"file\" class = \"btn\" name = \"spiffs\">\n";
+	resp += "<input type = \"submit\" class = \"btn\" value = \"Прошить\" onclick = \"this.value = 'Подождите...';\">\n";
+	resp += "</div>\n";
+	resp += "</form>\n";
+	resp += "</div>\n";
 	resp += "</body>\n</html>\n";
 
 	server->send(200, "text/html", resp);

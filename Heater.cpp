@@ -49,7 +49,7 @@ void Heater::switchRelay(boolean on) {
 		delay(50);
 		hard->getExtender()->registerWrite(relay_pin, on ? HIGH : LOW);
 		heater_stopped = hs;
-		logg.logging("relay is "+String(on));
+		//logg.logging("relay is "+String(on));
 	}
 }
 
@@ -68,7 +68,7 @@ boolean Heater::isON() {
 	return !heater_stopped;
 }
 
-void Heater::shiftPower(uint8_t sh)
+void Heater::shiftPower(int8_t sh)
 {
 	if (power + sh <= max_power && power + sh>=0) power += sh;
 }

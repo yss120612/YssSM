@@ -1,4 +1,9 @@
 
+#include "ESP8266WepSpiffsUpdater.h"
+#include <ArduinoJson.hpp>
+#include <ArduinoJson.h>
+#include <ESP8266WebServerSecure.h>
+#include <ESP8266WebServer.h>
 #include "Termopause.h"
 #include "Config.h"
 //#include "DataSource.h"
@@ -22,7 +27,7 @@ Aggregates agg(&hard);
 
 Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
-//Mode * distill = new Distillation(&agg, &hard);
+Mode * distill = new Distillation(&agg, &hard);
 //Mode * md = main;
 
 void setup() {
@@ -44,17 +49,16 @@ void setup() {
 	CONF.setSuvidMin(60);
 	CONF.setSuvidTemp(50);
 
-	CONF.setDistKranOpened(20);
-	CONF.setDistStopTemp(98);
-	CONF.setDistWorkPower(50);
+	CONF.setDistKranOpened(19.5);
+	CONF.setDistStopTemp(98.8);
+	CONF.setDistWorkPower(42);
 
+	CONF.setTSAmin(28);
 	CONF.setTSAmax(50);
 	CONF.setTSAcritical(90);
 
 	CONF.setDistForsajTemp(57);
-
 	
-
 
 	CONF.setTriakCoolerTemp(50);
 	CONF.setTriakCoolerGist(10);
@@ -81,10 +85,16 @@ void setup() {
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
 	workMode.addMode(suvid);
-//	workMode.addMode(distill);
+	workMode.addMode(distill);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
+
+
+	logg.logging("ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000="+String((ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000));
+	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
+	logg.logging("ESP.getFlashChipRealSize()=" + String(ESP.getFlashChipRealSize()));
+	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
 }
 
 void nulAC() {

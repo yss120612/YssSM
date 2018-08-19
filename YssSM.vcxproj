@@ -50,7 +50,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\YssSM;$(ProjectDir)..\libraries\QList\src;$(ProjectDir)..\libraries\OneWire;$(ProjectDir)..\libraries\DS1302;$(ProjectDir)..\libraries\MD_DS3231\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\Wire;$(ProjectDir)..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266WiFi\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266mDNS;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266WebServer\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266HTTPUpdateServer\src;$(ProjectDir)..\libraries\ArduinoJson\src;C:\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\libraries;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\libb64;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\spiffs;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\umm_malloc;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\variants\nodemcu;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\lwip2\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\libc\xtensa-lx106-elf\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include\c++\4.8.2;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include\c++\4.8.2\xtensa-lx106-elf;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\lib\gcc\xtensa-lx106-elf\4.8.2\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\YssSM;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266WebServer\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266WiFi\src;$(ProjectDir)..\libraries\ArduinoJson\src;$(ProjectDir)..\libraries\QList\src;$(ProjectDir)..\libraries\OneWire;$(ProjectDir)..\libraries\DS1302;$(ProjectDir)..\libraries\MD_DS3231\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\Wire;$(ProjectDir)..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\ESP8266mDNS;C:\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\libraries;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\libb64;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\spiffs;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\cores\esp8266\umm_malloc;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\variants\nodemcu;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\lwip2\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\libc\xtensa-lx106-elf\include;$(ProjectDir)..\..\Temp\VMBuilds\LuckyBox\esp8266_nodemcuv2\Debug\core;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include\c++\4.8.2;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include\c++\4.8.2\xtensa-lx106-elf;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\lib\gcc\xtensa-lx106-elf\4.8.2\include;C:\Users\ys\AppData\Local\arduino15\packages\esp8266\hardware\esp8266\2.4.1\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.YssSM.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <PreprocessorDefinitions>__ESP8266_ESp8266__;__ESP8266_ESP8266__;__ets__;ICACHE_FLASH;F_CPU=80000000L;LWIP_OPEN_SRC;TCP_MSS=536;ARDUINO=10805;ARDUINO_ESP8266_NODEMCU;ARDUINO_ARCH_ESP8266;ESP8266;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -79,6 +79,8 @@
     <ProjectCapability Include="VisualMicro" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\libraries\ArduinoJson\library.json" />
+    <None Include="..\libraries\ArduinoJson\library.properties" />
     <None Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\library.json" />
     <None Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\library.properties" />
     <None Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\resources\glyphEditor.html" />
@@ -154,6 +156,89 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\libraries\ArduinoJson\ArduinoJson.h" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson.h" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Configuration.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\Encoding.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonBufferAllocated.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonFloat.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonInteger.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonVariantAs.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonVariantContent.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonVariantDefault.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\JsonVariantType.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\List.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\ListConstIterator.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\ListIterator.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\ListNode.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\NonCopyable.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\ReferenceType.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Data\ValueSaver.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Deserialization\Comments.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Deserialization\JsonParser.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Deserialization\JsonParserImpl.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Deserialization\StringWriter.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\DynamicJsonBuffer.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonArray.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonArrayImpl.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonArraySubscript.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonBuffer.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonBufferBase.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonBufferImpl.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonObject.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonObjectImpl.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonObjectSubscript.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonPair.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariant.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariantBase.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariantCasts.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariantComparisons.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariantImpl.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariantOr.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\JsonVariantSubscripts.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\attributes.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\ctype.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\isFloat.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\isInteger.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\math.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\parseFloat.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Polyfills\parseInteger.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\RawJson.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\DummyPrint.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\DynamicStringBuilder.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\FloatParts.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\IndentedPrint.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\JsonPrintable.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\JsonSerializer.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\JsonSerializerImpl.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\JsonWriter.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\Prettyfier.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\StaticStringBuilder.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\Serialization\StreamPrintAdapter.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StaticJsonBuffer.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StringTraits\ArduinoStream.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StringTraits\CharPointer.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StringTraits\FlashString.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StringTraits\StdStream.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StringTraits\StdString.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\StringTraits\StringTraits.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\EnableIf.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\FloatTraits.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsArray.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsBaseOf.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsChar.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsConst.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsFloatingPoint.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsIntegral.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsSame.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsSignedIntegral.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsUnsignedIntegral.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\IsVariant.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\RemoveConst.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\TypeTraits\RemoveReference.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\src\ArduinoJson\version.hpp" />
+    <ClInclude Include="..\libraries\ArduinoJson\third-party\catch\catch.hpp" />
     <ClInclude Include="..\libraries\DS1302\DS1302.h" />
     <ClInclude Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src\OLEDDisplay.h" />
     <ClInclude Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src\OLEDDisplayFonts.h" />
@@ -255,6 +340,7 @@
     <ClInclude Include="Display.h" />
     <ClInclude Include="Distillation.h" />
     <ClInclude Include="Encoder.h" />
+    <ClInclude Include="ESP8266WepSpiffsUpdater.h" />
     <ClInclude Include="Extender.h" />
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="Heater.h" />
@@ -273,6 +359,77 @@
     <ClInclude Include="__vm\.YssSM.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\libraries\ArduinoJson\fuzzing\fuzzer.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\alloc.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\createArray.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\createObject.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\no_memory.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\size.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\startString.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\IntegrationTests\gbathree.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\IntegrationTests\round_trip.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\add.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\basics.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\copyFrom.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\copyTo.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\invalid.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\iterator.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\prettyPrintTo.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\printTo.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\remove.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\set.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\size.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonArray\subscript.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonBuffer\nested.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonBuffer\nestingLimit.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonBuffer\parse.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonBuffer\parseArray.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonBuffer\parseObject.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\basics.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\containsKey.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\get.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\invalid.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\iterator.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\prettyPrintTo.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\printTo.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\remove.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\set.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\size.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonObject\subscript.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\as.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\compare.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\copy.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\is.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\or.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\printTo.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\set_get.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\subscript.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\success.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonVariant\undefined.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonWriter\writeFloat.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\JsonWriter\writeString.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\deprecated.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\FloatParts.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\std_stream.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\std_string.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\StringBuilder.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\StringTraits.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\TypeTraits.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\unsigned_char.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\version.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Misc\vla.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Polyfills\isFloat.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Polyfills\isInteger.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Polyfills\parseFloat.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\Polyfills\parseInteger.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\alloc.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\createArray.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\createObject.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\parseArray.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\parseObject.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\size.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\startString.cpp" />
+    <ClCompile Include="..\libraries\ArduinoJson\third-party\catch\catch.cpp" />
     <ClCompile Include="..\libraries\DS1302\DS1302.cpp" />
     <ClCompile Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src\OLEDDisplay.cpp" />
     <ClCompile Include="..\libraries\ESP8266_and_ESP32_Oled_Driver_for_SSD1306_display\src\OLEDDisplayUi.cpp" />
@@ -330,6 +487,7 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Distillation.cpp" />
     <ClCompile Include="Encoder.cpp" />
+    <ClCompile Include="ESP8266WepSpiffsUpdater.cpp" />
     <ClCompile Include="Extender.cpp" />
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="Heater.cpp" />
@@ -346,6 +504,20 @@
     <ClCompile Include="Workmodes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\libraries\ArduinoJson\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\keywords.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\DynamicJsonBuffer\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\IntegrationTests\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\JsonArray\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\JsonBuffer\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\JsonObject\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\JsonVariant\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\JsonWriter\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\Misc\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\Polyfills\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\test\StaticJsonBuffer\CMakeLists.txt" />
+    <Text Include="..\libraries\ArduinoJson\third-party\catch\CMakeLists.txt" />
     <Text Include="..\libraries\MD_DS3231\keywords.txt" />
     <Text Include="..\libraries\OneWire\keywords.txt" />
     <Text Include="..\libraries\QList\keywords.txt" />

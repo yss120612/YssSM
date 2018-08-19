@@ -108,7 +108,10 @@ String Mode::getData(uint w)
 		return String(agg->getHeater()->getPower());
 	break;
 	case DS_KRANSTATE:
-		return String(agg->getKran()->getState());
+		return String(agg->getKran()->getState(),1);
 	break;
+	default:
+		return "NO DATA";
+		break;
 	}
 }

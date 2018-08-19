@@ -25,9 +25,10 @@ public:
 
 	void setDistWorkPower(uint8_t st);
 	void setDistStopTemp(float st);
-	void setDistKranOpened(uint8_t st);
+	void setDistKranOpened(float st);
 	void setDistForsajTemp(uint8_t st);
 	
+	void setTSAmin(uint8_t st);
 	void setTSAmax(uint8_t st);
 	void setTSAcritical(uint8_t st);
 
@@ -42,12 +43,13 @@ public:
 
 	const uint8_t getDistWorkPower();
 	const float getDistStopTemp();
-	const uint8_t getDistKranOpened();
+	const float getDistKranOpened();
 	const uint8_t getDistForsajTemp();
 
 	const uint8_t getTriakCoolerTemp();
 	const uint8_t getTriakCoolerGist();
 
+	const uint8_t getTSAmin();
 	const uint8_t getTSAmax();
 	const uint8_t getTSAcritical();
 private:
@@ -62,9 +64,10 @@ private:
 
 	uint8_t distWorkPower;
 	float distStopTemp;
-	uint8_t distKranOpened;
+	float distKranOpened;
 	uint8_t distForsajTemp;
 
+	uint8_t TSAmin;
 	uint8_t TSAmax;
 	uint8_t TSAcritical;
 

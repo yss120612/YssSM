@@ -41,7 +41,10 @@ protected:
 	MenuCommand * mcmd;
 	float tcube;
 	float ttsa;
+	float tdef;
 	long TSAchecked;
+	long TSAcheckedCold;
+	long coldBeginCheck;
 	uint8_t tsa_alarms;
 };
 
