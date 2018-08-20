@@ -312,6 +312,9 @@ void HttpHelper::handleUpdate() {
 	resp += "<script type = \"text/javascript\" src = \"/js/jquery.min.js\"></script>\n";
 	resp += "<script type = \"text/javascript\" src = \"/js/bootstrap.min.js\"></script>\n";
 	resp += "</head>\n<body>\n";
+	resp += "<div class = \"col-md-12\">\n";
+	resp += "<a href = \"/\"class = \"btn btn-info\">Дом</a>\n";
+	resp += "</div>\n";
 	resp += "<div class = \"alert alert-info\" role = \"alert\">";
 	resp += "<h3>Прошивка</h3>\n";
 	resp += "<form method = \"POST\" action = \"/update\" enctype = \"multipart/form-data\" class=\"form-inline\">\n";

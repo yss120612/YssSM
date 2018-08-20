@@ -20,10 +20,6 @@ public:
 	void showState();
 	void initDraw();
 	void makeMenu();
-	void left();
-	void right();
-	void press();
-	void long_press();
 	void command(MenuCommand * id);
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);

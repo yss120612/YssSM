@@ -28,6 +28,7 @@ void Hardware::init()
 	t_tsarga.set12bit();
 	t_tsa.set12bit();
 	t_triak.set12bit();
+	at24mem.begin();
 }
 
 void Hardware::timed_process(long ms)

@@ -47,8 +47,8 @@ void setup() {
 	CONF.setMem(hard.getAT24mem());
 
 
-	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	//CONF.setWiFi("Yss_GIGA","bqt3bqt3");
+	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	CONF.setWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.setHttp("admin", "esp");
 	CONF.setScrSavMin(1);
 	CONF.setSuvidMin(60);
@@ -67,9 +67,18 @@ void setup() {
 
 	CONF.setTriakCoolerTemp(50);
 	CONF.setTriakCoolerGist(10);
+	
+	
 
 	httph.setup();
-	
+	CONF.write();
+	//CONF.setDistStopTemp(98.7);
+	//CONF.setWiFi("Yss_GIGA1", "bqt3bqt3+");
+	//CONF.write();
+	CONF.read();
+	hard.getAT24mem()->write(100, 67);
+	uint8_t aaa=hard.getAT24mem()->read(100);
+	logg.logging("aaa="+String(aaa)+" Temp= " + String(CONF.getDistStopTemp()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
 	//hard.getEncoder()->setHandler(md);
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
