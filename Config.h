@@ -9,6 +9,8 @@
 	#include "WProgram.h"
 #endif
 
+#include "AT24C32.h"
+
 class Config
 {
 public:
@@ -52,16 +54,25 @@ public:
 	const uint8_t getTSAmin();
 	const uint8_t getTSAmax();
 	const uint8_t getTSAcritical();
+	void setMem(AT24C32 * mem) { at24mem = mem; }
+	void write();
+	void read();
+
 private:
+	uint16_t length;
+	uint16_t calcLength();
+	boolean changed;
+	AT24C32 * at24mem;
+
 	String wifi_ssid;
 	String wifi_password;
 	String www_username;
 	String www_password;
+	
 	int scrSaverMin;
 	int suvidMin;
 	uint8_t suvidTemp;
-	boolean changed;
-
+	
 	uint8_t distWorkPower;
 	float distStopTemp;
 	float distKranOpened;

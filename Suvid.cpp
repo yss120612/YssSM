@@ -3,39 +3,14 @@
 Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	
 	makeMenu();
+	MyName = "SuVid";
 }
 
 void Suvid::initDraw() {
 	tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
-	last_action = millis();
-	ss_active = false;
+	Mode::initDraw();
 }
 
-void Suvid::draw(long m) {
-	hardware->getDisplay()->clear();
-	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
-	if (ss_active || m - last_action > CONF.getScrSavMin() * 60000) {
-		ss_active = true;
-		showState();
-	}
-	else {
-				
-		if (menu != NULL && menu->isActive()) {
-			hardware->getDisplay()->drawString(0, 0, "Suvid");
-			if (menu->isEditMode()) {
-				hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
-			}
-			else {
-				menu->display(hardware->getDisplay());
-			}
-		}
-		else
-		{
-		showState();
-		}
-	}
-	hardware->getDisplay()->display();
-}
 
 void Suvid::showState() {
 	uint8_t X;
@@ -88,7 +63,6 @@ void Suvid::showState() {
 		hardware->getDisplay()->drawString(X, Y + 16," NOW:" + String(tim));
 		break;
 	case PROC_WORK:
-		
 		timeLeft();
 		hardware->getDisplay()->drawString(X, Y, "Working T:" + String(t));
 		hardware->getDisplay()->drawString(X, Y + 16, " Left:"+ String(tleft));
@@ -99,93 +73,6 @@ void Suvid::showState() {
 
 }
 
-void Suvid::left() {
-	Mode::left();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("suvid left");
-#endif
-	if (menu->isActive())
-	{
-		processMenuChange(false);
-	}
-	else {//MENU IS NOT ACTIVE
-
-		  //hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
-	}
-	drawImmed = true;
-}
-
-void Suvid::right() {
-	Mode::right();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("suvid right");
-#endif
-
-	if (menu->isActive())
-	{
-		processMenuChange(true);
-	}
-	else {//MENU IS NOT ACTIVE
-
-		  //hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
-	}
-	drawImmed = true;
-
-}
-
-void Suvid::press() {
-	Mode::press();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("suvid press");
-#endif
-	
-	if (menu->isActive())
-	{
-		processMenuPress();
-	}
-	else {//MENU IS NOT ACTIVE
-
-		
-	}
-	drawImmed = true;
-}
-
-void Suvid::long_press() {
-	Mode::long_press();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("suvid long_press");
-#endif
-	if (menu->isActive()) {
-		processMenuLong();
-	}
-	else {
-		menu->setActive(true);
-	}
-}
 
 void Suvid::makeMenu()
 {

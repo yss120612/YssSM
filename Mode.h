@@ -26,8 +26,9 @@ class Mode : public ModeBase
 {
 public:
 	Mode( Aggregates * a, Hardware *h);
-	virtual void draw(long m) = 0;
-	virtual void initDraw() = 0;
+	virtual void draw(long m);
+	virtual void initDraw();
+	virtual void showState() = 0;
 	virtual void drawImm(long m);
 	void readTime();
 	virtual void makeMenu() = 0;
@@ -39,8 +40,16 @@ public:
 	virtual void processMenuLong();
 	virtual void process(long ms) = 0;
 	virtual String getData(uint w);
-
+	virtual void left();
+	virtual void right();
+	virtual void press();
+	virtual void long_press();
+	virtual void left_nomenu() {};
+	virtual void right_nomenu() {};
+	virtual void press_nomenu() {};
+	long last_time;
 protected:
+	String MyName;
 	char tim[9];
 	char tleft[9];
 	boolean drawImmed;

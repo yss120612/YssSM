@@ -17,6 +17,7 @@ public:
 	Main(Aggregates * a,Hardware * h);
 
 	void draw(long m);
+	void showState();
 	void initDraw();
 	void makeMenu();
 	void left();

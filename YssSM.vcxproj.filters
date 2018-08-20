@@ -891,6 +891,12 @@
     <ClInclude Include="ESP8266WepSpiffsUpdater.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WaterSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectify.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -1320,6 +1326,12 @@
       <Filter>src\_micro-api-readonly\libraries\ArduinoJson</Filter>
     </ClCompile>
     <ClCompile Include="ESP8266WepSpiffsUpdater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectify.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

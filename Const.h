@@ -53,7 +53,7 @@ const uint8_t KRAN_CLOSE_PIN = EX_PIN7;
 
 
 const uint8_t term_addr [][8]={
-	{ 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 },
+	{ 0x28, 0xFF, 0x73, 0x37, 0x67, 0x14, 0x02, 0x11 },//in Cube sensor
 	{ 0x28, 0xFF, 0x36, 0x1E, 0xC0, 0x17, 0x02, 0x10 },//in capsule tsarga
 	{ 0x28, 0xFF, 0x10, 0x5C, 0x50, 0x17, 0x04, 0x66 },//TSA
 	{ 0x28, 0xFF, 0x75, 0x98, 0x50, 0x17, 0x04, 0x92 },//TRIAK RADIATOR
@@ -92,7 +92,8 @@ const uint16_t RTC_MEM_SIZE = 512;
 enum mo{
 	MODE_MAIN,
 	MODE_SUVID,
-	MODE_DISTILL
+	MODE_DISTILL,
+	MODE_RECTIFY
 };
 
 enum mydata {
@@ -104,13 +105,18 @@ enum mydata {
 	DS_KRANSTATE,
 	DS_DISTSTART,
 	DS_DISTSTATE,
-	DS_DISTEND
+	DS_DISTEND,
+	DS_RECTSTART,
+	DS_RECTSTATE,
+	DS_RECTEND
 };
 
 
 #define PROC_OFF  0 //начало
 #define PROC_FORSAJ  1 //разгон до temp_start
 #define PROC_WORK 2
+#define PROC_GET_HEAD 3
+#define PROC_SELF_WORK 4
 
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени

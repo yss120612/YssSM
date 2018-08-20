@@ -1,4 +1,6 @@
 
+#include "Rectify.h"
+#include "WaterSensor.h"
 #include "ESP8266WepSpiffsUpdater.h"
 #include <ArduinoJson.hpp>
 #include <ArduinoJson.h>
@@ -28,6 +30,7 @@ Aggregates agg(&hard);
 Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
 Mode * distill = new Distillation(&agg, &hard);
+Mode * rectify = new Rectify(&agg, &hard);
 //Mode * md = main;
 
 void setup() {
@@ -41,7 +44,7 @@ void setup() {
 	hard.init();
 	agg.init();
 	
-
+	CONF.setMem(hard.getAT24mem());
 
 
 	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
@@ -88,6 +91,7 @@ void setup() {
 	workMode.addMode(main);
 	workMode.addMode(suvid);
 	workMode.addMode(distill);
+	workMode.addMode(rectify);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");

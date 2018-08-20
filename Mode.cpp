@@ -1,9 +1,92 @@
-// 
-// 
-// 
-
 #include "Mode.h"
 
+
+void Mode::left()
+{
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
+#ifdef ENCODER_LOG
+	logg.logging("Distillation left");
+#endif
+	if (menu->isActive())
+	{
+		processMenuChange(false);
+	}
+	else {//MENU IS NOT ACTIVE
+		left_nomenu();
+		  //hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
+	}
+	drawImmed = true;
+}
+
+void Mode::right()
+{
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
+#ifdef ENCODER_LOG
+	logg.logging("Distillation right");
+#endif
+
+	if (menu->isActive())
+	{
+		processMenuChange(true);
+	}
+	else {//MENU IS NOT ACTIVE
+
+		right_nomenu();
+	}
+	drawImmed = true;
+}
+
+void Mode::press()
+{
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
+#ifdef ENCODER_LOG
+	logg.logging("Distillation press");
+#endif
+
+	if (menu->isActive())
+	{
+		processMenuPress();
+	}
+	else {//MENU IS NOT ACTIVE
+		press_nomenu();
+
+	}
+	drawImmed = true;
+}
+
+void Mode::long_press()
+{
+	if (ss_active) {
+		ss_active = false;
+		last_action = millis();
+		drawImmed = true;
+		return;
+	}
+#ifdef ENCODER_LOG
+	logg.logging("Distillation long_press");
+#endif
+	if (menu->isActive()) {
+		processMenuLong();
+	}
+	else {
+		menu->setActive(true);
+	}
+}
 
 Mode::Mode(Aggregates * a,Hardware * h)
 {
@@ -11,6 +94,41 @@ Mode::Mode(Aggregates * a,Hardware * h)
 	agg = a;
 	hardware = h;
 	
+}
+
+void Mode::draw(long m)
+{
+	hardware->getDisplay()->clear();
+	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
+
+	if (ss_active || m - last_action > CONF.getScrSavMin() * 60000) //активный савер
+	{
+		ss_active = true;
+		showState();
+	}
+	else
+	{
+		if (menu != NULL && menu->isActive()) {
+			hardware->getDisplay()->drawString(0, 0, MyName);
+			if (menu->isEditMode()) {
+				hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
+			}
+			else {
+				menu->display(hardware->getDisplay());
+			}
+		}
+		else
+		{
+			showState();
+		}
+	}
+	hardware->getDisplay()->display();
+}
+
+void Mode::initDraw()
+{
+	last_action = millis();
+	ss_active = false;
 }
 
 void Mode::drawImm(long m)

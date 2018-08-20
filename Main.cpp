@@ -50,6 +50,10 @@ void Main::draw(long m) {
 	hardware->getDisplay()->display();
 }
 
+void Main::showState() {
+
+}
+
 void Main::makeMenu()
 {
 	menu = new Menu();
@@ -312,6 +316,9 @@ void Main::command(MenuCommand * id)
 		break;
 	case 3:
 		workMode.setCurrent(MODE_DISTILL);
+		break;
+	case 4:
+		workMode.setCurrent(MODE_RECTIFY);
 		break;
 	case 11:
 		byte addr[8];

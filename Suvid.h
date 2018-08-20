@@ -35,17 +35,10 @@ protected:
 	void armAlarm();
 	void timeLeft();
 	TermoPause tpause;
-	long last_time;
 	
-	//long time;
 	void error(uint8_t);
-	void draw(long m);
 	void showState();
 	void initDraw();
-	void left();
-	void right();
-	void press();
-	void long_press();
 	void makeMenu();
 	void command(MenuCommand * id);
 	void initParams(MenuParameter * mp);

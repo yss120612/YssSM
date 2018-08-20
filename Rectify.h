@@ -1,7 +1,7 @@
-// Distillation.h
+// Rectify.h
 
-#ifndef _DISTILLATION_h
-#define _DISTILLATION_h
+#ifndef _RECTIFY_h
+#define _RECTIFY_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -12,17 +12,13 @@
 #include "Mode.h"
 #include "Workmodes.h"
 
-const long checkTSA = 1000 * 60 * 3;//через 3 минуты проверяем TSA
-
-class Distillation : public Mode
+class Rectify : public Mode
 {
 public:
-	Distillation(Aggregates * a, Hardware *h);
-	~Distillation();
+	Rectify(Aggregates * a, Hardware *h);
+	~Rectify();
 	String getData(uint w);
-	
 protected:
-	
 	void showState();
 	void process(long ms);
 	void makeMenu();
@@ -40,7 +36,6 @@ protected:
 	long coldBeginCheck;
 	uint8_t tsa_alarms;
 };
-
 
 
 #endif

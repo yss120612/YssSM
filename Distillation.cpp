@@ -1,50 +1,13 @@
-// 
-// 
-// 
-
 #include "Distillation.h"
-
 
 Distillation::Distillation(Aggregates * a, Hardware *h) : Mode(a,h)
 {
+	MyName = "Distillation";
 	makeMenu();
 }
 
 Distillation::~Distillation()
 {
-}
-
-void Distillation::draw(long m)
-{
-	hardware->getDisplay()->clear();
-	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
-	if (ss_active || m - last_action > CONF.getScrSavMin() * 60000) {
-		ss_active = true;
-		showState();
-	}
-	else {
-
-		if (menu != NULL && menu->isActive()) {
-			hardware->getDisplay()->drawString(0, 0, "Distillation");
-			if (menu->isEditMode()) {
-				hardware->getDisplay()->drawString(0, hardware->getDisplay()->getHeight() / 2, menu->getEditParams()->getMyName() + " : " + menu->getEditParams()->getStCurr());
-			}
-			else {
-				menu->display(hardware->getDisplay());
-			}
-		}
-		else
-		{
-			showState();
-		}
-	}
-	hardware->getDisplay()->display();
-}
-
-void Distillation::initDraw()
-{
-	last_action = millis();
-	ss_active = false;
 }
 
 void Distillation::showState()
@@ -75,10 +38,6 @@ void Distillation::showState()
 		hardware->getDisplay()->drawString(x, y + 45, "WORKING");
 		break;
 	}
-	
-	//hardware->getDisplay()->drawString(x, y+29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
-	//hardware->getDisplay()->drawString(x, y+45, "KUB=" + String(hardware->getTKube()->getTemp()));
-	
 }
 
 String Distillation::getData(uint w)
@@ -109,101 +68,8 @@ String Distillation::getData(uint w)
 		}
 		
 	}
+	else
 	return Mode::getData(w);
-}
-
-
-
-
-void Distillation::left()
-{
-	Mode::left();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("Distillation left");
-#endif
-	if (menu->isActive())
-	{
-		processMenuChange(false);
-	}
-	else {//MENU IS NOT ACTIVE
-
-		  //hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
-	}
-	drawImmed = true;
-}
-
-void Distillation::right()
-{
-	Mode::right();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("Distillation right");
-#endif
-
-	if (menu->isActive())
-	{
-		processMenuChange(true);
-	}
-	else {//MENU IS NOT ACTIVE
-
-		  //hardware->getHeater()->setPower(hardware->getHeater()->getPower() + 1);
-	}
-	drawImmed = true;
-}
-
-void Distillation::press()
-{
-	Mode::press();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("Distillation press");
-#endif
-
-	if (menu->isActive())
-	{
-		processMenuPress();
-	}
-	else {//MENU IS NOT ACTIVE
-
-
-	}
-	drawImmed = true;
-}
-
-void Distillation::long_press()
-{
-	Mode::long_press();
-	if (ss_active) {
-		ss_active = false;
-		last_action = millis();
-		drawImmed = true;
-		return;
-	}
-#ifdef ENCODER_LOG
-	logg.logging("Distillation long_press");
-#endif
-	if (menu->isActive()) {
-		processMenuLong();
-	}
-	else {
-		menu->setActive(true);
-	}
 }
 
 void Distillation::makeMenu()
@@ -239,7 +105,6 @@ void Distillation::command(MenuCommand * id)
 		}
 		else {
 			stop(PROCEND_MANUAL);
-			
 		}
 		break;
 	case 2:
