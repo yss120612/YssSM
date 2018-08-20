@@ -48,7 +48,7 @@ void PinExtender::setAll(uint16_t bitsToSend) {
 
 void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
 	if (whichPin < 0)  return;
-	logg.logging("Set pin " + String(whichPin) + " to " + String(whichState));
+	//logg.logging("Set pin " + String(whichPin) + " to " + String(whichState));
 	if (whichPin < 100) {
 		digitalWrite(whichPin, whichState);
 		return;

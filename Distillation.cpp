@@ -212,19 +212,15 @@ void Distillation::makeMenu()
 	menu->setActive(true);
 	mcmd = new MenuCommand("Start", 1);
 	menu->add(mcmd);
-	menu->add(new MenuCommand("Hide", 2));
+	menu->add(new MenuCommand("Hide menu", 2));
 	menu->add(new MenuCommand("Return", 3));
 	Menu * setup = new Menu();
 	setup->setParent(menu);
 	setup->setActive(true);
-	MenuIParameter * tTSA = new MenuIParameter("T MaxTsa", setup, 11);
-	MenuIParameter * cTSA = new MenuIParameter("T CritTsa", setup, 16);
 	MenuIParameter * tFor = new MenuIParameter("T Forsaj", setup, 12);
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 13);
 	MenuIParameter * pwWork = new MenuIParameter("WorkPower", setup, 14);
-	MenuIParameter * pwKran = new MenuIParameter("OpenKran", setup, 15);
-	setup->add(tTSA);
-	setup->add(cTSA);
+	MenuFParameter * pwKran = new MenuFParameter("OpenKran", setup, 15);
 	setup->add(tFor);
 	setup->add(tEnd);
 	setup->add(pwWork);
@@ -293,20 +289,17 @@ void Distillation::start() {
 	agg->getHeater()->start();
 	mcmd->setName("Stop");
 	TSAchecked = 0;
+	TSAcheckedCold = 0;
+	coldBeginCheck = 0;
 	tsa_alarms = 0;
-//	if (hardware->getTTsarga()>CONF.)
+	readTime();
+	logg.logging("Distill process started at " + String(tim));
 }
 
 void Distillation::initParams(MenuParameter * mp)
 {
 	if (mp == NULL) return;
 	switch (mp->getId()) {
-	case 11:
-		((MenuIParameter *)mp)->setup(CONF.getTSAmax(),1,20,100);
-		break;
-	case 16:
-		((MenuIParameter *)mp)->setup(CONF.getTSAcritical(), 1, 40, 100);
-		break;
 	case 12:
 		((MenuIParameter *)mp)->setup(CONF.getDistForsajTemp(), 1, 20, 100);
 		break;
@@ -317,7 +310,7 @@ void Distillation::initParams(MenuParameter * mp)
 		((MenuIParameter *)mp)->setup(CONF.getDistWorkPower(), 1, 10, 100);
 		break;
 	case 15:
-		((MenuIParameter *)mp)->setup(CONF.getDistKranOpened(), 1, 10 , 85);
+		((MenuFParameter *)mp)->setup(CONF.getDistKranOpened(), 0.1, 10 , 85);
 		break;
 	}
 }
@@ -327,12 +320,6 @@ void Distillation::acceptParams(MenuParameter * mp)
 	if (mp == NULL) return;
 	switch (mp->getId())
 	{
-	case 11:
-		CONF.setTSAmax(((MenuIParameter *)mp)->getCurrent());
-		break;
-	case 16:
-		CONF.setTSAcritical(((MenuIParameter *)mp)->getCurrent());
-		break;
 	case 12:
 		CONF.setDistForsajTemp(((MenuIParameter *)mp)->getCurrent());
 		break;
@@ -341,9 +328,15 @@ void Distillation::acceptParams(MenuParameter * mp)
 		break;
 	case 14:
 		CONF.setDistWorkPower(((MenuIParameter *)mp)->getCurrent());
+		if (work_mode == PROC_WORK) {
+			agg->getHeater()->setPower(CONF.getDistWorkPower());
+		}
 		break;
 	case 15:
-		CONF.setDistKranOpened(((MenuIParameter *)mp)->getCurrent());
+		CONF.setDistKranOpened(((MenuFParameter *)mp)->getCurrent());
+		if (work_mode == PROC_WORK) {
+			agg->getKran()->openQuantum(CONF.getDistKranOpened());
+		}
 		break;
 	}
 }
@@ -356,9 +349,10 @@ void Distillation::process(long ms) {
 	
 	tcube = hardware->getTKube()->getTemp();
 	ttsa = hardware->getTTSA()->getTemp();
+	tdef= hardware->getTTsarga()->getTemp();
 	switch (work_mode) {
 	case PROC_FORSAJ:
-		if (tcube > CONF.getDistForsajTemp()){//end of forsaj
+		if (tdef > CONF.getDistForsajTemp()){//end of forsaj
 			agg->getHeater()->setPower(CONF.getDistWorkPower());
 			agg->getKran()->openQuantum(CONF.getDistKranOpened());
 			readTime();
@@ -370,16 +364,30 @@ void Distillation::process(long ms) {
 		if (tcube > CONF.getDistStopTemp()) {//end of forsaj
 			stop(PROCEND_TEMPERATURE);
 		}
+		if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
 		break;
 	}
 
-	
+
+	if (coldBeginCheck > 0 && ms- coldBeginCheck > 0 && ttsa < CONF.getTSAmin()) {
+		if (TSAcheckedCold == 0 || (ms - TSAcheckedCold) > checkTSA) {
+			readTime();
+			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
+			agg->getHeater()->shiftPower(3);
+			//agg->getKran()->shiftQuantum(-0.5);
+			TSAcheckedCold = ms;
+		}
+	}
+	else {
+		TSAcheckedCold= 0;
+	}
+
 	if (ttsa > CONF.getTSAmax()) {
 		if (TSAchecked == 0 || (ms - TSAchecked) > checkTSA){
 		readTime();
 		logg.logging("TSA alarm ("+String(ttsa)+"C) at " + String(tim));
-		agg->getHeater()->shiftPower(-3);
-		agg->getKran()->shiftQuantum(3);
+		agg->getHeater()->shiftPower(-10);
+		//agg->getKran()->shiftQuantum(0.5);
 		TSAchecked = ms;
 		tsa_alarms++;
 		}
@@ -387,6 +395,7 @@ void Distillation::process(long ms) {
 	else {
 		if (tsa_alarms > 0)
 		{
+			readTime();
 			logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
 			tsa_alarms = 0;
 		}
@@ -395,12 +404,14 @@ void Distillation::process(long ms) {
 	
 	if (tsa_alarms > 3)
 	{
+		readTime();
 		logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
 		stop(PROCEND_FAULT);
 	}
 
-	if (tsa_alarms > 3 || ttsa > CONF.getTSAcritical())
+	if (ttsa > CONF.getTSAcritical())
 	{
+		readTime();
 		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + String(tim));
 		stop(PROCEND_FAULT);
 	}

@@ -66,10 +66,16 @@ void Config::setDistStopTemp(float st)
 	distStopTemp = st;
 }
 
-void Config::setDistKranOpened(uint8_t st)
+void Config::setDistKranOpened(float st)
 {
 	if (distKranOpened != st) changed = true;
 	distKranOpened = st;
+}
+
+void Config::setTSAmin(uint8_t st)
+{
+	if (TSAmin != st) changed = true;
+	TSAmin = st;
 }
 
 void Config::setTSAmax(uint8_t st)
@@ -92,21 +98,20 @@ void Config::setDistForsajTemp(uint8_t st)
 
 
 
-const String Config::getHttpU() { return www_username; }
-const String Config::getHttpP() { return www_password; }
-const String Config::getWiFiN() { return wifi_ssid; }
+const String Config::getHttpU() { return www_username; };
+const String Config::getHttpP() { return www_password; };
+const String Config::getWiFiN() { return wifi_ssid; };
 const String Config::getWiFiP() { return wifi_password; }
 const int Config::getScrSavMin(){ return scrSaverMin;}
 const int Config::getSuvidMin(){ return suvidMin;}
 const uint8_t Config::getSuvidTemp(){return suvidTemp;}
 const uint8_t Config::getDistWorkPower(){ return distWorkPower;}
 const float Config::getDistStopTemp() { return distStopTemp;}
-const uint8_t Config::getDistKranOpened(){	return distKranOpened;}
-const uint8_t Config::getDistForsajTemp() { return distForsajTemp; }
-
+const float Config::getDistKranOpened(){	return distKranOpened;}
+const uint8_t Config::getTSAmin() { return TSAmin; }
 const uint8_t Config::getTSAmax(){	return TSAmax;}
 const uint8_t Config::getTSAcritical(){	return TSAcritical;}
-
+const uint8_t Config::getDistForsajTemp(){	return distForsajTemp;}
 const uint8_t Config::getTriakCoolerTemp(){	return triakCoolerTemp;}
 const uint8_t Config::getTriakCoolerGist(){	return triakCoolerGist;}
 

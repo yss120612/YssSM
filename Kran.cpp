@@ -15,7 +15,7 @@ void Kran::forceClose() {
 	hard->getExtender()->registerWrite(close_pin, HIGH);
 }
 
-void Kran::openQuantum(int8_t oq)
+void Kran::openQuantum(float oq)
 { //min==17 max==87
 	inQuantum = true;
 	forceClose();
@@ -23,9 +23,16 @@ void Kran::openQuantum(int8_t oq)
 	state = oq;
 }
 
-void Kran::shiftQuantum(int8_t oq)
+void Kran::shiftQuantum(float oq)
 {
-	if (state + oq > 100 || state + oq < 0) return;
+	if (state + oq > 100)
+	{
+		oq = 100 - state;
+	}
+	if (state + oq < 0) {
+		oq = -state;
+	}
+	if (oq==0) return;
 	inQuantum = true;
 	progress_time = millis();
 	state += oq;
@@ -53,6 +60,7 @@ void Kran::process(long ms) {
 			hard->getExtender()->registerWrite(close_pin, LOW);
 			inProgress = false;
 			if (quantum > 0) {
+				state = quantum;
 				hard->getExtender()->registerWrite(open_pin, HIGH);
 				progress_time = ms;
 			}

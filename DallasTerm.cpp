@@ -13,11 +13,14 @@ float DallasTerm::getTemp() {
 	return summ / dim;
 }
 
+
+
 void DallasTerm::process(long ms) {
 //	if (ms - lastWork < interval) return;
 
 	ds->reset(); // Теперь готовимся
 	ds->select(address);
+	
 	float tm;
 	if (meajured) {
 	   ds->write(0xBE); // Просим передать нам значение регистров со значением температуры

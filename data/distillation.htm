@@ -12,7 +12,7 @@
 <body>
 	<div class="container-fluid">
 	<div class="col-md-12">
-		<a href="/" class="btn btn-info">Дом</a>
+		<a href="/" class="btn btn-info">Дом</a>Yess
 	</div>
 	<div class="row">
 		<div class="col-md-offset-1 col-md-10">
@@ -34,7 +34,7 @@
 			<div id="KSTATE"></div>		
 		</div>
 		<div class="col-md-offset-1 col-md-10">
-			<div id="STATE"></div>		
+			<div id="STA"></div>		
 		</div>
 	</div>
 	</div>
@@ -54,7 +54,7 @@
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
 		$('#KSTATE').html('Кран охладителя открыт на <b>'+data['kran_data']+'%</b>');
-		$('#STATE').html('Состояние <b>'+data['state_data']+'</b>');
+		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
 		});
 		setTimeout('process()',3000);
 	}

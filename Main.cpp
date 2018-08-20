@@ -86,10 +86,12 @@ void Main::makeMenu()
 		iTemp->setNext(iGis);
 		setup->add(iTemp);
 
-		MenuIParameter * mTsa = new MenuIParameter("TSA;Maximum", setup, 23);
-		MenuIParameter * cTsa = new MenuIParameter("Critical", setup, 24);
-		mTsa->setNext(cTsa);
-		setup->add(mTsa);
+		MenuIParameter * miTsa = new MenuIParameter("TSA;Minimum", setup, 23);
+		MenuIParameter * maTsa = new MenuIParameter("Maximum", setup, 24);
+		MenuIParameter * cTsa = new MenuIParameter("Critical", setup, 25);
+		miTsa->setNext(maTsa);
+		maTsa->setNext(cTsa);
+		setup->add(miTsa);
 			//Menu * triak = new Menu();
 			//triak->setParent(setup);
 			//triak->setActive(true);
@@ -216,9 +218,12 @@ void Main::initParams(MenuParameter * mp) {
 		((MenuIParameter *)mp)->setup(CONF.getTriakCoolerGist(), 1, 0, 20);
 		break;
 	case 23:
-		((MenuIParameter *)mp)->setup(CONF.getTSAmax(), 1, 20, 70);
+		((MenuIParameter *)mp)->setup(CONF.getTSAmin(), 1, 20, 50);
 		break;
 	case 24:
+		((MenuIParameter *)mp)->setup(CONF.getTSAmax(), 1, 20, 80);
+		break;
+	case 25:
 		((MenuIParameter *)mp)->setup(CONF.getTSAcritical(), 1, 40, 99);
 		break;
 	
@@ -263,6 +268,9 @@ void Main::acceptParams(MenuParameter * mp) {
 	case 23:
 		break;
 	case 24:
+		break;
+	case 25:
+		CONF.setTSAmin(((MenuIParameter *)mp->getPrev()->getPrev())->getCurrent());
 		CONF.setTSAmax(((MenuIParameter *)mp->getPrev())->getCurrent());
 		CONF.setTSAcritical(((MenuIParameter *)mp)->getCurrent());
 		break;

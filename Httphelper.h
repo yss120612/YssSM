@@ -14,8 +14,8 @@
 #include <ESP8266mDNS.h>
 
 #include <ESP8266WebServer.h>
-#include <ESP8266HTTPUpdateServer.h>
-
+//#include <ESP8266HTTPUpdateServer.h>
+#include "ESP8266WepSpiffsUpdater.h"
 
 #include "Config.h"
 #include "DataSrc.h"
@@ -42,7 +42,8 @@ private:
 	void handleDistill();
 	//Config * conf;
 	ESP8266WebServer * server;
-	ESP8266HTTPUpdateServer * httpUpdater;
+	//ESP8266HTTPUpdateServer * httpUpdater;
+	ESP8266WebSpiffsUpdater * httpSpiffsUpdater;
 	DataSrc * ds;
 	//Hardware * hard;
 	//Aggregates * agg;
