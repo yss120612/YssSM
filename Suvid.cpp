@@ -30,7 +30,7 @@ void Suvid::showState() {
 	//Y = 13 + (hardware->getDisplay()->height() - 44);
 
 	uint8_t t = String(hardware->getTKube()->getTemp() > 0 && hardware->getTKube()->getTemp() < 110) ? hardware->getTKube()->getTemp() : 0;
-
+	readTime();
 	switch (work_mode)
 	{
 	case PROC_OFF:
@@ -60,7 +60,7 @@ void Suvid::showState() {
 	case PROC_FORSAJ:
 		hardware->getDisplay()->drawString(X, Y, "Forsaj T:" + String(t));
 		//hardware->getDisplay()->drawString(X, Y + 12, "T=" + String(t));
-		hardware->getDisplay()->drawString(X, Y + 16," NOW:" + String(tim));
+		hardware->getDisplay()->drawString(X, Y + 16," PWR:" + String(agg->getHeater()->getPower()));
 		break;
 	case PROC_WORK:
 		timeLeft();
@@ -241,23 +241,32 @@ void Suvid::process(long ms) {
 	if (work_mode == PROC_OFF) return;
 	if (last_time + test_time - ms >0) return;
 	last_time = ms;
+	float tmp = hardware->getTKube()->getTemp();
+	switch (work_mode) {
+	case PROC_WORK:
+		if (hardware->getClock()->checkAlarm2()){
+			stop(PROCEND_TIME);
+		}
+		break;
+	case PROC_FORSAJ:
+		
+		if (tmp >= tpause.getTemp()) {
+			work_mode = PROC_WORK;
+			armAlarm();//Завели будильник
+		}
+		break;
+	}
 
-	if (work_mode == PROC_WORK && hardware->getClock()->checkAlarm2()) {
+
+	/*if (work_mode == PROC_WORK && hardware->getClock()->checkAlarm2()) {
 		stop(PROCEND_TIME);
 		hardware->getBeeper()->beep(1000, 5000);
 		return;
-	}
+	}*/
 
+		
 
-	float tmp = hardware->getTKube()->getTemp();
-
-	if (tmp >= tpause.getTemp() && work_mode == PROC_FORSAJ) {//вышли на рабочий режим
-		work_mode = PROC_WORK;
-		hardware->getBeeper()->beep(1000, 500);
-		armAlarm();//Завели будильник
-	}
-
-	uint8_t need_pw = 100;
+	/*uint8_t need_pw = 100;
 
 	if (tpause.getTemp() <= tmp) {
 		need_pw = 0;
@@ -266,8 +275,8 @@ void Suvid::process(long ms) {
 	else if (tpause.getTemp() - tmp < 10)
 	{
 		need_pw = (tpause.getTemp() - tmp) * 10 + 5;
-	}
-	agg->getHeater()->setPower(need_pw);
+	}*/
+	agg->getHeater()->setPID(tmp, tpause.getTemp());
 }
 
 void Suvid::error(uint8_t er) {
@@ -291,6 +300,8 @@ void Suvid::start() {
 		return;
 	}
 	work_mode = PROC_FORSAJ;
+	agg->getHeater()->start();
+	agg->getHeater()->setPower(50);
 }
 
 void Suvid::stop(uint8_t reason) {

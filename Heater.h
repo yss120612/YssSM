@@ -24,8 +24,14 @@ public:
 	void setup(Hardware * h, uint8_t hp, int8_t rp);
 	boolean isON();
 	void shiftPower(int8_t sh);
-	
+	void setPID(float inp,float targetT);
+
+
 private:
+	float kp = 2, ki = 5 * 5.0, kd = 2 / 5.0;
+	float lastinput = 0;
+	float outsumm = 0;
+	
 	boolean cy;
 	uint8_t heater_pin;
 	uint8_t relay_pin;

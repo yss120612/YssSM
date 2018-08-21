@@ -73,6 +73,33 @@ void Heater::shiftPower(int8_t sh)
 	if (power + sh <= max_power && power + sh>=0) power += sh;
 }
 
+void Heater::setPID(float inp, float targetT)
+{
+	
+		bool pOnE = true;
+		float err = targetT - inp;
+		float dInput = inp - lastinput;
+		
+
+		float output;
+		outsumm += (ki * err);
+		if (!pOnE) outsumm -= (kp * dInput);
+		if (outsumm > 100) outsumm = 100;
+		else if (outsumm < 0) outsumm = 0;
+
+		if (pOnE) output = kp * err;
+		else output = 0;
+				
+		output += outsumm - kd * dInput;
+
+		if (output > 100) output = 100;
+		else if (output < 0) output = 0;
+		
+		lastinput = inp;
+
+		setPower(output);
+}
+
 void Heater::start() {
 	switchRelay(true);
 	heater_stopped = false;

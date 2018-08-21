@@ -178,9 +178,9 @@ void Config::read()
 	TSAcritical = *reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	triakCoolerTemp = *reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	triakCoolerGist = *reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	wifi_ssid = "";while (*(buff + idx) != 0) {wifi_ssid += *(buff + idx++);}
-	wifi_password = ""; while (*(buff + idx) != 0) { wifi_password += *(buff + idx++); }
-	www_username = ""; while (*(buff + idx) != 0) { www_username += *(buff + idx++); }
+	wifi_ssid = "";while (*(buff + idx) != 0) {wifi_ssid += *(buff + idx++);}idx++;
+	wifi_password = ""; while (*(buff + idx) != 0) { wifi_password += *(buff + idx++); }idx++;
+	www_username = ""; while (*(buff + idx) != 0) { www_username += *(buff + idx++); }idx++;
 	www_password = ""; while (*(buff + idx) != 0) { www_password += *(buff + idx++); }
 	logg.logging("CONFIG loaded (" + String(idx) + " bytes)!");
 	changed = false;

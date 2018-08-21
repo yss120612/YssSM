@@ -52,7 +52,7 @@ void setup() {
 	CONF.setHttp("admin", "esp");
 	CONF.setScrSavMin(1);
 	CONF.setSuvidMin(60);
-	CONF.setSuvidTemp(50);
+	CONF.setSuvidTemp(60);
 
 	CONF.setDistKranOpened(19.5);
 	CONF.setDistStopTemp(98.8);
@@ -71,14 +71,15 @@ void setup() {
 	
 
 	httph.setup();
-	CONF.write();
+	//CONF.write();
 	//CONF.setDistStopTemp(98.7);
 	//CONF.setWiFi("Yss_GIGA1", "bqt3bqt3+");
 	//CONF.write();
-	CONF.read();
+	
 	hard.getAT24mem()->write(100, 67);
 	uint8_t aaa=hard.getAT24mem()->read(100);
-	logg.logging("aaa="+String(aaa)+" Temp= " + String(CONF.getDistStopTemp()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
+	//CONF.read();
+	logg.logging("aaa="+String(aaa)+" Temp= " + String(CONF.getDistStopTemp()) + " Kran= " + String(CONF.getDistKranOpened()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
 	//hard.getEncoder()->setHandler(md);
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
