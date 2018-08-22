@@ -11,7 +11,7 @@
 
 
 #define ENCODER_LOG1
-#define _SERIAL
+#define _SERIAL1
 
 
 const uint8_t EX_PIN0 = 100;
@@ -112,6 +112,7 @@ enum mydata {
 	DS_SUVIDSTART,
 	DS_SUVIDSTATE,
 	DS_SUVIDTIMELEFT,
+	DS_SUVIDTARGET,
 	DS_SUVIDEND
 };
 

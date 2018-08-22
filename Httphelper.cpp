@@ -181,6 +181,8 @@ void HttpHelper::setup() {
 
 	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
 
+	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
+
 	server->on("/restart", web_handlers::restart);
 
 	//server->on("/update", web_handlers::pageUpdate);
@@ -191,6 +193,8 @@ void HttpHelper::setup() {
 	server->serveStatic("/log", SPIFFS, "/log.htm", NULL);
 
 	server->serveStatic("/distill", SPIFFS, "/distillation.htm", NULL);
+
+	server->serveStatic("/suvid", SPIFFS, "/suvid.htm", NULL);
 
 	server->serveStatic("/css/bootstrap.min.css", SPIFFS, "/css/bootstrap.min.css", NULL);
 
@@ -239,6 +243,13 @@ void HttpHelper::handleDistill()
 	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
+
+void HttpHelper::handleSuvid()
+{
+	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"ttarget_data\":" + ds->getData(DS_SUVIDTARGET)+ ", \"state_data\":\"" + ds->getData(DS_SUVIDSTATE) + "\", \"time_data\":\"" + ds->getData(DS_SUVIDTIMELEFT) + "\" }";
+	server->send(200, "text/json", str); // Oтправляем ответ No Reset
+}
+
 
 void HttpHelper::WiFiconnect()
 {

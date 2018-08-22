@@ -16,11 +16,12 @@
 	</div>
 	<div class="row">
 		<div class="col-md-offset-1 col-md-10">
-			<div id="TTSA"></div>		
+			<div id="TTARGET"></div>		
 		</div>
 		<div class="col-md-offset-1 col-md-10">
-			<div id="TDEF"></div>		
+			<div id="TIMELEFT"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TKUBE"></div>		
 		</div>
@@ -30,15 +31,13 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="HPOWER"></div>		
 		</div>
-		<div class="col-md-offset-1 col-md-10">
-			<div id="KSTATE"></div>		
-		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
 	</div>
 	</div>
- </body>
+ 
  <script type="text/javascript">
 	$(document).ready(function(){
 	process();
@@ -46,17 +45,17 @@
 	
 	function process(){
 		$.getJSON(
-		"/distilldata",
+		"/suviddata",
 		function(data){
-		$('#TTSA').html('Температура TSA <b>'+data['tsa_data']+'&deg;C</b>');
-		$('#TDEF').html('Температура в дефлегматоре <b>'+data['def_data']+'&deg;C</b>');
+		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
-		$('#KSTATE').html('Кран охладителя открыт на <b>'+data['kran_data']+'%</b>');
+		$('#TIMELEFT').html('Осталось <b>'+data['time_data']+'</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
 		});
 		setTimeout('process()',3000);
 	}
 	</script>
+	</body>
 </html>

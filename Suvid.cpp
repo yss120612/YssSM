@@ -89,9 +89,17 @@ String Suvid::getData(uint w)
 				break;
 			}
 		case DS_SUVIDTIMELEFT:
-			timeLeft();
-			return String(tleft);
+			if (work_mode == PROC_WORK) {
+				timeLeft();
+				return String(tleft);
+			}
+			else {
+				return "-";
+			}
 			break;
+		case DS_SUVIDTARGET:
+			return String(tpause.getTemp(),1);
+		break;
 		default:
 			return "";
 			break;

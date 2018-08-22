@@ -27,8 +27,7 @@ public:
 	~Suvid() { delete mcmd; };
 	void start();
 	void stop(uint8_t reason);
-	String getData(uint w) { return Mode::getData(w); }
-	
+
 	void process(long ms);
 	String getData(uint w);
 protected:

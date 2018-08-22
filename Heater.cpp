@@ -9,11 +9,13 @@ Heater::Heater() {
 };
 
 void Heater::processHeater() {
+	
 	if (heater_stopped) {
 		if (digitalRead(heater_pin) == HIGH) digitalWrite(heater_pin, LOW);
 		return;
 	}
-	
+	//logg.logging("IN INTERRUPT-2");
+
 	if (!relayIsOn()) return;
 	
 	cy = !cy;
@@ -25,11 +27,14 @@ void Heater::processHeater() {
 	if (curr < 0) {
 		curr += max_power;
 		digitalWrite(heater_pin, HIGH);
+		
 	}
 	else
 	{
 		digitalWrite(heater_pin, LOW);
+		
 	}
+	
 }
 
 void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
@@ -52,8 +57,7 @@ void Heater::switchRelay(boolean on) {
 		delay(50);
 		hard->getExtender()->registerWrite(relay_pin, on ? HIGH : LOW);
 	}
-	heater_stopped = on;
-
+	heater_stopped = !on;
 }
 
 //реле включено если его нет вообще или оно есть и включено

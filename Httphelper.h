@@ -40,6 +40,7 @@ private:
 	void WiFiReconnect();
 	void handleLog();
 	void handleDistill();
+	void handleSuvid();
 	//Config * conf;
 	ESP8266WebServer * server;
 	//ESP8266HTTPUpdateServer * httpUpdater;
