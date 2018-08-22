@@ -26,9 +26,6 @@ void Suvid::showState() {
 		Y = 15;
 	}
 	
-	//X = 25;
-	//Y = 13 + (hardware->getDisplay()->height() - 44);
-
 	uint8_t t = String(hardware->getTKube()->getTemp() > 0 && hardware->getTKube()->getTemp() < 110) ? hardware->getTKube()->getTemp() : 0;
 	readTime();
 	switch (work_mode)
@@ -59,13 +56,14 @@ void Suvid::showState() {
 		break;
 	case PROC_FORSAJ:
 		hardware->getDisplay()->drawString(X, Y, "Forsaj T:" + String(t));
-		//hardware->getDisplay()->drawString(X, Y + 12, "T=" + String(t));
 		hardware->getDisplay()->drawString(X, Y + 16," PWR:" + String(agg->getHeater()->getPower()));
 		break;
 	case PROC_WORK:
 		timeLeft();
 		hardware->getDisplay()->drawString(X, Y, "Working T:" + String(t));
-		hardware->getDisplay()->drawString(X, Y + 16, " Left:"+ String(tleft));
+		hardware->getDisplay()->drawString(X, Y + 16, " PWR:" + String(agg->getHeater()->getPower()));
+		hardware->getDisplay()->drawString(X, Y + 28, " Left:"+ String(tleft));
+		
 		break;
 	default:
 		break;
@@ -73,13 +71,44 @@ void Suvid::showState() {
 
 }
 
+String Suvid::getData(uint w)
+{
+
+	if (w > DS_SUVIDSTART && w < DS_SUVIDEND) {
+		switch (w) {
+		case DS_SUVIDSTATE:
+			switch (work_mode) {
+			case PROC_OFF:
+				return "OFF";
+				break;
+			case PROC_FORSAJ:
+				return "FORSAJ";
+				break;
+			case PROC_WORK:
+				return "WORKING";
+				break;
+			}
+		case DS_SUVIDTIMELEFT:
+			timeLeft();
+			return String(tleft);
+			break;
+		default:
+			return "";
+			break;
+		}
+
+	}
+	else
+		return Mode::getData(w);
+}
 
 void Suvid::makeMenu()
 {
 	menu = new Menu();
 	menu->setActive(true);
-	menu->add(new MenuCommand("Start", 1));
-	menu->add(new MenuCommand("Stop", 2));
+	mcmd = new MenuCommand("Start", 1);
+	menu->add(mcmd);
+	menu->add(new MenuCommand("Hide", 2));
 	menu->add(new MenuCommand("Return", 3));
 	Menu * setup = new Menu();
 	setup->setParent(menu);
@@ -97,13 +126,17 @@ void Suvid::command(MenuCommand * id)
 {
 	switch (id->getId()) {
 	case 1:
-		if (work_mode != PROC_OFF) return;
-		menu->setActive(false);
-		start();
+		if (work_mode == PROC_OFF) {
+			menu->setActive(false);
+			start();
+
+		}
+		else {
+			stop(PROCEND_MANUAL);
+		}
 		break;
 	case 2:
-		if (work_mode == PROC_OFF) return;
-		stop(PROCEND_MANUAL);
+		menu->setActive(false);
 		break;
 	case 3:
 		stop(PROCEND_MANUAL);
@@ -176,13 +209,6 @@ void Suvid::armAlarm()
 			hardware->getClock()->mm += 1;
 		}
 		break;
-	case 12:
-		if (hardware->getClock()->dd > 31) hardware->getClock()->dd = 1;
-		{
-			hardware->getClock()->mm = 1;
-			hardware->getClock()->yyyy += 1;
-		}
-		break;
 	case 4:
 	case 6:
 	case 9:
@@ -205,11 +231,20 @@ void Suvid::armAlarm()
 			}
 		}
 		break;
+	case 12:
+		if (hardware->getClock()->dd > 31) 
+		{
+			hardware->getClock()->dd = 1;
+			hardware->getClock()->mm = 1;
+			hardware->getClock()->yyyy += 1;
+		}
+		break;
+	
+	
 	
 	}
 	hardware->getClock()->writeAlarm2(DS3231_ALM_DTHM);
-	//hardware->getClock() ->
-	
+
 }
 
 void Suvid::timeLeft() {
@@ -243,16 +278,17 @@ void Suvid::process(long ms) {
 	last_time = ms;
 	float tmp = hardware->getTKube()->getTemp();
 	switch (work_mode) {
-	case PROC_WORK:
-		if (hardware->getClock()->checkAlarm2()){
-			stop(PROCEND_TIME);
-		}
-		break;
+	
 	case PROC_FORSAJ:
 		
 		if (tmp >= tpause.getTemp()) {
 			work_mode = PROC_WORK;
 			armAlarm();//Завели будильник
+		}
+		break;
+	case PROC_WORK:
+		if (hardware->getClock()->checkAlarm2()) {
+			stop(PROCEND_TIME);
 		}
 		break;
 	}
@@ -302,6 +338,7 @@ void Suvid::start() {
 	work_mode = PROC_FORSAJ;
 	agg->getHeater()->start();
 	agg->getHeater()->setPower(50);
+	mcmd->setName("Stop");
 }
 
 void Suvid::stop(uint8_t reason) {
@@ -309,5 +346,6 @@ void Suvid::stop(uint8_t reason) {
 	agg->getHeater()->stop();
 	work_mode = PROC_OFF;
 	end_reason = reason;
+	mcmd->setName("Start");
 }
 

@@ -8,6 +8,7 @@ Distillation::Distillation(Aggregates * a, Hardware *h) : Mode(a,h)
 
 Distillation::~Distillation()
 {
+	delete mcmd;
 }
 
 void Distillation::showState()
@@ -62,6 +63,7 @@ String Distillation::getData(uint w)
 		//case DS_TTSA:
 		//	return String(hardware->getTTSA()->getTemp(), 1);
 		//	break;
+	
 		default:
 			return "";
 		break;

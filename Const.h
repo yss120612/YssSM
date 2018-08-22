@@ -108,7 +108,11 @@ enum mydata {
 	DS_DISTEND,
 	DS_RECTSTART,
 	DS_RECTSTATE,
-	DS_RECTEND
+	DS_RECTEND,
+	DS_SUVIDSTART,
+	DS_SUVIDSTATE,
+	DS_SUVIDTIMELEFT,
+	DS_SUVIDEND
 };
 
 
@@ -129,7 +133,7 @@ enum mydata {
 #define PROCERR_NOTKUB 1 //нет градусника в кубе
 #define PROCERR_NOHEATER 2 //нет тена
 
-const uint16_t test_time = 5000;//5 секунд
+const uint16_t test_time = 10000;//5 секунд
 
 #endif
 

@@ -8,6 +8,7 @@ Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 
 Rectify::~Rectify()
 {
+	delete mcmd;
 }
 
 String Rectify::getData(uint w)

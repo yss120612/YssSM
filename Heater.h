@@ -25,11 +25,10 @@ public:
 	boolean isON();
 	void shiftPower(int8_t sh);
 	void setPID(float inp,float targetT);
-
-
 private:
-	float kp = 2, ki = 5 * 5.0, kd = 2 / 5.0;
-	float lastinput = 0;
+	const float kc = 8;
+	float kp,ki,kd;
+	float lasterr = 0;
 	float outsumm = 0;
 	
 	boolean cy;

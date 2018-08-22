@@ -15,7 +15,7 @@ void Heater::processHeater() {
 	}
 	
 	if (!relayIsOn()) return;
-	//dummy++;
+	
 	cy = !cy;
 
 	if (!cy) return;
@@ -39,6 +39,9 @@ void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
 	have_relay = rp >= 0;
 	relay_pin = rp;
 	hard->getExtender()->setPinMode(relay_pin, OUTPUT);
+	kp = kc * 0.6;
+	ki = 2 * kc * 0.6 / (test_time / 1000);
+	kd = kc * 0.6 * (test_time / 1000) / 8;
 }
 
 void Heater::switchRelay(boolean on) {
@@ -48,9 +51,9 @@ void Heater::switchRelay(boolean on) {
 		heater_stopped = true;
 		delay(50);
 		hard->getExtender()->registerWrite(relay_pin, on ? HIGH : LOW);
-		heater_stopped = hs;
-		//logg.logging("relay is "+String(on));
 	}
+	heater_stopped = on;
+
 }
 
 //реле включено если его нет вообще или оно есть и включено
@@ -75,39 +78,32 @@ void Heater::shiftPower(int8_t sh)
 
 void Heater::setPID(float inp, float targetT)
 {
-	
-		bool pOnE = true;
-		float err = targetT - inp;
-		float dInput = inp - lastinput;
+		float err = targetT-inp;
+		float dErr = err- lasterr;
 		
-
 		float output;
+
 		outsumm += (ki * err);
-		if (!pOnE) outsumm -= (kp * dInput);
-		if (outsumm > 100) outsumm = 100;
-		else if (outsumm < 0) outsumm = 0;
-
-		if (pOnE) output = kp * err;
-		else output = 0;
-				
-		output += outsumm - kd * dInput;
-
-		if (output > 100) output = 100;
-		else if (output < 0) output = 0;
 		
-		lastinput = inp;
+		outsumm = _min(_max(outsumm, 0), 100);
+		
+		output = kp * err + outsumm + kd * dErr;
+
+		output = _min(_max(output, 0), 100);
+				
+		lasterr = inp;
 
 		setPower(output);
 }
 
 void Heater::start() {
 	switchRelay(true);
-	heater_stopped = false;
+	
 }
 
 void Heater::stop() {
 	switchRelay(false);
-	heater_stopped = true;
+	
 }
 
 uint8_t Heater::getPower()

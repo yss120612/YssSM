@@ -24,14 +24,16 @@
 class Suvid : public Mode {
 public:
 	Suvid(Aggregates * a, Hardware *h);
+	~Suvid() { delete mcmd; };
 	void start();
 	void stop(uint8_t reason);
 	String getData(uint w) { return Mode::getData(w); }
 	
 	void process(long ms);
-	//int getHeaterPower() { return hardware->getHeater()->getPower(); };
+	String getData(uint w);
 protected:
-	
+	MenuCommand * mcmd;
+
 	void armAlarm();
 	void timeLeft();
 	TermoPause tpause;
