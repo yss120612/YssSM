@@ -8,6 +8,9 @@
     <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/js/highstock.js"></script>
+	<script type="text/javascript" src="/js/exporting.js"></script>
+	<script type="text/javascript" src="/js/export-data.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -39,12 +42,18 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
+		
+		<div class="col-md-offset-1 col-md-10">
+			<div id="CHART"></div>		
+		</div>
 	</div>
 	</div>
  
  <script type="text/javascript">
 	$(document).ready(function(){
 	process();
+	var crt=createChat();
+	
 	});
 	
 	function process(){
@@ -60,6 +69,99 @@
 		});
 		setTimeout('process()',3000);
 	}
+
+	function createChat(){
+// Create the chart
+return new Highcharts.stockChart('CHART', {
+	global: {
+        useUTC: false
+    },
+    chart: {
+        events: {
+            load: function () {
+			setInterval(load, 5000);
+                
+            }
+        }
+    },
+
+    rangeSelector: {
+        buttons: [{
+            count: 1,
+            type: 'minute',
+            text: '1M'
+        }, {
+            count: 5,
+            type: 'minute',
+            text: '5M'
+        }, {
+            count: 15,
+            type: 'minute',
+            text: '15M'
+        }, {
+            type: 'all',
+            text: 'All'
+        }],
+        inputEnabled: false,
+        selected: 0
+    },
+
+    title: {
+        text: 'Температура'
+    },
+
+    exporting: {
+   
+   
+		    type: 'image/png',
+                    buttons: {
+			    exportButton: {
+				    menuItems: null,
+					onclick: function() {
+					    this.exportChart();
+					}
+				}
+			}
+},
+	
+	legend: {
+            enabled: true,
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',			
+            x: -10,
+            y: 60,
+	    itemStyle: {padding: '10px'}
+},
+
+    series: [{
+        name: 'Показания сенсора',
+        data: (function () {
+            // generate an array of random data
+            var data = [],
+                time = (new Date()).getTime(),
+                i;
+
+            for (i = -99; i <= 0; i += 1) {
+                data.push([
+                    time + i * 5000,
+                    20)
+                ]);
+            }
+            return data;
+        }())
+    }]
+});
+};
+
+	function load() {
+    $.getJSON('/suvidchart', function(lst) {
+	    this.series[0].addPoint([(new Date()).getTime(), lst['kube_data']], true, false); 
+    });
+};
+
+
+
 	</script>
 	</body>
 </html>

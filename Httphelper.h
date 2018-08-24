@@ -27,9 +27,11 @@ public:
 	~HttpHelper();
 
 	void clientHandle();
+	boolean handleFileRead(String path);
 	void setup();
 	void setDataSource(DataSrc * d) { ds = d; };
 	boolean isConnected();
+	void handleRoot();
 	/*void setMode(Mode * m);
 	Mode * getMode();*/
 
@@ -42,6 +44,7 @@ private:
 	void handleDistill();
 	void handleRectify();
 	void handleSuvid();
+	void handleSuvidChart();
 	//Config * conf;
 	ESP8266WebServer * server;
 	//ESP8266HTTPUpdateServer * httpUpdater;

@@ -57,17 +57,18 @@ void Rectify::makeMenu()
 	setup->setParent(menu);
 	setup->setActive(true);
 
-	MenuIParameter * pwWork = new MenuIParameter("Head Power", setup, 10);
-	MenuFParameter * pwKran = new MenuFParameter("Head Kran", setup, 11);
+	MenuIParameter * pwHWork = new MenuIParameter("Head Power", setup, 10);
+	MenuFParameter * pwHKran = new MenuFParameter("Head Kran", setup, 11);
 	MenuIParameter * pwWork = new MenuIParameter("Power", setup, 12);
 	MenuFParameter * pwKran = new MenuFParameter("Kran", setup, 13);
 	MenuIParameter * tFor = new MenuIParameter("T Forsaj", setup, 14);
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 15);
-	
-	setup->add(tFor);
-	setup->add(tEnd);
+	setup->add(pwHWork);
+	setup->add(pwHKran);
 	setup->add(pwWork);
 	setup->add(pwKran);
+	setup->add(tFor);
+	setup->add(tEnd);
 	menu->add(new MenuSubmenu("Setup", setup));
 }
 

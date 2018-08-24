@@ -86,7 +86,7 @@ void Heater::setPID(float inp, float targetT)
 	ki = 2 * kc * 0.6 / (test_time / 1000);
 	kd = kc * 0.6 * (test_time / 1000) / 8;*/
 		float err = targetT-inp;
-		float dErr = err- lasterr;
+		float dErr = err - lasterr;
 		float output;
 
 		outsumm += (ki * err);

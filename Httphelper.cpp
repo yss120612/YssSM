@@ -5,148 +5,6 @@
 #include  "Config.h"
 
 
-
-namespace web_handlers {
-	ESP8266WebServer * server;
-	Config * conf;
-
-	/*const char * beginHTML PROGMEM = "<!DOCTYPE html>
-		<html lang = \"en\">\n
-		<head>\n
-		<meta charset = \"utf-8\">\n
-		<title>Система автоматики Yss</title>\n
-		<meta name = \"description\" content = \"Версия 0.1\">\n
-		<meta name = \"author\" content = \"Yss\">\n
-		<link href = \"bootstrap.min.css\" rel = \"stylesheet\" />\n
-		<script type = \"text/javascript\" src = \"/jquery.min.js\"></script>\n
-		<script type = \"text/javascript\" src = \"/bootstrap.min.js\"></script>\n
-		</head>\n
-		<body>\n";*/
-
-	boolean handleFileRead(String path) {
-
-		if (path.endsWith("/")) path += "index.htm";
-		String contentType;
-		if (path.endsWith(".htm") || path.endsWith(".html")) contentType = "text/html";
-		else if (path.endsWith(".css")) contentType = "text/css";
-		else if (path.endsWith(".js")) contentType = "application/javascript";
-		else if (path.endsWith(".png")) contentType = "image/png";
-		else if (path.endsWith(".gif")) contentType = "image/gif";
-		else if (path.endsWith(".jpg")) contentType = "image/jpeg";
-		else if (path.endsWith(".ico")) contentType = "image/x-icon";
-		else if (path.endsWith(".xml")) contentType = "text/xml";
-		else if (path.endsWith(".pdf")) contentType = "application/x-pdf";
-		else if (path.endsWith(".zip")) contentType = "application/x-zip";
-		else if (path.endsWith(".gz")) contentType = "application/x-gzip";
-		else if (path.endsWith(".json")) contentType = "application/json";
-		else contentType = "text/plain";
-
-		//split filepath and extension
-		
-		String prefix = path, ext = "";
-		int lastPeriod = path.lastIndexOf('.');
-		if (lastPeriod >= 0) {
-			prefix = path.substring(0, lastPeriod);
-			ext = path.substring(lastPeriod);
-		}
-
-		//look for smaller versions of file
-		//minified file, good (myscript.min.js)
-		if (SPIFFS.exists(prefix + ".min" + ext)) path = prefix + ".min" + ext;
-		//gzipped file, better (myscript.js.gz)
-		if (SPIFFS.exists(prefix + ext + ".gz")) path = prefix + ext + ".gz";
-		//min and gzipped file, best (myscript.min.js.gz)
-		if (SPIFFS.exists(prefix + ".min" + ext + ".gz")) path = prefix + ".min" + ext + ".gz";
-
-		if (SPIFFS.exists(path)) {
-
-			File file = SPIFFS.open(path, "r");
-			//if (server->hasArg())
-				if (server->hasArg("download"))
-					server->sendHeader("Content-Disposition", " attachment;");
-			if (server->uri().indexOf("nocache") < 0)
-				server->sendHeader("Cache-Control", " max-age=172800");
-
-			//optional alt arg (encoded url), server sends redirect to file on the web
-			//if (WiFi.status() == WL_CONNECTED && ESP8266WebServer::hasArg("alt")) {
-			//	ESP8266WebServer::sendHeader("Location", ESP8266WebServer::arg("alt"), true);
-			//	ESP8266WebServer::send(302, "text/plain", "");
-			//}
-			//else {
-			//	//server sends file
-			//	size_t sent = ESP8266WebServer::streamFile(file, contentType);
-			//}
-			size_t sent = server->streamFile(file, contentType);
-			file.close();
-			return true;
-		} //if SPIFFS.exists
-
-		//server->send(200, "text/plain", SPIFFS.);
-		return false;
-	} //bool handleFileRead
-
-
-
-	void root() {
-		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
-			return server->requestAuthentication();
-		//server->send(200, "text/plain", "Login OK");
-		if (!handleFileRead("/")) {
-			//server->send(200, "text/plain", "NOT FOUND!!!");
-		}
-	}
-
-	void distill() {
-		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
-			return server->requestAuthentication();
-		//server->send(200, "text/plain", "Login OK");
-		if (!handleFileRead("/distillation.htm")) {
-			//server->send(200, "text/plain", "NOT FOUND!!!");
-		}
-	}
-
-
-	void page1() {
-		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
-			return server->requestAuthentication();
-		//server->send(200, "text/plain", "Login OK on Page1");
-		if (!handleFileRead("/distillator.png")) {
-			//server->send(200, "text/plain", "NOT FOUND!!!");
-		}
-	}
-
-	void log() {
-		if (!server->authenticate(conf->getHttpU().c_str(), conf->getHttpP().c_str()))
-			return server->requestAuthentication();
-		
-//		server->send(200, "text/plain",logg.getAll("\n"));
-		
-	}
-
-
-
-	void restart()
-	{
-		String restart = server->arg("device");          // Получаем значение device из запроса
-		if (restart == "ok")
-		{                         // Если значение равно Ок
-			server->send(200, "text/plain", "Reset OK"); // Oтправляем ответ Reset OK
-			ESP.restart();                                // перезагружаем модуль
-			
-		}
-		else
-		{                                        // иначе
-			server->send(200, "text/plain", ""); // Oтправляем ответ No Reset
-		}
-	}
-
-
-	
-
-	
-
-}
-
 HttpHelper::HttpHelper()
 {
 	server = new ESP8266WebServer(80);
@@ -161,22 +19,13 @@ HttpHelper::~HttpHelper()
 	SPIFFS.end();
 }
 
-
 void HttpHelper::setup() {
 	if (server == NULL) return;
 
 	WiFiconnect();
-
-	web_handlers::conf = &CONF;
-
-	web_handlers::server = server;
-
-	server->on("/distill", web_handlers::distill);
-	
-	server->on("/", web_handlers::root);
-
-	server->on("/pict", web_handlers::page1);
-
+			
+	server->on("/", std::bind(&HttpHelper::handleRoot, this));
+		
 	server->on("/logdata", std::bind(&HttpHelper::handleLog, this));
 
 	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
@@ -185,9 +34,10 @@ void HttpHelper::setup() {
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
 
-	server->on("/restart", web_handlers::restart);
+	server->on("/suvidchart", std::bind(&HttpHelper::handleSuvidChart, this));
 
-	
+	//server->on("/restart", web_handlers::restart);
+		
 	server->on("/upd", std::bind(&HttpHelper::handleUpdate, this));
 
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
@@ -205,11 +55,16 @@ void HttpHelper::setup() {
 	server->serveStatic("/js/bootstrap.min.js", SPIFFS, "/js/bootstrap.min.js", NULL);
 
 	server->serveStatic("/js/jquery.min.js", SPIFFS, "/js/jquery.min.js", NULL);
-	
+
+	server->serveStatic("/js/export-data.js", SPIFFS, "/js/export-data.js", NULL);
+
+	server->serveStatic("/js/exporting.js", SPIFFS, "/js/exporting.js", NULL);
+
+	server->serveStatic("/js/highstock.js", SPIFFS, "/js/highstock.js", NULL);
+
+		
 	server->begin();
 
-	//httpUpdater = new ESP8266HTTPUpdateServer();
-	//httpUpdater->setup(server);
 	httpSpiffsUpdater = new ESP8266WebSpiffsUpdater();
 	httpSpiffsUpdater->setup(server);
 }
@@ -219,47 +74,43 @@ boolean HttpHelper::isConnected()
 	return WiFi.status() == WL_CONNECTED;
 }
 
+void HttpHelper::handleRoot() {
+	if (!server->authenticate(CONF.getHttpU().c_str(), CONF.getHttpP().c_str()))
+		return server->requestAuthentication();
+	if (!handleFileRead("/")) {
+		server->send(200, "text/plain", "NOT FOUND!!!");
+	}
+}
+
 void HttpHelper::handleLog()
 {
-
-
 	String str = "{\"logdata\":\"<ul>" + logg.getAll2Web() + "</ul>\"}";
-
-	//StaticJsonBuffer<2000> jsonBuffer;
-
-	//JsonObject& root = jsonBuffer.createObject();
-
-	//root["logdata"] = logg.getAll("<br>");
-
-	//root.printTo(Serial);
-
-	//Serial.println();
-
-	//root.prettyPrintTo(Serial);
-	
-	//root.prettyPrintTo(str);
-
 	server->send(200, "text/json",str); // Oтправляем ответ No Reset
 }
 
 void HttpHelper::handleDistill()
 {
+	
 	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
 void HttpHelper::handleRectify()
 {
+	
 	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
-void HttpHelper::handleSuvid()
-{
+void HttpHelper::handleSuvid(){
 	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"ttarget_data\":" + ds->getData(DS_SUVIDTARGET)+ ", \"state_data\":\"" + ds->getData(DS_SUVIDSTATE) + "\", \"time_data\":\"" + ds->getData(DS_SUVIDTIMELEFT) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
+void HttpHelper::handleSuvidChart() {
+	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) + " }";
+	server->send(200, "text/json", str); // Oтправляем ответ No Reset
+}
 
 void HttpHelper::WiFiconnect()
 {
@@ -364,6 +215,67 @@ void HttpHelper::clientHandle() {
 	//ArduinoOTA.handle();
 }
 
+boolean HttpHelper::handleFileRead(String path) {
+
+	if (path.endsWith("/")) path += "index.htm";
+	String contentType;
+	if (path.endsWith(".htm") || path.endsWith(".html")) contentType = "text/html";
+	else if (path.endsWith(".css")) contentType = "text/css";
+	else if (path.endsWith(".js")) contentType = "application/javascript";
+	else if (path.endsWith(".png")) contentType = "image/png";
+	else if (path.endsWith(".gif")) contentType = "image/gif";
+	else if (path.endsWith(".jpg")) contentType = "image/jpeg";
+	else if (path.endsWith(".ico")) contentType = "image/x-icon";
+	else if (path.endsWith(".xml")) contentType = "text/xml";
+	else if (path.endsWith(".pdf")) contentType = "application/x-pdf";
+	else if (path.endsWith(".zip")) contentType = "application/x-zip";
+	else if (path.endsWith(".gz")) contentType = "application/x-gzip";
+	else if (path.endsWith(".json")) contentType = "application/json";
+	else contentType = "text/plain";
+
+	//split filepath and extension
+
+	String prefix = path, ext = "";
+	int lastPeriod = path.lastIndexOf('.');
+	if (lastPeriod >= 0) {
+		prefix = path.substring(0, lastPeriod);
+		ext = path.substring(lastPeriod);
+	}
+
+	//look for smaller versions of file
+	//minified file, good (myscript.min.js)
+	if (SPIFFS.exists(prefix + ".min" + ext)) path = prefix + ".min" + ext;
+	//gzipped file, better (myscript.js.gz)
+	if (SPIFFS.exists(prefix + ext + ".gz")) path = prefix + ext + ".gz";
+	//min and gzipped file, best (myscript.min.js.gz)
+	if (SPIFFS.exists(prefix + ".min" + ext + ".gz")) path = prefix + ".min" + ext + ".gz";
+
+	if (SPIFFS.exists(path)) {
+
+		File file = SPIFFS.open(path, "r");
+		//if (server->hasArg())
+		if (server->hasArg("download"))
+			server->sendHeader("Content-Disposition", " attachment;");
+		if (server->uri().indexOf("nocache") < 0)
+			server->sendHeader("Cache-Control", " max-age=172800");
+
+		//optional alt arg (encoded url), server sends redirect to file on the web
+		//if (WiFi.status() == WL_CONNECTED && ESP8266WebServer::hasArg("alt")) {
+		//	ESP8266WebServer::sendHeader("Location", ESP8266WebServer::arg("alt"), true);
+		//	ESP8266WebServer::send(302, "text/plain", "");
+		//}
+		//else {
+		//	//server sends file
+		//	size_t sent = ESP8266WebServer::streamFile(file, contentType);
+		//}
+		size_t sent = server->streamFile(file, contentType);
+		file.close();
+		return true;
+	} //if SPIFFS.exists
+
+	//server->send(200, "text/plain", SPIFFS.);
+	return false;
+} //bool handleFileRead
 
 
 
