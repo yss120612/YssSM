@@ -116,7 +116,7 @@ void Suvid::makeMenu()
 	menu->setActive(true);
 	mcmd = new MenuCommand("Start", 1);
 	menu->add(mcmd);
-	menu->add(new MenuCommand("Hide", 2));
+	menu->add(new MenuCommand("Hide menu", 2));
 	menu->add(new MenuCommand("Return", 3));
 	Menu * setup = new Menu();
 	setup->setParent(menu);
@@ -157,11 +157,12 @@ void Suvid::initParams(MenuParameter * mp)
 {
 	if (mp == NULL) return;
 	switch (mp->getId()) {
+		//ot 0:0 do 23:50
 	case 10:
-		((MenuIParameter *)mp)->setup(tpause.getTime()/60, 1, 0, 11);
+		((MenuIParameter *)mp)->setup(tpause.getTime()/60, 1, 0, 23);
 		break;
 	case 11:
-		((MenuIParameter *)mp)->setup(tpause.getTime() % 60, 1, 0, 59);
+		((MenuIParameter *)mp)->setup(tpause.getTime() % 60, 10, 0, 50);
 		break;
 	case 12:
 		((MenuIParameter *)mp)->setup(tpause.getTemp(), 1, 20, 100);
@@ -176,12 +177,12 @@ void Suvid::acceptParams(MenuParameter * mp)
 	case 10:
 		break;
 	case 11:
-		logg.logging("Hours="+String(((MenuIParameter *)mp->getPrev())->getCurrent()));
-		logg.logging("Minutes=" + String(((MenuIParameter *)mp)->getCurrent()));
+		//logg.logging("Hours="+String(((MenuIParameter *)mp->getPrev())->getCurrent()));
+		//logg.logging("Minutes=" + String(((MenuIParameter *)mp)->getCurrent()));
 		tpause.setTime(((MenuIParameter *)mp->getPrev())->getCurrent()*60+((MenuIParameter *)mp)->getCurrent());
 		break;
 	case 12:
-		logg.logging("Temp-ra=" + String(((MenuIParameter *)mp)->getCurrent()));
+		//logg.logging("Temp-ra=" + String(((MenuIParameter *)mp)->getCurrent()));
 		tpause.setTemp(((MenuIParameter *)mp)->getCurrent());
 		break;
 	}
@@ -296,30 +297,11 @@ void Suvid::process(long ms) {
 		break;
 	case PROC_WORK:
 		if (hardware->getClock()->checkAlarm2()) {
-			stop(PROCEND_TIME);
+			stop(PROCEND_TIME);//будильник сработал
 		}
 		break;
 	}
 
-
-	/*if (work_mode == PROC_WORK && hardware->getClock()->checkAlarm2()) {
-		stop(PROCEND_TIME);
-		hardware->getBeeper()->beep(1000, 5000);
-		return;
-	}*/
-
-		
-
-	/*uint8_t need_pw = 100;
-
-	if (tpause.getTemp() <= tmp) {
-		need_pw = 0;
-	}
-
-	else if (tpause.getTemp() - tmp < 10)
-	{
-		need_pw = (tpause.getTemp() - tmp) * 10 + 5;
-	}*/
 	agg->getHeater()->setPID(tmp, tpause.getTemp());
 }
 

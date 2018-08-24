@@ -82,20 +82,23 @@ void Heater::shiftPower(int8_t sh)
 
 void Heater::setPID(float inp, float targetT)
 {
+	/*kp = kc * 0.6;
+	ki = 2 * kc * 0.6 / (test_time / 1000);
+	kd = kc * 0.6 * (test_time / 1000) / 8;*/
 		float err = targetT-inp;
 		float dErr = err- lasterr;
-		
 		float output;
 
 		outsumm += (ki * err);
 		
 		outsumm = _min(_max(outsumm, 0), 100);
-		
+
+		//пропорциональный, интегральный, дифференциальный
 		output = kp * err + outsumm + kd * dErr;
 
 		output = _min(_max(output, 0), 100);
 				
-		lasterr = inp;
+		lasterr = err;
 
 		setPower(output);
 }

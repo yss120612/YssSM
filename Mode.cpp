@@ -1,6 +1,5 @@
 #include "Mode.h"
 
-
 void Mode::left()
 {
 	if (ss_active) {

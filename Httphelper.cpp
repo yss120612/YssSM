@@ -181,11 +181,13 @@ void HttpHelper::setup() {
 
 	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
 
+	server->on("/rectifydata", std::bind(&HttpHelper::handleDistill, this));
+
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
 
 	server->on("/restart", web_handlers::restart);
 
-	//server->on("/update", web_handlers::pageUpdate);
+	
 	server->on("/upd", std::bind(&HttpHelper::handleUpdate, this));
 
 	server->serveStatic("/heater",SPIFFS,"/heater.htm", NULL);
@@ -193,6 +195,8 @@ void HttpHelper::setup() {
 	server->serveStatic("/log", SPIFFS, "/log.htm", NULL);
 
 	server->serveStatic("/distill", SPIFFS, "/distillation.htm", NULL);
+
+	server->serveStatic("/rectify", SPIFFS, "/rectify.htm", NULL);
 
 	server->serveStatic("/suvid", SPIFFS, "/suvid.htm", NULL);
 
@@ -239,6 +243,12 @@ void HttpHelper::handleLog()
 }
 
 void HttpHelper::handleDistill()
+{
+	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
+	server->send(200, "text/json", str); // Oтправляем ответ No Reset
+}
+
+void HttpHelper::handleRectify()
 {
 	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset

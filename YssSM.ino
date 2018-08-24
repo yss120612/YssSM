@@ -57,12 +57,20 @@ void setup() {
 	CONF.setDistKranOpened(19.5);
 	CONF.setDistStopTemp(98.8);
 	CONF.setDistWorkPower(42);
+	CONF.setDistForsajTemp(57);
+
+	CONF.setRectKranOpened(19.5);
+	CONF.setRectHeadKranOpened(19.5);
+	CONF.setRectStopTemp(78.8);
+	CONF.setRectHeadPower(42);
+	CONF.setRectWorkPower(37);
+	CONF.setRectForsajTemp(57);
 
 	CONF.setTSAmin(28);
 	CONF.setTSAmax(50);
 	CONF.setTSAcritical(90);
 
-	CONF.setDistForsajTemp(57);
+	
 	
 
 	CONF.setTriakCoolerTemp(50);
@@ -71,15 +79,21 @@ void setup() {
 	
 
 	httph.setup();
+	if (CONF.checkVersion()) {
+		CONF.read();
+	}
+	else {
+		CONF.write();
+	}
+
 	//CONF.write();
 	//CONF.setDistStopTemp(98.7);
 	//CONF.setWiFi("Yss_GIGA1", "bqt3bqt3+");
 	//CONF.write();
 	
-	hard.getAT24mem()->write(100, 67);
-	uint8_t aaa=hard.getAT24mem()->read(100);
+	
 	//CONF.read();
-	logg.logging("aaa="+String(aaa)+" Temp= " + String(CONF.getDistStopTemp()) + " Kran= " + String(CONF.getDistKranOpened()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
+	logg.logging(" Temp= " + String(CONF.getDistStopTemp()) + " Kran= " + String(CONF.getDistKranOpened()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
 	//hard.getEncoder()->setHandler(md);
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 

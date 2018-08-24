@@ -59,11 +59,6 @@ String Distillation::getData(uint w)
 				break;
 			}
 
-		//	break;
-		//case DS_TTSA:
-		//	return String(hardware->getTTSA()->getTemp(), 1);
-		//	break;
-	
 		default:
 			return "";
 		break;

@@ -16,6 +16,7 @@ class Config
 public:
 	Config();
 	~Config();
+	boolean checkVersion();
 	void setHttp(const String n, const  String p);
 	void setWiFi(const String n, const  String p);
 	void setScrSavMin(int ss);
@@ -30,6 +31,14 @@ public:
 	void setDistKranOpened(float st);
 	void setDistForsajTemp(uint8_t st);
 	
+	void setRectHeadPower(uint8_t st);
+	void setRectHeadKranOpened(float st);
+	void setRectWorkPower(uint8_t st);
+	void setRectStopTemp(float st);
+	void setRectKranOpened(float st);
+	void setRectForsajTemp(uint8_t st);
+
+
 	void setTSAmin(uint8_t st);
 	void setTSAmax(uint8_t st);
 	void setTSAcritical(uint8_t st);
@@ -42,6 +51,13 @@ public:
 
 	const int getSuvidMin();
 	const uint8_t getSuvidTemp();
+
+	const uint8_t	getRectHeadPower();
+	const float		getRectHeadKranOpened();
+	const uint8_t	getRectWorkPower();
+	const float		getRectStopTemp();
+	const float		getRectKranOpened();
+	const uint8_t	getRectForsajTemp();
 
 	const uint8_t getDistWorkPower();
 	const float getDistStopTemp();
@@ -78,12 +94,23 @@ private:
 	float distKranOpened;
 	uint8_t distForsajTemp;
 
+	uint8_t rectHeadPower;
+	float	rectHeadKranOpened;
+	uint8_t rectWorkPower;
+	float	rectKranOpened;
+	float	rectStopTemp;
+
+	uint8_t rectForsajTemp;
+
+
 	uint8_t TSAmin;
 	uint8_t TSAmax;
 	uint8_t TSAcritical;
 
 	uint8_t triakCoolerTemp;
 	uint8_t triakCoolerGist;
+
+	uint8_t version;
 };
 
 extern Config CONF;
