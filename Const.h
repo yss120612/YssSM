@@ -136,5 +136,7 @@ enum mydata {
 
 const uint16_t test_time = 10000;//5 секунд
 
+const long checkTSA = 1000 * 60 * 3;//через 3 минуты проверяем TSA после коррекции
+
 #endif
 

@@ -173,12 +173,12 @@ const float Config::getDistStopTemp() { return distStopTemp;}
 const float Config::getDistKranOpened(){	return distKranOpened;}
 const uint8_t Config::getDistForsajTemp() { return distForsajTemp; }
 
-const uint8_t Config::getRectHeadPower() { return distWorkPower; }
-const uint8_t Config::getRectWorkPower() { return distWorkPower; }
-const float Config::getRectStopTemp() { return distStopTemp; }
-const float Config::getRectHeadKranOpened() { return distKranOpened; }
-const uint8_t Config::getRectForsajTemp() { return distForsajTemp; }
-
+const uint8_t Config::getRectHeadPower() { return rectWorkPower; }
+const uint8_t Config::getRectWorkPower() { return rectWorkPower; }
+const float Config::getRectKranOpened() { return rectKranOpened; }
+const float Config::getRectHeadKranOpened() { return rectHeadKranOpened; }
+const uint8_t Config::getRectForsajTemp() { return rectForsajTemp; }
+const float Config::getRectStopTemp() { return rectStopTemp; }
 
 const uint8_t Config::getTSAmin() { return TSAmin; }
 const uint8_t Config::getTSAmax(){	return TSAmax;}
