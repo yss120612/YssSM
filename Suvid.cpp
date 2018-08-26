@@ -4,11 +4,12 @@ Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	
 	makeMenu();
 	MyName = "SuVid";
+	
 }
 
 void Suvid::initDraw() {
-	tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
 	Mode::initDraw();
+	tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
 }
 
 
@@ -17,7 +18,8 @@ void Suvid::showState() {
 	uint8_t Y;
 	if (ss_active) {
 		X = rand() % 25;
-		Y = 13 + rand() % (hardware->getDisplay()->height() - 44);
+		//Y = 13 + rand() % (hardware->getDisplay()->height() - 44);
+		Y = 15;
 		hardware->getDisplay()->drawString(rand() % (80), 0, "Suvid...");
 	}
 	else {
@@ -62,7 +64,7 @@ void Suvid::showState() {
 		timeLeft();
 		hardware->getDisplay()->drawString(X, Y, "Working T:" + String(t));
 		hardware->getDisplay()->drawString(X, Y + 16, " PWR:" + String(agg->getHeater()->getPower()));
-		hardware->getDisplay()->drawString(X, Y + 28, " Left:"+ String(tleft));
+		hardware->getDisplay()->drawString(X, Y + 32, " Left:"+ String(tleft));
 		
 		break;
 	default:
@@ -98,7 +100,7 @@ String Suvid::getData(uint w)
 			}
 			break;
 		case DS_SUVIDTARGET:
-			return String(tpause.getTemp(),1);
+			return String(tpause.getTemp());
 		break;
 		default:
 			return "";
@@ -179,11 +181,13 @@ void Suvid::acceptParams(MenuParameter * mp)
 	case 11:
 		//logg.logging("Hours="+String(((MenuIParameter *)mp->getPrev())->getCurrent()));
 		//logg.logging("Minutes=" + String(((MenuIParameter *)mp)->getCurrent()));
-		tpause.setTime(((MenuIParameter *)mp->getPrev())->getCurrent()*60+((MenuIParameter *)mp)->getCurrent());
+		CONF.setSuvidMin(((MenuIParameter *)mp->getPrev())->getCurrent() * 60 + ((MenuIParameter *)mp)->getCurrent());
+		tpause.setTime(CONF.getSuvidMin());
 		break;
 	case 12:
 		//logg.logging("Temp-ra=" + String(((MenuIParameter *)mp)->getCurrent()));
-		tpause.setTemp(((MenuIParameter *)mp)->getCurrent());
+		CONF.setSuvidTemp(((MenuIParameter *)mp)->getCurrent());
+		tpause.setTemp(CONF.getSuvidTemp());
 		break;
 	}
 }

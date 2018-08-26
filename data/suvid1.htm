@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Система автоматики Yss</title>
+    <meta name="description" content="Версия 0.1">
+    <meta name="author" content="Yss">
+    <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	
+</head>
+<body>
+	<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<a href="/" class="btn btn-info">Дом</a>
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+		<h3>Сувид</h3>
+		</div>
+	
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TTARGET"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMELEFT"></div>		
+		</div>
+		
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TKUBE"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TTRIAK"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="HPOWER"></div>		
+		</div>
+		
+		<div class="col-md-offset-1 col-md-10">
+			<div id="STA"></div>		
+		</div>
+		
+		<div class="col-md-offset-1 col-md-10">
+			<div id="CHART"></div>		
+		</div>
+	</div>
+	</div>
+ 
+ <script type="text/javascript">
+	$(document).ready(function(){
+	process();
+	});
+	
+	function process(){
+		$.getJSON(
+		"/suviddata",
+		function(data){
+		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
+		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
+		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
+		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
+		$('#TIMELEFT').html('Осталось <b>'+data['time_data']+'</b>');
+		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
+		});
+		setTimeout('process()',3000);
+	}
+
+	
+	</script>
+	</body>
+</html>

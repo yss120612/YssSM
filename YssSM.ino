@@ -48,53 +48,34 @@ void setup() {
 
 
 	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	CONF.setWiFi("Yss_GIGA","bqt3bqt3");
-	CONF.setHttp("admin", "esp");
-	CONF.setScrSavMin(1);
-	CONF.setSuvidMin(60);
-	CONF.setSuvidTemp(60);
+	CONF.seWiFi("Yss_GIGA","bqt3bqt3");
+	CONF.seHttp("admin", "esp");
+	CONF.seScrSavMin(1);
+	CONF.seSuvidMin(60);
+	CONF.seSuvidTemp(60);
 
-	CONF.setDistKranOpened(19.5);
-	CONF.setDistStopTemp(98.8);
-	CONF.setDistWorkPower(42);
-	CONF.setDistForsajTemp(57);
+	CONF.seDistKranOpened(19.5);
+	CONF.seDistStopTemp(98.8);
+	CONF.seDistWorkPower(42);
+	CONF.seDistForsajTemp(57);
 
-	CONF.setRectKranOpened(19.5);
-	CONF.setRectHeadKranOpened(19.5);
-	CONF.setRectStopTemp(78.8);
-	CONF.setRectHeadPower(42);
-	CONF.setRectWorkPower(37);
-	CONF.setRectForsajTemp(57);
+	CONF.seRectKranOpened(19.5);
+	CONF.seRectHeadKranOpened(19.5);
+	CONF.seRectStopTemp(78.8);
+	CONF.seRectHeadPower(42);
+	CONF.seRectWorkPower(37);
+	CONF.seRectForsajTemp(57);
 
 	CONF.setTSAmin(28);
 	CONF.setTSAmax(50);
-	CONF.setTSAcritical(90);
-
-	
-	
+	CONF.seTSAcritical(90);
 
 	CONF.setTriakCoolerTemp(50);
-	CONF.setTriakCoolerGist(10);
-	
-	
+	CONF.seTriakCoolerGist(10);
 
 	httph.setup();
-	if (CONF.checkVersion()) {
-		CONF.read();
-	}
-	else {
-		CONF.write();
-	}
 
-	//CONF.write();
-	//CONF.setDistStopTemp(98.7);
-	//CONF.setWiFi("Yss_GIGA1", "bqt3bqt3+");
-	//CONF.write();
-	
-	
-	//CONF.read();
 	logg.logging(" Temp= " + String(CONF.getDistStopTemp()) + " Kran= " + String(CONF.getDistKranOpened()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
-	//hard.getEncoder()->setHandler(md);
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 	attachInterrupt(ENC_BTN_PIN, Button, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала нажатия кнопки
@@ -119,6 +100,15 @@ void setup() {
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
+
+	CONF.write();
+
+	if (CONF.checkVersion()) {
+		//CONF.read();
+	}
+	else {
+		CONF.write();
+	}
 
 
 	logg.logging("ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000="+String((ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000));

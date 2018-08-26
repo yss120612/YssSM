@@ -27,12 +27,25 @@ void Config::setHttp(const String n, const  String p) {
 	www_password=p;
 	write();
 }
+
+void Config::seHttp(const String n, const  String p) {
+	if (!www_username.equals(n) || !www_password.equals(p)) changed = true;
+	www_username = n;
+	www_password = p;
+}
 void Config::setWiFi(const String n, const String p) {
 	if (!wifi_ssid.equals(n) || !wifi_password.equals(p)) changed = true;
 	wifi_ssid = n;
 	wifi_password = p;
 	write();
 }
+
+void Config::seWiFi(const String n, const String p) {
+	if (!wifi_ssid.equals(n) || !wifi_password.equals(p)) changed = true;
+	wifi_ssid = n;
+	wifi_password = p;
+}
+
 
 void Config::setScrSavMin(int ss)
 {
@@ -41,27 +54,48 @@ void Config::setScrSavMin(int ss)
 	write();
 }
 
+void Config::seScrSavMin(int ss)
+{
+	if (scrSaverMin != ss) changed = true;
+	scrSaverMin = ss;
+}
+
+
 void Config::setSuvidMin(int sm)
 {
 	if (suvidMin != sm) changed = true;
 	suvidMin = sm;
 	write();
-	
 }
+
+void Config::seSuvidMin(int sm)
+{
+	if (suvidMin != sm) changed = true;
+	suvidMin = sm;
+}
+
 
 void Config::setSuvidTemp(uint8_t st)
 {
 	if (suvidTemp != st) changed = true;
 	suvidTemp = st;
 	write();
-	
 }
+
+void Config::seSuvidTemp(uint8_t st)
+{
+	if (suvidTemp != st) changed = true;
+	suvidTemp = st;
+}
+
+
 
 void Config::setTriakCoolerTemp(uint8_t st)
 {
 	if (triakCoolerTemp != st) changed = true;
 	triakCoolerTemp = st;
 }
+
 
 void Config::setTriakCoolerGist(uint8_t st)
 {
@@ -70,12 +104,26 @@ void Config::setTriakCoolerGist(uint8_t st)
 	write();
 }
 
+void Config::seTriakCoolerGist(uint8_t st)
+{
+	if (triakCoolerGist != st) changed = true;
+	triakCoolerGist = st;
+}
+
+
 void Config::setRectWorkPower(uint8_t st)
 {
 	if (rectWorkPower != st) changed = true;
 	rectWorkPower = st;
 	write();
 }
+
+void Config::seRectWorkPower(uint8_t st)
+{
+	if (rectWorkPower != st) changed = true;
+	rectWorkPower = st;
+}
+
 
 void Config::setRectHeadPower(uint8_t st)
 {
@@ -84,12 +132,28 @@ void Config::setRectHeadPower(uint8_t st)
 	write();
 }
 
+void Config::seRectHeadPower(uint8_t st)
+{
+	if (rectHeadPower != st) changed = true;
+	rectHeadPower = st;
+}
+
+
 void Config::setRectStopTemp(float st)
 {
 	if (rectStopTemp != st) changed = true;
 	rectStopTemp = st;
 	write();
 }
+
+void Config::seRectStopTemp(float st)
+{
+	if (rectStopTemp != st) changed = true;
+	rectStopTemp = st;
+}
+
+
+
 
 void Config::setRectKranOpened(float st)
 {
@@ -98,18 +162,40 @@ void Config::setRectKranOpened(float st)
 	write();
 }
 
+void Config::seRectKranOpened(float st)
+{
+	if (rectKranOpened != st) changed = true;
+	rectKranOpened = st;
+}
+
+
 void Config::setRectHeadKranOpened(float st)
 {
 	if (rectHeadKranOpened != st) changed = true;
 	rectHeadKranOpened = st;
 	write();
 }
+
+
+void Config::seRectHeadKranOpened(float st)
+{
+	if (rectHeadKranOpened != st) changed = true;
+	rectHeadKranOpened = st;
+}
+
 void Config::setRectForsajTemp(uint8_t st)
 {
 	if (rectForsajTemp != st) changed = true;
 	rectForsajTemp = st;
 	write();
 }
+
+void Config::seRectForsajTemp(uint8_t st)
+{
+	if (rectForsajTemp != st) changed = true;
+	rectForsajTemp = st;
+}
+
 
 void Config::setDistWorkPower(uint8_t st)
 {
@@ -118,6 +204,13 @@ void Config::setDistWorkPower(uint8_t st)
 	write();
 }
 
+void Config::seDistWorkPower(uint8_t st)
+{
+	if (distWorkPower != st) changed = true;
+	distWorkPower = st;
+}
+
+
 void Config::setDistStopTemp(float st)
 {
 	if (distStopTemp != st) changed = true;
@@ -125,18 +218,39 @@ void Config::setDistStopTemp(float st)
 	write();
 }
 
+void Config::seDistStopTemp(float st)
+{
+	if (distStopTemp != st) changed = true;
+	distStopTemp = st;
+}
+
+
 void Config::setDistKranOpened(float st)
 {
 	if (distKranOpened != st) changed = true;
 	distKranOpened = st;
 	write();
 }
+
+void Config::seDistKranOpened(float st)
+{
+	if (distKranOpened != st) changed = true;
+	distKranOpened = st;
+}
+
 void Config::setDistForsajTemp(uint8_t st)
 {
 	if (distForsajTemp != st) changed = true;
 	distForsajTemp = st;
 	write();
 }
+
+void Config::seDistForsajTemp(uint8_t st)
+{
+	if (distForsajTemp != st) changed = true;
+	distForsajTemp = st;
+}
+
 
 void Config::setTSAmin(uint8_t st)
 {
@@ -155,6 +269,14 @@ void Config::setTSAcritical(uint8_t st)
 	if (TSAcritical != st) changed = true;
 	TSAcritical = st;
 	write();
+}
+
+
+void Config::seTSAcritical(uint8_t st)
+{
+	if (TSAcritical != st) changed = true;
+	TSAcritical = st;
+
 }
 
 
@@ -253,7 +375,7 @@ void Config::read()
 	scrSaverMin =		*reinterpret_cast<int *>(buff + idx); idx += sizeof(int);
 	suvidMin =			*reinterpret_cast<int *>(buff + idx); idx += sizeof(int);
 
-	suvidTemp =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
+	/*suvidTemp =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	distWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	distForsajTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
@@ -263,12 +385,12 @@ void Config::read()
 	TSAmax =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	TSAcritical =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	triakCoolerTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	triakCoolerGist =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
+	triakCoolerGist =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);*/
 
-	wifi_ssid = "";		while (*(buff + idx) != 0) { wifi_ssid +=		*reinterpret_cast<char *>(buff + idx++); } idx++;
-	wifi_password = ""; while (*(buff + idx) != 0) { wifi_password +=	*reinterpret_cast<char *>(buff + idx++); } idx++;
-	www_username = "";	while (*(buff + idx) != 0) { www_username +=	*reinterpret_cast<char *>(buff + idx++); } idx++;
-	www_password = "";	while (*(buff + idx) != 0) { www_password +=	*reinterpret_cast<char *>(buff + idx++); }
+	//wifi_ssid = "";		while (*(buff + idx) != 0) { wifi_ssid +=		*reinterpret_cast<char *>(buff + idx++); } idx++;
+	//wifi_password = ""; while (*(buff + idx) != 0) { wifi_password +=	*reinterpret_cast<char *>(buff + idx++); } idx++;
+	//www_username = "";	while (*(buff + idx) != 0) { www_username +=	*reinterpret_cast<char *>(buff + idx++); } idx++;
+	//www_password = "";	while (*(buff + idx) != 0) { www_password +=	*reinterpret_cast<char *>(buff + idx++); }
 
 	logg.logging("CONFIG loaded (" + String(idx) + " bytes)!");
 	changed = false;
@@ -301,7 +423,7 @@ void Config::read()
 
 uint16_t Config::calcLength()
 {
-	length = sizeof(int) * 2 + sizeof(float)*2 + sizeof(uint8_t) * 8 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
+	length = sizeof(int) * 2 + sizeof(float)*5 + sizeof(uint8_t) * 12 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
 	return length;
 }
 

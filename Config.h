@@ -18,30 +18,52 @@ public:
 	~Config();
 	boolean checkVersion();
 	void setHttp(const String n, const  String p);
+	void seHttp(const String n, const String p);
 	void setWiFi(const String n, const  String p);
+	void seWiFi(const String n, const String p);
 	void setScrSavMin(int ss);
+	void seScrSavMin(int ss);
 	void setSuvidMin(int sm);
+	void seSuvidMin(int sm);
 	void setSuvidTemp(uint8_t st);
+
+	void seSuvidTemp(uint8_t st);
 
 	void setTriakCoolerTemp(uint8_t st);
 	void setTriakCoolerGist(uint8_t st);
 
+	void seTriakCoolerGist(uint8_t st);
+
 	void setDistWorkPower(uint8_t st);
+	void seDistWorkPower(uint8_t st);
 	void setDistStopTemp(float st);
+	void seDistStopTemp(float st);
 	void setDistKranOpened(float st);
+	void seDistKranOpened(float st);
 	void setDistForsajTemp(uint8_t st);
+
+	void seDistForsajTemp(uint8_t st);
 	
 	void setRectHeadPower(uint8_t st);
+	void seRectHeadPower(uint8_t st);
 	void setRectHeadKranOpened(float st);
 	void setRectWorkPower(uint8_t st);
+	void seRectWorkPower(uint8_t st);
 	void setRectStopTemp(float st);
+	void seRectStopTemp(float st);
 	void setRectKranOpened(float st);
+	void seRectKranOpened(float st);
+	void seRectHeadKranOpened(float st);
 	void setRectForsajTemp(uint8_t st);
+
+	void seRectForsajTemp(uint8_t st);
 
 
 	void setTSAmin(uint8_t st);
 	void setTSAmax(uint8_t st);
 	void setTSAcritical(uint8_t st);
+
+	void seTSAcritical(uint8_t st);
 
 	const String getHttpU();
 	const String getHttpP();

@@ -18,14 +18,6 @@
 		<div class="col-md-12">
 			<a href="/" class="btn btn-info">Дом</a>
 		</div>
-		<div class="col-md-12">
-			<button class="btn btn-info" id="button">qqq</button>
-		</div>
-		
-		<div class="col-md-12">
-			<button class="btn btn-info" id="button1">qqq1</button>
-		</div>
-		
 		<div class="col-md-offset-1 col-md-10">
 		<h3>Сувид</h3>
 		</div>
@@ -60,92 +52,89 @@
  <script type="text/javascript">
 	$(document).ready(function(){
 	process();
-	
-	Highcharts.setOptions({
-	global:
-	{
-		useUTC: false
-	}
-	});
-
-	 var chart1 = new Highcharts.Chart({
-        chart: {
-            renderTo: 'CHART',
-			type: 'spline', 
-			 events: {
+	var crt=new Highcharts.stockChart('CHART', {
+	global: {
+        useUTC: false
+    },
+    chart: {
+        events: {
             load: function () {
-			 var series = this.series[0];
-			setInterval(function(){
-			  $.getJSON("/suvidchart", function(lst) {
-			
-			//int x=(new Date()).getTime();
-			var y= parseFloat(lst['kube_data']);
-			//alert(y);
-		    //this.series[0].addPoint([x,y], true, false); 
-			//alert('here');
-			
-			series.addPoint(y); 
-			});
-			}, 10000);
+			setInterval(load, 5000);
+                
             }
         }
-        },
+    },
 
-        xAxis: {
-            type: 'datetime'
-        },
+    rangeSelector: {
+        buttons: [{
+            count: 1,
+            type: 'minute',
+            text: '1M'
+        }, {
+            count: 5,
+            type: 'minute',
+            text: '5M'
+        }, {
+            count: 15,
+            type: 'minute',
+            text: '15M'
+        }, {
+            type: 'all',
+            text: 'All'
+        }],
+        inputEnabled: false,
+        selected: 0
+    },
 
-		yAxis:{
-		plotBands: [{ // Light air
-            from: 60,
-            to: 70,
-            color: 'rgba(68, 170, 213, 0.1)',
-            label: {
-                text: 'Light air',
-                style: {
-                    color: '#606060'
-                }
+    title: {
+        text: 'Температура'
+    },
+
+    exporting: {
+   
+   
+		    type: 'image/png',
+                    buttons: {
+			    exportButton: {
+				    menuItems: null,
+					onclick: function() {
+					    this.exportChart();
+					}
+				}
+			}
+},
+	
+	legend: {
+            enabled: true,
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',			
+            x: -10,
+            y: 60,
+	    itemStyle: {padding: '10px'}
+},
+
+    series: [{
+        name: 'Показания сенсора',
+        data: (function () {
+            // generate an array of random data
+            var data = [],
+                time = (new Date()).getTime(),
+                i;
+
+            for (i = -99; i <= 0; i += 1) {
+                data.push([
+                    time + i * 5000,
+                    20)
+                ]);
             }
-        }]
-		},
-		
-        series: [{
-			name:"Температура",
-            data: [29.9, 71.5, 106.4, 12.2, 14.0, 76.0, 35.6, 48.5, 21.4, 94.1, 55.6, 33.4],
-            pointStart: (new Date()).getTime()-10*5000,
-            pointInterval: 10 * 1000
-        }]
-    });
-	
-	$('#button1').click(function () {
-    
-	chart1.series[0].addPoint(50);
-	//alert('click');
-   });
-	$('#button').click(function () {
-    chart1.series[0].addPoint((new Date()).getTime(),50);
-	
-	//alert('click');
-   });
-	
+            return data;
+        }
+    }]
+});
 	
 	});
 	
-	function load() {
-			  
-    $.getJSON("/suvidchart", function(lst) {
-			
-			//int x=(new Date()).getTime();
-			//var y= parseFloat(lst['kube_data']);
-			//alert(y);
-		    //this.series[0].addPoint([x,y], true, false); 
-			//alert('here');
-			alert(this.title.text+' this');
-			alert(chart1.title.text+ ' chart1');
-			//this.series[0].addPoint(30); 
-	  });
-	};
-		
 	function process(){
 		$.getJSON(
 		"/suviddata",
@@ -158,10 +147,14 @@
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
 		});
 		setTimeout('process()',3000);
-	};
+	}
 
 	
-	
+	function load() {
+    $.getJSON('/suvidchart', function(lst) {
+	    this.series[0].addPoint([(new Date()).getTime(), lst['kube_data']], true, false); 
+    });
+};
 
 
 
