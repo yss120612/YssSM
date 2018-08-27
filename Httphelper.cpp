@@ -108,7 +108,7 @@ void HttpHelper::handleSuvid(){
 }
 
 void HttpHelper::handleSuvidChart() {
-	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE) + "\", \"heater_data\":" + ds->getData(DS_HPOWER) +" }";
+	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE) + "\", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"ttarget_data\":\"" + rand()%100 + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 

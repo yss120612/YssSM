@@ -69,68 +69,142 @@
 	});
 
 	 var chart1 = new Highcharts.Chart({
+	title: {
+		text: 'SuVid'
+	},
+	subtitle: {
+		text: 'История изменения температуры в кубе и мощности тэна.'
+	},
+	yAxis:[{
+	
+	title: {
+        text: 'Температура'
+		},
+		 plotLines: [{
+                value: 60,
+                color: 'green',
+				id: 'tmp',
+                dashStyle: 'shortdash',
+                width: 1,
+                label: {
+                    text: 'Заданная температура'
+                }
+            }],
+		 labels: {
+			formatter: function() {
+            return this.value + '°C'
+			}
+		 }
+		},{
+		title: {
+        text: 'Мощность'
+		},
+    
+		 labels: {
+			formatter: function() {
+            return this.value + '%'
+			}
+		 },
+		 opposite: true
+		}],
+        xAxis: {
+            type: 'datetime'
+        },	
         chart: {
             renderTo: 'CHART',
 			type: 'spline', 
 			 events: {
             load: function () {
-			 var series = this.series[0];
-			setInterval(function(){
-			  $.getJSON("/suvidchart", function(lst) {
 			
+			 var series0 = this.series[0];
+			 var series1 = this.series[1];
+			 var ax = this.yAxis[0];
+			 
+			setInterval(function(){
+			$.getJSON("/suvidchart", function(lst) {
+			var shift = series0.data.length > 120;
 			//int x=(new Date()).getTime();
-			var y= parseFloat(lst['kube_data']);
+			var y0= parseFloat(lst['kube_data']);
+			var y1= parseFloat(lst['heater_data']);
+			ax.removePlotLine('tmp');
+			ax.addPlotLine({
+				value: parseFloat(lst['ttarget_data']),
+                color: 'green',
+				id: 'tmp',
+                dashStyle: 'shortdash',
+                width: 1,
+                label: {
+                    text: 'Заданная температура'
+                }
+        });
 			//alert(y);
 		    //this.series[0].addPoint([x,y], true, false); 
 			//alert('here');
 			
-			series.addPoint(y); 
+			//series.addPoint([(new Date()).getTime(),y],true,shift); 
+			//series0.addPoint(y0,true,shift); 
+			//series1.addPoint(y1,true,shift); 
+			series0.addPoint(randomInteger(0,100),true,shift); 
+			series1.addPoint(randomInteger(0,100),true,shift); 
 			});
 			}, 10000);
             }
         }
         },
+	
 
-        xAxis: {
-            type: 'datetime'
-        },
-
-		yAxis:{
-		plotBands: [{ // Light air
-            from: 60,
-            to: 70,
-            color: 'rgba(68, 170, 213, 0.1)',
-            label: {
-                text: 'Light air',
-                style: {
-                    color: '#606060'
-                }
-            }
-        }]
-		},
+		
 		
         series: [{
-			name:"Температура",
-            data: [29.9, 71.5, 106.4, 12.2, 14.0, 76.0, 35.6, 48.5, 21.4, 94.1, 55.6, 33.4],
-            pointStart: (new Date()).getTime()-10*5000,
-            pointInterval: 10 * 1000
-        }]
+			name:'Температура',
+            data: [20],
+            pointStart: (new Date()).getTime()-10000,
+           // pointInterval: 10 * 1000
+        },{
+			name:'Мощность тэна',
+            data: [40],
+			color: '#FF0000',
+            pointStart: (new Date()).getTime()-10000,
+		}]
     });
+	
+	
 	
 	$('#button1').click(function () {
     
-	chart1.series[0].addPoint(50);
-	//alert('click');
+	 chart1.update({
+        xAxis: {
+           plotLines: [{
+                value: 30
+				}]
+        }
+    });
    });
+   
 	$('#button').click(function () {
-    chart1.series[0].addPoint((new Date()).getTime(),50);
-	
+    //chart1.xAxis.plotLines[0].value=80;
+	 chart1.yAxis[0].removePlotLine('tmp');
+	 chart1.yAxis[0].addPlotLine({
+				value: 20,
+                color: 'green',
+				id: 'tmp',
+                dashStyle: 'shortdash',
+                width: 1,
+                label: {
+                    text: 'Заданная температура'
+                }
+        });
 	//alert('click');
    });
 	
 	
 	});
 	
+	function randomInteger(min, max) {
+    var rand = min - 0.5 + Math.random() * (max - min + 1)
+    rand = Math.round(rand);
+    return rand;
+  }
 	function load() {
 			  
     $.getJSON("/suvidchart", function(lst) {
@@ -140,8 +214,8 @@
 			//alert(y);
 		    //this.series[0].addPoint([x,y], true, false); 
 			//alert('here');
-			alert(this.title.text+' this');
-			alert(chart1.title.text+ ' chart1');
+			//alert(this.title.text+' this');
+			//alert(chart1.title.text+ ' chart1');
 			//this.series[0].addPoint(30); 
 	  });
 	};

@@ -314,6 +314,7 @@ const uint8_t Config::getTriakCoolerGist(){	return triakCoolerGist;}
 
 void Config::write()
 {
+	if (!changed) return;
 	calcLength();
 	uint8_t * buff = new uint8_t [length];
 	uint16_t idx = 0;
