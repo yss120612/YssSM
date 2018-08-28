@@ -31,7 +31,7 @@ Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
 //Mode * distill = new Distillation(&agg, &hard);
 //Mode * rectify = new Rectify(&agg, &hard);
-//Mode * md = main;
+
 
 void setup() {
 #ifdef _SERIAL
@@ -85,16 +85,6 @@ void setup() {
 
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний проходу через 0
 	
-	/*RTC.yyyy = 2018;
-	RTC.dd = 22;
-	RTC.mm = 6;
-	RTC.h = 23;
-	RTC.m = 53;
-	RTC.s = 0;
-	RTC.dow = 4;*/
-	//RTC.readRAM
-	//RTC.writeTime();
-	//md->initDraw();
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
 	workMode.addMode(suvid);
@@ -104,15 +94,13 @@ void setup() {
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 
-	//CONF.write();
-
-	//if (CONF.checkVersion()) {
-		//CONF.read();
-	//}
-	//else {
-		//CONF.write();
-	//}
-
+	/*CONF.write();
+	if (CONF.checkVersion()) {
+		CONF.read();
+	}
+	else {
+		CONF.write();
+	}*/
 
 	logg.logging("ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000="+String((ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000));
 	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));

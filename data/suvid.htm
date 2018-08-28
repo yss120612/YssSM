@@ -61,14 +61,9 @@
 	$(document).ready(function(){
 	process();
 	
-	Highcharts.setOptions({
-	global:
-	{
-		useUTC: false
-	}
-	});
-
-	 var chart1 = new Highcharts.Chart({
+	
+	var target=0;
+	var chart1 = new Highcharts.Chart({
 	title: {
 		text: 'SuVid'
 	},
@@ -99,8 +94,7 @@
 		title: {
         text: 'Мощность'
 		},
-    
-		 labels: {
+        labels: {
 			formatter: function() {
             return this.value + '%'
 			}
@@ -108,8 +102,15 @@
 		 opposite: true
 		}],
         xAxis: {
-            type: 'datetime'
+            type: 'datetime',
+			
+			 
         },	
+		
+		time:{
+		useUTC:false,
+		},
+		
         chart: {
             renderTo: 'CHART',
 			type: 'spline', 
@@ -122,10 +123,14 @@
 			 
 			setInterval(function(){
 			$.getJSON("/suvidchart", function(lst) {
-			var shift = series0.data.length > 120;
-			//int x=(new Date()).getTime();
+			var shift = series0.data.length > 99;
 			var y0= parseFloat(lst['kube_data']);
 			var y1= parseFloat(lst['heater_data']);
+			var t=parseFloat(lst['ttarget_data']);
+			var x=(new Date()).getTime();
+			if (target!=t)
+			{
+			target=t;
 			ax.removePlotLine('tmp');
 			ax.addPlotLine({
 				value: parseFloat(lst['ttarget_data']),
@@ -136,18 +141,12 @@
                 label: {
                     text: 'Заданная температура'
                 }
-        });
-			//alert(y);
-		    //this.series[0].addPoint([x,y], true, false); 
-			//alert('here');
-			
-			//series.addPoint([(new Date()).getTime(),y],true,shift); 
-			//series0.addPoint(y0,true,shift); 
-			//series1.addPoint(y1,true,shift); 
-			series0.addPoint(randomInteger(0,100),true,shift); 
-			series1.addPoint(randomInteger(0,100),true,shift); 
 			});
-			}, 10000);
+			}
+			series0.addPoint([x,y0],true,shift); 
+			series1.addPoint([x,y1],true,shift); 
+			});
+			}, 30000);
             }
         }
         },
@@ -158,11 +157,13 @@
         series: [{
 			name:'Температура',
             data: [20],
+			yAxis: 0,
             pointStart: (new Date()).getTime()-10000,
            // pointInterval: 10 * 1000
         },{
 			name:'Мощность тэна',
             data: [40],
+			yAxis: 1,
 			color: '#FF0000',
             pointStart: (new Date()).getTime()-10000,
 		}]
@@ -180,23 +181,7 @@
         }
     });
    });
-   
-	$('#button').click(function () {
-    //chart1.xAxis.plotLines[0].value=80;
-	 chart1.yAxis[0].removePlotLine('tmp');
-	 chart1.yAxis[0].addPlotLine({
-				value: 20,
-                color: 'green',
-				id: 'tmp',
-                dashStyle: 'shortdash',
-                width: 1,
-                label: {
-                    text: 'Заданная температура'
-                }
-        });
-	//alert('click');
-   });
-	
+
 	
 	});
 	
@@ -205,20 +190,7 @@
     rand = Math.round(rand);
     return rand;
   }
-	function load() {
-			  
-    $.getJSON("/suvidchart", function(lst) {
-			
-			//int x=(new Date()).getTime();
-			//var y= parseFloat(lst['kube_data']);
-			//alert(y);
-		    //this.series[0].addPoint([x,y], true, false); 
-			//alert('here');
-			//alert(this.title.text+' this');
-			//alert(chart1.title.text+ ' chart1');
-			//this.series[0].addPoint(30); 
-	  });
-	};
+	
 		
 	function process(){
 		$.getJSON(

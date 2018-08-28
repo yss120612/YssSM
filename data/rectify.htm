@@ -39,14 +39,155 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="CHART"></div>		
+		</div>
 	</div>
 	</div>
  </body>
  <script type="text/javascript">
 	$(document).ready(function(){
 	process();
+	var target=0;
+	var chart1 = new Highcharts.Chart({
+	title: {
+		text: 'SuVid'
+	},
+	subtitle: {
+		text: 'температуры в узлах и мощность тэна.'
+	},
+	yAxis:[{
+	
+	title: {
+        text: 'Температура'
+		},
+		 plotLines: [{
+                value: 60,
+                color: 'green',
+				id: 'tmp',
+                dashStyle: 'shortdash',
+                width: 1,
+                label: {
+                    text: 'Заданная температура'
+                }
+            }],
+		 labels: {
+			formatter: function() {
+            return this.value + '°C'
+			}
+		 }
+		},{
+		title: {
+        text: 'Мощность'
+		},
+        labels: {
+			formatter: function() {
+            return this.value + '%'
+			}
+		 },
+		 opposite: true
+		}],
+        xAxis: {
+            type: 'datetime',
+			
+			 
+        },	
+		
+		time:{
+		useUTC:false,
+		},
+		
+        chart: {
+            renderTo: 'CHART',
+			type: 'spline', 
+			 events: {
+            load: function () {
+			
+			 var series0 = this.series[0];
+			 var series1 = this.series[1];
+			 var series2 = this.series[2];
+			 var series3 = this.series[3];
+			 var ax = this.yAxis[0];
+			 
+			setInterval(function(){
+			$.getJSON("/suvidchart", function(lst) {
+			var shift = series0.data.length > 99;
+			var y0= parseFloat(lst['kube_data']);
+			var y1= parseFloat(lst['heater_data']);
+			var y2= parseFloat(lst['tsa_data']);
+			var y3= parseFloat(lst['def_data']);
+		//	var t=parseFloat(lst['ttarget_data']);
+			var x=(new Date()).getTime();
+		//	if (target!=t)
+		//	{
+		//	target=t;
+		//	ax.removePlotLine('tmp');
+		//	ax.addPlotLine({
+		//		value: parseFloat(lst['ttarget_data']),
+        //       color: 'green',
+		//		id: 'tmp',
+        //       dashStyle: 'shortdash',
+        //        width: 1,
+        //        label: {
+        //            text: 'Заданная температура'
+        //        }
+		//	});
+		//	}
+			
+			y0= randomInteger(0, 99);
+			y1= randomInteger(0, 99);
+			y2= randomInteger(0, 99);
+			y3= randomInteger(0, 99);
+			
+			series0.addPoint([x,y0],true,shift); 
+			series1.addPoint([x,y1],true,shift); 
+			series2.addPoint([x,y2],true,shift); 
+			series3.addPoint([x,y3],true,shift); 
+			});
+			}, 30000);
+            }
+        }
+        },
+	
+
+		
+		
+        series: [{
+			name:'Т куба',
+            data: [20],
+			yAxis: 0,
+            pointStart: (new Date()).getTime(),
+           // pointInterval: 10 * 1000
+        },{
+			name:'Т колонны',
+            data: [20],
+			yAxis: 0,
+            pointStart: (new Date()).getTime(),
+           // pointInterval: 10 * 1000
+        },{
+			name:'Т ТСА',
+            data: [20],
+			yAxis: 0,
+            pointStart: (new Date()).getTime(),
+           // pointInterval: 10 * 1000
+        },
+		{
+			name:'Мощность тэна',
+            data: [40],
+			yAxis: 1,
+			color: '#FF0000',
+            pointStart: (new Date()).getTime(),
+		}]
+    });
 	});
 	
+	
+	function randomInteger(min, max) {
+    var rand = min - 0.5 + Math.random() * (max - min + 1)
+    rand = Math.round(rand);
+    return rand;
+  }
+  
 	function process(){
 		$.getJSON(
 		"/rectifydata",

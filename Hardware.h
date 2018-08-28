@@ -67,6 +67,7 @@ public:
 protected:
 	
 	OneWire ow;
+	AT24C32 at24mem;
 	DallasTerm t_tsarga;
 	//DallasTerm t_water;
 	DallasTerm t_triak;
@@ -80,7 +81,7 @@ protected:
 	SSD1306Wire display;
 	
 	Encoder encoder;
-	AT24C32 at24mem;
+	
 	RTCmemory RTCmem;
 
 	//OneWire ow(TEMPERATURE_PIN);

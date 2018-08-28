@@ -15,6 +15,7 @@
 //
 bool AT24C32::begin(uint8_t address) {
 	_address = address;
+	Wire.begin(SDA,SCL);
 	Wire.beginTransmission(_address);
 	return (Wire.endTransmission() == 0);
 }

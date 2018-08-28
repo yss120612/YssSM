@@ -1,6 +1,7 @@
 
 #include "Extender.h"
 #include "Log.h"
+#include <Wire.h>
 
 PinExtender::PinExtender()
 {
@@ -27,6 +28,46 @@ void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
 	pinMode(clockPin, OUTPUT);
 	setAll(0);
 }
+
+void PinExtender::setup(uint8_t addr)
+{
+	_address = addr;
+	Wire.beginTransmission(_address);  // i2c Ц адрес (A0-0,A1-0,A2-0)
+	Wire.write(0x00); // IODIRA register
+	Wire.write(0x00); // настроить PORT A как output //bit 0-output 1-input
+	Wire.write(0x10); // IODIRB register
+	Wire.write(0x00); // настроить PORT A как output 
+	Wire.endTransmission();
+}
+
+void PinExtender::setAB(uint8_t bitsToSend,uint8_t ab) {//ab=0-A< ab=1-B
+	Wire.beginTransmission(_address);
+	if (ab == 0)
+	{
+		Wire.write(0x12); // address PORT A
+	}
+	else {
+		Wire.write(0x13); // address PORT B
+	}
+	Wire.write(bitsToSend);    // PORT A
+	Wire.endTransmission();
+}
+
+uint8_t PinExtender::getAB(uint8_t ab) {//ab=0-A< ab=1-B
+	Wire.beginTransmission(_address);
+	if (ab == 0)
+	{
+		Wire.write(0x12); // address PORT A
+	}
+	else 
+	{
+		Wire.write(0x13); // address PORT B
+	}
+	Wire.endTransmission();
+	Wire.requestFrom(_address, (uint8_t)1);
+	return Wire.read();
+}
+
 
 
 void PinExtender::setAll(uint16_t bitsToSend) {
