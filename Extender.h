@@ -26,6 +26,10 @@ public:
 
 	uint8_t getAB(uint8_t ab);
 
+	uint8_t readRegister(uint8_t addr);
+
+	void writeRegister(uint8_t regAddr, uint8_t regValue);
+
 	void setAll(uint16_t bitsToSend);
 
 	void registerWrite(int8_t whichPin, uint8_t whichState);

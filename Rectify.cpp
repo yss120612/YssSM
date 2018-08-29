@@ -31,6 +31,10 @@ String Rectify::getData(uint w)
 				return "GET HEAD";
 				break;
 			}
+			break;
+		case DS_RECTSTOP:
+			return String(CONF.getRectStopTemp(), 1);
+			break;
 		default:
 			return "";
 			break;
@@ -212,19 +216,21 @@ void Rectify::process(long ms)
 
 	switch (work_mode) {
 	case PROC_FORSAJ:
-		if (tdef > CONF.getDistForsajTemp()) {//end of forsaj
+		if (tdef > CONF.getRectForsajTemp()) {//end of forsaj
 			agg->getHeater()->setPower(CONF.getRectHeadPower());
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
 			readTime();
-			logg.logging("Distill forsaj finished at " + String(tim));
+			logg.logging("Rectify forsaj finished at " + String(tim));
 			work_mode = PROC_GET_HEAD;
 		}
 		break;
 	case PROC_GET_HEAD: 
-
+		work_mode = PROC_WORK;
+		//agg->getHeater()->setPower(CONF.getRectWorkPower());
+		//agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		break;
 	case PROC_WORK:
-		if (tcube > CONF.getDistStopTemp()) {//end of forsaj
+		if (tcube > CONF.getRectStopTemp()) {//end of forsaj
 			stop(PROCEND_TEMPERATURE);
 		}
 		if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
@@ -232,18 +238,18 @@ void Rectify::process(long ms)
 	}
 
 
-	if (coldBeginCheck > 0 && ms - coldBeginCheck > 0 && ttsa < CONF.getTSAmin()) {
-		if (TSAcheckedCold == 0 || (ms - TSAcheckedCold) > checkTSA) {
-			readTime();
-			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
-			agg->getHeater()->shiftPower(3);
-			//agg->getKran()->shiftQuantum(-0.5);
-			TSAcheckedCold = ms;
-		}
-	}
-	else {
-		TSAcheckedCold = 0;
-	}
+	//if (coldBeginCheck > 0 && ms - coldBeginCheck > 0 && ttsa < CONF.getTSAmin()) {
+	//	if (TSAcheckedCold == 0 || (ms - TSAcheckedCold) > checkTSA) {
+	//		readTime();
+	//		logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
+	//		agg->getHeater()->shiftPower(3);
+	//		//agg->getKran()->shiftQuantum(-0.5);
+	//		TSAcheckedCold = ms;
+	//	}
+	//}
+	//else {
+	//	TSAcheckedCold = 0;
+	//}
 
 	if (ttsa > CONF.getTSAmax()) {
 		if (TSAchecked == 0 || (ms - TSAchecked) > checkTSA) {

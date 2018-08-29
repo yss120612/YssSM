@@ -44,7 +44,7 @@ private:
 	void handleDistill();
 	void handleRectify();
 	void handleSuvid();
-	void handleSuvidChart();
+	//void handleSuvidChart();
 	//Config * conf;
 	ESP8266WebServer * server;
 	//ESP8266HTTPUpdateServer * httpUpdater;

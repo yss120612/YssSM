@@ -34,7 +34,7 @@ void HttpHelper::setup() {
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
 
-	server->on("/suvidchart", std::bind(&HttpHelper::handleSuvidChart, this));
+	//server->on("/suvidchart", std::bind(&HttpHelper::handleSuvidChart, this));
 
 	//server->on("/restart", web_handlers::restart);
 		
@@ -90,27 +90,46 @@ void HttpHelper::handleLog()
 
 void HttpHelper::handleDistill()
 {
-	
-	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
+	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) 
+			  + ", \"def_data\":" + ds->getData(DS_TTSARGA) 
+			  + ", \"kube_data\":" + ds->getData(DS_TKUBE) 
+			  + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
+			  + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
+			  + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
+		      + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
 void HttpHelper::handleRectify()
 {
 	
-	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) + ", \"def_data\":" + ds->getData(DS_TTSARGA) + ", \"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
+	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) 
+			  + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
+			  + ", \"def_data\":" + ds->getData(DS_TTSARGA) 
+		      + ", \"kube_data\":" + ds->getData(DS_TKUBE) 
+		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
+		      + ", \"ttarget_data\":" + ds->getData(DS_RECTSTOP) 
+		      + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
+		      + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
 void HttpHelper::handleSuvid(){
-	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) + ", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"ttarget_data\":\"" + ds->getData(DS_SUVIDTARGET)+ "\", \"state_data\":\"" + ds->getData(DS_SUVIDSTATE) + "\", \"time_data\":\"" + ds->getData(DS_SUVIDTIMELEFT) + "\" }";
+	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) 
+		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
+		      + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
+		      + ", \"ttarget_data\":\"" + ds->getData(DS_SUVIDTARGET)
+		      + "\", \"state_data\":\"" + ds->getData(DS_SUVIDSTATE) 
+		      + "\", \"time_data\":\"" + ds->getData(DS_SUVIDTIMELEFT) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
-void HttpHelper::handleSuvidChart() {
-	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE) + "\", \"heater_data\":" + ds->getData(DS_HPOWER) + ", \"ttarget_data\":\"" + rand()%100 + "\" }";
-	server->send(200, "text/json", str); // Oтправляем ответ No Reset
-}
+//void HttpHelper::handleSuvidChart() {
+//	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE) 
+//		    + "\", \"heater_data\":" + ds->getData(DS_HPOWER) 
+//		      + ", \"ttarget_data\":\"" + ds->getData(DS_SUVIDTARGET) + "\" }";
+//	server->send(200, "text/json", str); // Oтправляем ответ No Reset
+//}
 
 void HttpHelper::WiFiconnect()
 {

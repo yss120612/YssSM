@@ -40,6 +40,10 @@ void PinExtender::setup(uint8_t addr)
 	Wire.endTransmission();
 }
 
+/**
+ * new
+ */
+
 void PinExtender::setAB(uint8_t bitsToSend,uint8_t ab) {//ab=0-A< ab=1-B
 	Wire.beginTransmission(_address);
 	if (ab == 0)
@@ -68,7 +72,26 @@ uint8_t PinExtender::getAB(uint8_t ab) {//ab=0-A< ab=1-B
 	return Wire.read();
 }
 
+uint8_t PinExtender::readRegister(uint8_t addr) {
+	// read the current GPINTEN
+	Wire.beginTransmission(_address);
+	Wire.write(addr);
+	Wire.endTransmission();
+	Wire.requestFrom(_address, (uint8_t)1);
+	return Wire.read();
+}
 
+void PinExtender::writeRegister(uint8_t regAddr, uint8_t regValue) {
+	// Write the register
+	Wire.beginTransmission(_address);
+	Wire.write(regAddr);
+	Wire.write(regValue);
+	Wire.endTransmission();
+}
+
+/**
+ * OLD
+ */
 
 void PinExtender::setAll(uint16_t bitsToSend) {
 	// для хранения 16 битов используем unsigned int

@@ -122,7 +122,7 @@
 			 var ax = this.yAxis[0];
 			 
 			setInterval(function(){
-			$.getJSON("/suvidchart", function(lst) {
+			$.getJSON("/suviddata", function(lst) {
 			var shift = series0.data.length > 99;
 			var y0= parseFloat(lst['kube_data']);
 			var y1= parseFloat(lst['heater_data']);

@@ -90,6 +90,7 @@ String Suvid::getData(uint w)
 				return "WORKING";
 				break;
 			}
+			break;
 		case DS_SUVIDTIMELEFT:
 			if (work_mode == PROC_WORK) {
 				timeLeft();
