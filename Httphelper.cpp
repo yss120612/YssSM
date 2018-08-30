@@ -30,7 +30,7 @@ void HttpHelper::setup() {
 
 	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
 
-	server->on("/rectifydata", std::bind(&HttpHelper::handleDistill, this));
+	server->on("/rectifydata", std::bind(&HttpHelper::handleRectify, this));
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
 
@@ -110,7 +110,7 @@ void HttpHelper::handleRectify()
 		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
 		      + ", \"ttarget_data\":" + ds->getData(DS_RECTSTOP) 
 		      + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
-		      + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
+		      + ", \"state_data\":\"" + ds->getData(DS_RECTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 

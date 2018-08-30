@@ -47,6 +47,32 @@ String Rectify::getData(uint w)
 
 void Rectify::showState()
 {
+	uint8_t x;
+	uint8_t y;
+	if (ss_active) {
+		x = rand() % 40;
+		y = 0;
+	}
+	else {
+		x = 0;
+		y = 0;
+	}
+	hardware->getDisplay()->drawString(x, 0, "Dist");
+	hardware->getDisplay()->drawString(x + 40, 0, "PW="+String(agg->getHeater()->getPower()));
+
+	hardware->getDisplay()->drawString(x, y + 13, "TSA=" + String(hardware->getTTSA()->getTemp()));
+	hardware->getDisplay()->drawString(x, y + 29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
+	switch (work_mode) {
+	case PROC_OFF:
+		hardware->getDisplay()->drawString(x, y + 45, "OFF");
+		break;
+	case PROC_FORSAJ:
+		hardware->getDisplay()->drawString(x, y + 45, "FORSAJ");
+		break;
+	case PROC_WORK:
+		hardware->getDisplay()->drawString(x, y + 45, "WORKING");
+		break;
+	}
 }
 
 void Rectify::makeMenu()
@@ -109,13 +135,13 @@ void Rectify::stop(uint8_t reason)
 	switch (end_reason)
 	{
 	case PROCEND_FAULT:
-		logg.logging("Distill fault and finished at " + String(tim));
+		logg.logging("Rectify fault and finished at " + String(tim));
 		break;
 	case PROCEND_MANUAL:
-		logg.logging("Distill manually stopped at " + String(tim));
+		logg.logging("Rectify manually stopped at " + String(tim));
 		break;
 	case PROCEND_TEMPERATURE:
-		logg.logging("Distill normal finished at " + String(tim));
+		logg.logging("Rectify normal finished at " + String(tim));
 		break;
 	default:
 		break;
@@ -230,7 +256,7 @@ void Rectify::process(long ms)
 		//agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		break;
 	case PROC_WORK:
-		if (tcube > CONF.getRectStopTemp()) {//end of forsaj
+		if (tdef > CONF.getRectStopTemp()) {//end of forsaj
 			stop(PROCEND_TEMPERATURE);
 		}
 		if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум

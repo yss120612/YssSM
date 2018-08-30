@@ -29,8 +29,8 @@ Aggregates agg(&hard);
 
 Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
-//Mode * distill = new Distillation(&agg, &hard);
-//Mode * rectify = new Rectify(&agg, &hard);
+Mode * distill = new Distillation(&agg, &hard);
+Mode * rectify = new Rectify(&agg, &hard);
 
 
 void setup() {
@@ -44,13 +44,13 @@ void setup() {
 	hard.init();
 	agg.init();
 	
-	logg.logging("Begin");
+	
 
 	CONF.setMem(hard.getAT24mem());
-	logg.logging("Begin1");
+	
 
-	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	//CONF.seWiFi("Yss_GIGA","bqt3bqt3");
+	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	CONF.seWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.seHttp("admin", "esp");
 	CONF.seScrSavMin(1);
 	CONF.seSuvidMin(60);
@@ -60,12 +60,12 @@ void setup() {
 	CONF.seDistStopTemp(98.8);
 	CONF.seDistWorkPower(42);
 	CONF.seDistForsajTemp(57);
-	logg.logging("Begin2");
-	CONF.seRectKranOpened(19.5);
-	CONF.seRectHeadKranOpened(19.5);
-	CONF.seRectStopTemp(78.8);
-	CONF.seRectHeadPower(42);
-	CONF.seRectWorkPower(37);
+	
+	CONF.seRectKranOpened(21.5);
+	CONF.seRectHeadKranOpened(21.5);
+	CONF.seRectStopTemp(80.8);
+	CONF.seRectHeadPower(35);
+	CONF.seRectWorkPower(35);
 	CONF.seRectForsajTemp(57);
 
 	CONF.setTSAmin(28);
@@ -74,7 +74,7 @@ void setup() {
 
 	CONF.setTriakCoolerTemp(50);
 	CONF.seTriakCoolerGist(10);
-	logg.logging("Begin3");
+	
 	httph.setup();
 	
 	logg.logging(" Temp= " + String(CONF.getDistStopTemp()) + " Kran= " + String(CONF.getDistKranOpened()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
@@ -88,8 +88,8 @@ void setup() {
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
 	workMode.addMode(suvid);
-	//workMode.addMode(distill);
-	//workMode.addMode(rectify);
+	workMode.addMode(distill);
+	workMode.addMode(rectify);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
