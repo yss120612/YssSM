@@ -32,6 +32,9 @@ const uint8_t EX_PIN13 = 113;
 const uint8_t EX_PIN14 = 114;
 const uint8_t EX_PIN15 = 115;
 
+const uint8_t WS1_PIN= 0;
+const uint8_t WS1_PWR_PIN = EX_PIN4;
+
 const uint8_t TEMPERATURE_PIN = D3;
 
 const uint8_t ENC_A_PIN = D4;

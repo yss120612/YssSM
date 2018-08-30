@@ -26,6 +26,8 @@
 #include "Encoder.h"
 #include "AT24C32.h"
 #include "RTCmemory.h"
+#include "Multiplexor.h"
+#include "WaterSensor.h"
 
 class Hardware
 {
@@ -50,7 +52,7 @@ public:
 	AT24C32 * getAT24mem();
 	RTCmemory * getRTCmem();
 	OneWire * getOneWire() { return &ow; }
-	
+	Multiplexor * getMultiplexor();
 
 	//void setDisplay(SSD1306Wire * d);
 	//void setTKube(DallasTerm * k);
@@ -84,6 +86,9 @@ protected:
 	
 	RTCmemory RTCmem;
 
+	Multiplexor mult;
+
+	WaterSensor uroven;
 	//OneWire ow(TEMPERATURE_PIN);
 	//SSD1306Wire display(0x3C, SDA, SCL);
 	//DallasTerm t_kube(tkube, &ow, 2.5);

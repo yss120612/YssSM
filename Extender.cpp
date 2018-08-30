@@ -11,71 +11,49 @@ PinExtender::~PinExtender()
 {
 }
 
-void PinExtender::setPinMode(int8_t pin, uint8_t mode)
-{
-	if (pin<0 || pin >= 100) return;
-	pinMode(pin, mode);
-	
-}
 
-void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
-{
-	latchPin = ST_CP;
-	clockPin = SH_CP;
-	dataPin = DS;
-	pinMode(latchPin, OUTPUT);
-	pinMode(dataPin, OUTPUT);
-	pinMode(clockPin, OUTPUT);
-	setAll(0);
-}
 
-void PinExtender::setup(uint8_t addr)
-{
-	_address = addr;
-	Wire.beginTransmission(_address);  // i2c – адрес (A0-0,A1-0,A2-0)
-	Wire.write(0x00); // IODIRA register
-	Wire.write(0x00); // настроить PORT A как output //bit 0-output 1-input
-	Wire.write(0x10); // IODIRB register
-	Wire.write(0x00); // настроить PORT A как output 
-	Wire.endTransmission();
-}
 
 /**
  * new
  */
+void PinExtender::setup(uint8_t addr)
+{
+	_address = addr;
+	Wire.beginTransmission(_address);  // i2c – адрес (A0-0,A1-0,A2-0)
+	Wire.write(IODIRA); // IODIRA register
+	Wire.write(0x00); // настроить PORT A как output //bit 0-output 1-input
+	Wire.write(IODIRB); // IODIRB register
+	Wire.write(0x00); // настроить PORT B как output 
+	Wire.endTransmission();
+}
 
-void PinExtender::setAB(uint8_t bitsToSend,uint8_t ab) {//ab=0-A< ab=1-B
-	Wire.beginTransmission(_address);
+
+void PinExtender::setAB(uint8_t bitsToSend,uint8_t ab) {//ab=0:A ab=1:B
 	if (ab == 0)
 	{
-		Wire.write(0x12); // address PORT A
+		writeRegister(GPIOA, bitsToSend);
 	}
 	else {
-		Wire.write(0x13); // address PORT B
+		writeRegister(GPIOB, bitsToSend);
 	}
-	Wire.write(bitsToSend);    // PORT A
-	Wire.endTransmission();
 }
 
 uint8_t PinExtender::getAB(uint8_t ab) {//ab=0-A< ab=1-B
-	Wire.beginTransmission(_address);
 	if (ab == 0)
 	{
-		Wire.write(0x12); // address PORT A
+		return readRegister(GPIOA);
 	}
 	else 
 	{
-		Wire.write(0x13); // address PORT B
+		return readRegister(GPIOB);
 	}
-	Wire.endTransmission();
-	Wire.requestFrom(_address, (uint8_t)1);
-	return Wire.read();
 }
 
-uint8_t PinExtender::readRegister(uint8_t addr) {
+uint8_t PinExtender::readRegister(uint8_t regAddr) {
 	// read the current GPINTEN
 	Wire.beginTransmission(_address);
-	Wire.write(addr);
+	Wire.write(regAddr);
 	Wire.endTransmission();
 	Wire.requestFrom(_address, (uint8_t)1);
 	return Wire.read();
@@ -90,8 +68,82 @@ void PinExtender::writeRegister(uint8_t regAddr, uint8_t regValue) {
 }
 
 /**
+ * Helper to update a single bit of an A/B register.
+ * - Reads the current register value
+ * - Writes the new register value
+ */
+void PinExtender::updateRegisterBit(uint8_t pin, uint8_t pValue, uint8_t portAaddr, uint8_t portBaddr) {
+	uint8_t regValue;
+	uint8_t bit = pin%8;
+	if (pin < 8) {
+		regValue = readRegister(portAaddr);
+		bitWrite(regValue, bit, pValue);
+		writeRegister(portAaddr, regValue);
+	}
+	else {
+		regValue = readRegister(portBaddr);
+		bitWrite(regValue, bit, pValue);
+		writeRegister(portBaddr, regValue);
+	}
+}
+
+
+void PinExtender::pullUp(uint8_t p, uint8_t d) {
+	updateRegisterBit(p, d, GPPUA, GPPUB);
+}
+
+uint8_t PinExtender::digRead(uint8_t pin) {
+	if (pin < 100) {
+		return digitalRead(pin);
+	}
+	else 
+	{
+		uint8_t bit = (pin-100) % 8;
+		return (readRegister(pin < 108 ? GPIOA : GPIOB) >> bit) & 0x1;
+	}
+	
+}
+
+void PinExtender::setPinMode(uint8_t pin ,uint8_t state) {
+	if (pin < 100) {
+		pinMode(pin, state);
+	}
+	else
+	{
+		updateRegisterBit(pin - 100, (state==INPUT), IODIRA , IODIRB);
+	}
+}
+
+void PinExtender::digWrite(uint8_t pin, uint8_t d) {
+	if (pin < 100) {
+		digitalWrite(pin, d);
+	}
+	else {
+		updateRegisterBit(pin - 100, d, GPIOA, GPIOB);
+	}
+	
+}
+
+/**
  * OLD
  */
+
+void PinExtender::setPinMode(int8_t pin, uint8_t mode)
+{
+	if (pin < 0 || pin >= 100) return;
+	pinMode(pin, mode);
+}
+
+void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
+{
+	latchPin = ST_CP;
+	clockPin = SH_CP;
+	dataPin = DS;
+	pinMode(latchPin, OUTPUT);
+	pinMode(dataPin, OUTPUT);
+	pinMode(clockPin, OUTPUT);
+	setAll(0);
+}
 
 void PinExtender::setAll(uint16_t bitsToSend) {
 	// для хранения 16 битов используем unsigned int

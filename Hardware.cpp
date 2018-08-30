@@ -23,7 +23,9 @@ Hardware::~Hardware()
 void Hardware::init()
 {
 	pinExtender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
+	mult.setup(A0, EX_PIN0, EX_PIN1, EX_PIN2, EX_PIN3, &pinExtender);
 	encoder.setup(ENC_A_PIN, ENC_B_PIN, ENC_BTN_PIN);
+	uroven.setup(WS1_PIN, WS1_PWR_PIN, &mult, &pinExtender);
 	t_kube.set12bit();
 	t_tsarga.set12bit();
 	t_tsa.set12bit();
@@ -59,6 +61,7 @@ Encoder * Hardware::getEncoder(){ return &encoder;}
 SSD1306Wire * Hardware::getDisplay() { return &display; }
 AT24C32 * Hardware::getAT24mem() { return &at24mem; }
 RTCmemory * Hardware::getRTCmem() { return &RTCmem; }
+Multiplexor * Hardware::getMultiplexor(){ return &mult;}
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }

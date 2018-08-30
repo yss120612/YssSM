@@ -9,6 +9,14 @@
 	#include "WProgram.h"
 #endif
 
+const uint8_t IODIRA = 0x00;
+const uint8_t IODIRB = 0x01;
+const uint8_t GPIOA = 0x12;
+const uint8_t GPIOB = 0x13;
+const uint8_t GPPUA = 0x0C;
+const uint8_t GPPUB = 0x0D;
+
+
 class PinExtender
 {
 public:
@@ -29,6 +37,16 @@ public:
 	uint8_t readRegister(uint8_t addr);
 
 	void writeRegister(uint8_t regAddr, uint8_t regValue);
+
+	void updateRegisterBit(uint8_t pin, uint8_t pValue, uint8_t portAaddr, uint8_t portBaddr);
+
+	void pullUp(uint8_t p, uint8_t d);
+
+	uint8_t digRead(uint8_t pin);
+
+	void setPinMode(uint8_t p, uint8_t state);
+
+	void digWrite(uint8_t p, uint8_t d);
 
 	void setAll(uint16_t bitsToSend);
 

@@ -8,23 +8,33 @@
 #else
 	#include "WProgram.h"
 #endif
+#include "Multiplexor.h"
+#include "Extender.h"
 
 class WaterSensor
 {
 public:
 	WaterSensor();
 	~WaterSensor();
-	void setup(uint8_t sens, uint8_t pwr);
+	void setup(uint8_t sens, uint8_t pwr, Multiplexor * m, PinExtender *p);
 	void process(long ms);
 	boolean isAlarmed() { return alarm; }
-	void arm();
+	void arm(uint8_t lc = 3);
+	void setLimit(int lm);
+	int getLimit();
 private:
 	boolean alarm;
+	Multiplexor * mult;
+	PinExtender * ext;
 	uint8_t sensor_pin;
 	uint8_t power_pin;
+	int limit;
+	uint8_t limit_count;
+	uint8_t counter;
 };
 
 
 
 #endif
+
 
