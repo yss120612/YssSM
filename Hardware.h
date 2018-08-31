@@ -53,7 +53,8 @@ public:
 	RTCmemory * getRTCmem();
 	OneWire * getOneWire() { return &ow; }
 	Multiplexor * getMultiplexor();
-
+	WaterSensor * getUrovenWS();
+	WaterSensor * getFloodWS();
 	//void setDisplay(SSD1306Wire * d);
 	//void setTKube(DallasTerm * k);
 	//void setTTsarga(DallasTerm * t);
@@ -89,6 +90,7 @@ protected:
 	Multiplexor mult;
 
 	WaterSensor uroven;
+	WaterSensor flood;
 	//OneWire ow(TEMPERATURE_PIN);
 	//SSD1306Wire display(0x3C, SDA, SCL);
 	//DallasTerm t_kube(tkube, &ow, 2.5);

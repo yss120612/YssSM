@@ -26,6 +26,7 @@ void Hardware::init()
 	mult.setup(A0, EX_PIN0, EX_PIN1, EX_PIN2, EX_PIN3, &pinExtender);
 	encoder.setup(ENC_A_PIN, ENC_B_PIN, ENC_BTN_PIN);
 	uroven.setup(WS1_PIN, WS1_PWR_PIN, &mult, &pinExtender);
+	flood.setup(WS2_PIN, WS2_PWR_PIN, &mult, &pinExtender);
 	t_kube.set12bit();
 	t_tsarga.set12bit();
 	t_tsa.set12bit();
@@ -39,6 +40,8 @@ void Hardware::timed_process(long ms)
 	t_tsarga.process(ms);
 	t_tsa.process(ms);
 	t_triak.process(ms);
+	uroven.process(ms);
+	flood.process(ms);
 }
 
 void Hardware::process(long ms)
@@ -62,6 +65,8 @@ SSD1306Wire * Hardware::getDisplay() { return &display; }
 AT24C32 * Hardware::getAT24mem() { return &at24mem; }
 RTCmemory * Hardware::getRTCmem() { return &RTCmem; }
 Multiplexor * Hardware::getMultiplexor(){ return &mult;}
+WaterSensor * Hardware::getUrovenWS(){	return &uroven;}
+WaterSensor * Hardware::getFloodWS(){	return &flood;}
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }
