@@ -62,6 +62,7 @@ void setup() {
 	CONF.seDistWorkPower(42);
 	CONF.seDistForsajTemp(57);
 	
+	CONF.seRectWorkSelf(20);
 	CONF.seRectKranOpened(21.5);
 	CONF.seRectHeadKranOpened(21.5);
 	CONF.seRectStopTemp(80.8);
@@ -130,14 +131,12 @@ void loop() {
 	agg.process(mls);
 	workMode.getCurrent()->drawImm(mls);
 
-	if (scrLoop + 1000 - mls < 0) {
+	if (scrLoop - mls + 1500 < 0) {
 		hard.timed_process(mls);
 		agg.timed_process(mls);
 		workMode.getCurrent()->process(mls);
 		workMode.getCurrent()->draw(mls);
 		scrLoop = millis();
-		//i++;
-		//logg.logging("Event " + String(i) + " Length=" + logg.length());
 	}
 }
 

@@ -37,6 +37,12 @@
 			<div id="KSTATE"></div>		
 		</div>
 		<div class="col-md-offset-1 col-md-10">
+			<div id="UROVEN"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="FLOOD"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
 	</div>
@@ -57,6 +63,8 @@
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
 		$('#KSTATE').html('Кран охладителя открыт на <b>'+data['kran_data']+'%</b>');
+		$('#UROVEN').html('Датчик уровня <b>'+data['wsu_data']+'%</b>');
+		$('#FLOOD').html('Датчик протечки <b>'+data['wsf_data']+'%</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
 		});
 		setTimeout('process()',3000);

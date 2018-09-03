@@ -34,6 +34,7 @@ protected:
 	long TSAchecked;
 	long TSAcheckedCold;
 	long coldBeginCheck;
+	long workSelf;
 	uint8_t tsa_alarms;
 };
 

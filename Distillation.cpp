@@ -134,6 +134,12 @@ void Distillation::stop(uint8_t reason) {
 	case PROCEND_TEMPERATURE:
 		logg.logging("Distill normal finished at " + String(tim));
 		break;
+	case PROCEND_UROVEN:
+		logg.logging("Distill normal finished at " + String(tim) + " by uroven sensor");
+		break;
+	case PROCEND_FLOOD:
+		logg.logging("Distill  finished at " + String(tim) + " by flood sensor");
+		break;
 	default:
 		break;
 	}

@@ -87,18 +87,23 @@ void Rectify::makeMenu()
 	setup->setParent(menu);
 	setup->setActive(true);
 
+	
 	MenuIParameter * pwHWork = new MenuIParameter("Head Power", setup, 10);
 	MenuFParameter * pwHKran = new MenuFParameter("Head Kran", setup, 11);
 	MenuIParameter * pwWork = new MenuIParameter("Power", setup, 12);
 	MenuFParameter * pwKran = new MenuFParameter("Kran", setup, 13);
 	MenuIParameter * tFor = new MenuIParameter("T Forsaj", setup, 14);
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 15);
+	MenuIParameter * wSelf = new MenuIParameter("Work Self", setup, 16);
+
+	setup->add(wSelf);
 	setup->add(pwHWork);
 	setup->add(pwHKran);
 	setup->add(pwWork);
 	setup->add(pwKran);
 	setup->add(tFor);
 	setup->add(tEnd);
+
 	menu->add(new MenuSubmenu("Setup", setup));
 }
 
@@ -143,12 +148,20 @@ void Rectify::stop(uint8_t reason)
 	case PROCEND_TEMPERATURE:
 		logg.logging("Rectify normal finished at " + String(tim));
 		break;
+	case PROCEND_UROVEN:
+		logg.logging("Rectify finished at " + String(tim)+" by uroven sensor");
+		break;
+	case PROCEND_FLOOD:
+		logg.logging("Rectify finished at " + String(tim) + " by flood sensor");
+		break;
 	default:
 		break;
 	}
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
 	agg->getKran()->forceClose();
+	hardware->getFloodWS()->disarm();
+	hardware->getUrovenWS()->disarm();
 	mcmd->setName("Start");
 }
 
@@ -159,6 +172,8 @@ void Rectify::start()
 	end_reason = PROCEND_NO;
 	agg->getHeater()->setPower(98);
 	agg->getHeater()->start();
+	hardware->getUrovenWS()->arm(25);
+	hardware->getFloodWS()->arm(25);
 	mcmd->setName("Stop");
 	TSAchecked = 0;
 	TSAcheckedCold = 0;
@@ -189,6 +204,9 @@ void Rectify::initParams(MenuParameter * mp)
 		break;
 	case 15:
 		((MenuFParameter *)mp)->setup(CONF.getRectStopTemp(), 0.1, 50, 85);
+		break;
+	case 16:
+		((MenuIParameter *)mp)->setup(CONF.getRectWorkSelf(), 5, 5, 100);
 		break;
 	}
 }
@@ -226,6 +244,9 @@ void Rectify::acceptParams(MenuParameter * mp)
 	case 15:
 		CONF.setRectStopTemp(((MenuFParameter *)mp)->getCurrent());
 		break;
+	case 16:
+		CONF.setRectWorkSelf(((MenuFParameter *)mp)->getCurrent());
+		break;
 	
 	}
 }
@@ -247,10 +268,19 @@ void Rectify::process(long ms)
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
 			readTime();
 			logg.logging("Rectify forsaj finished at " + String(tim));
+			work_mode = PROC_SELF_WORK;
+			workSelf = ms + 1000 * 60 * CONF.getRectWorkSelf();//через 15 мин заканчиваем работать на себя
+		}
+		break;
+	case PROC_SELF_WORK:
+		if (ms-workSelf>0){
+			readTime();
+			logg.logging("Rectify Work Self finished at " + String(tim));
 			work_mode = PROC_GET_HEAD;
 		}
 		break;
 	case PROC_GET_HEAD: 
+
 		work_mode = PROC_WORK;
 		//agg->getHeater()->setPower(CONF.getRectWorkPower());
 		//agg->getKran()->openQuantum(CONF.getRectKranOpened());
@@ -259,7 +289,7 @@ void Rectify::process(long ms)
 		if (tdef > CONF.getRectStopTemp()) {//end of forsaj
 			stop(PROCEND_TEMPERATURE);
 		}
-		if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
+		//if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
 		break;
 	}
 
@@ -309,5 +339,13 @@ void Rectify::process(long ms)
 		readTime();
 		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + String(tim));
 		stop(PROCEND_FAULT);
+	}
+
+	if (hardware->getUrovenWS()->isAlarmed()) {
+		stop(PROCEND_UROVEN);
+	}
+
+	if (hardware->getFloodWS()->isAlarmed()) {
+		stop(PROCEND_FLOOD);
 	}
 }

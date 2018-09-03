@@ -115,6 +115,8 @@ enum mydata {
 	DS_TTRIAK,
 	DS_HPOWER,
 	DS_KRANSTATE,
+	DS_WSUROVEN,
+	DS_WSFLOOD,
 	DS_DISTSTART,
 	DS_DISTSTATE,
 	DS_DISTEND,
@@ -136,18 +138,21 @@ enum mydata {
 #define PROC_GET_HEAD 3
 #define PROC_SELF_WORK 4
 
+
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени
 #define PROCEND_ERROR 2 //закончили с ошибкой
 #define PROCEND_FAULT 3 //закончили аварийно
 #define PROCEND_TEMPERATURE 4 //закончили по температуре
 #define PROCEND_MANUAL 5 //закончили вручную
+#define PROCEND_UROVEN 6 //закончили по датчику уровн€
+#define PROCEND_FLOOD 7 //закончили по датчику затоплени€
 
 #define PROCERR_OK 0 //нет ошибок
 #define PROCERR_NOTKUB 1 //нет градусника в кубе
 #define PROCERR_NOHEATER 2 //нет тена
 
-const uint16_t test_time = 10000;//5 секунд
+const uint16_t test_time = 10000;//10 секунд
 
 const long checkTSA = 1000 * 60 * 3;//через 3 минуты провер€ем TSA после коррекции
 

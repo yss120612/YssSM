@@ -96,6 +96,8 @@ void HttpHelper::handleDistill()
 			  + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
 			  + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
 			  + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
+			  + ", \"wsu_data\":" + ds->getData(DS_WSUROVEN)
+			  + ", \"wsf_data\":" + ds->getData(DS_WSFLOOD)
 		      + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
@@ -110,6 +112,8 @@ void HttpHelper::handleRectify()
 		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
 		      + ", \"ttarget_data\":" + ds->getData(DS_RECTSTOP) 
 		      + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
+			  + ", \"wsu_data\":" + ds->getData(DS_WSUROVEN)
+			  + ", \"wsf_data\":" + ds->getData(DS_WSFLOOD)
 		      + ", \"state_data\":\"" + ds->getData(DS_RECTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }

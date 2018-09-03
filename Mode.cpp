@@ -227,6 +227,12 @@ String Mode::getData(uint w)
 	case DS_KRANSTATE:
 		return String(agg->getKran()->getState(),1);
 	break;
+	case DS_WSUROVEN:
+		return String(hardware->getUrovenWS()->getValue());
+		break;
+	case DS_WSFLOOD:
+		return String(hardware->getFloodWS()->getValue());
+		break;
 	default:
 		return "NO DATA";
 		break;

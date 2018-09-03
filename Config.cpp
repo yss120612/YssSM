@@ -125,6 +125,19 @@ void Config::seRectWorkPower(uint8_t st)
 }
 
 
+void Config::setRectWorkSelf(uint8_t st)
+{
+	if (rectWorkSelf != st) changed = true;
+	rectWorkSelf = st;
+	write();
+}
+
+void Config::seRectWorkSelf(uint8_t st)
+{
+	if (rectWorkSelf != st) changed = true;
+	rectWorkSelf = st;
+}
+
 void Config::setRectHeadPower(uint8_t st)
 {
 	if (rectHeadPower != st) changed = true;
@@ -295,6 +308,7 @@ const float Config::getDistStopTemp() { return distStopTemp;}
 const float Config::getDistKranOpened(){	return distKranOpened;}
 const uint8_t Config::getDistForsajTemp() { return distForsajTemp; }
 
+const uint8_t Config::getRectWorkSelf(){return rectWorkSelf;}
 const uint8_t Config::getRectHeadPower() { return rectWorkPower; }
 const uint8_t Config::getRectWorkPower() { return rectWorkPower; }
 const float Config::getRectKranOpened() { return rectKranOpened; }
@@ -334,6 +348,7 @@ void Config::write()
 	*(buff + idx++) = suvidTemp;
 	*(buff + idx++) = distWorkPower;
 	*(buff + idx++) = distForsajTemp;
+	*(buff + idx++) = rectWorkSelf;
 	*(buff + idx++) = rectWorkPower;
 	*(buff + idx++) = rectHeadPower;
 	*(buff + idx++) = rectForsajTemp;
@@ -379,6 +394,7 @@ void Config::read()
 	/*suvidTemp =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	distWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	distForsajTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
+	rectWorkSelf =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectHeadPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectForsajTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
@@ -424,7 +440,7 @@ void Config::read()
 
 uint16_t Config::calcLength()
 {
-	length = sizeof(int) * 2 + sizeof(float)*5 + sizeof(uint8_t) * 12 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
+	length = sizeof(int) * 2 + sizeof(float)*5 + sizeof(uint8_t) * 13 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
 	return length;
 }
 

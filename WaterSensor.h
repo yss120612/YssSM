@@ -18,12 +18,16 @@ public:
 	~WaterSensor();
 	void setup(uint8_t sens, uint8_t pwr, Multiplexor * m, PinExtender *p);
 	void process(long ms);
+	uint16_t getValue();
+	void disarm();
 	boolean isAlarmed() { return alarm; }
 	void arm(uint8_t lim, uint8_t lc = 3);
 	void setLimit(int lm);
 	int getLimit();
 private:
+	uint16_t data;
 	boolean alarm;
+	boolean check_me;
 	Multiplexor * mult;
 	PinExtender * ext;
 	uint8_t sensor_pin;

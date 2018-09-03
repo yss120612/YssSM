@@ -44,6 +44,8 @@ public:
 
 	void seDistForsajTemp(uint8_t st);
 	
+	void setRectWorkSelf(uint8_t st);//in minutes
+	void seRectWorkSelf(uint8_t st);//in minutes
 	void setRectHeadPower(uint8_t st);
 	void seRectHeadPower(uint8_t st);
 	void setRectHeadKranOpened(float st);
@@ -74,6 +76,7 @@ public:
 	const int getSuvidMin();
 	const uint8_t getSuvidTemp();
 
+	const uint8_t	getRectWorkSelf();
 	const uint8_t	getRectHeadPower();
 	const float		getRectHeadKranOpened();
 	const uint8_t	getRectWorkPower();
@@ -116,6 +119,7 @@ private:
 	float distKranOpened;
 	uint8_t distForsajTemp;
 
+	uint8_t rectWorkSelf;
 	uint8_t rectHeadPower;
 	float	rectHeadKranOpened;
 	uint8_t rectWorkPower;
