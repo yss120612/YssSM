@@ -19,7 +19,7 @@ public:
 	void setup(uint8_t sens, uint8_t pwr, Multiplexor * m, PinExtender *p);
 	void process(long ms);
 	boolean isAlarmed() { return alarm; }
-	void arm(uint8_t lc = 3);
+	void arm(uint8_t lim, uint8_t lc = 3);
 	void setLimit(int lm);
 	int getLimit();
 private:

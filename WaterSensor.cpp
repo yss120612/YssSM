@@ -1,6 +1,6 @@
 
 #include "WaterSensor.h"
-
+#include "Log.h"
 
 WaterSensor::WaterSensor()
 {
@@ -24,11 +24,14 @@ void WaterSensor::setup(uint8_t sens, uint8_t pwr, Multiplexor *m, PinExtender *
 
 void WaterSensor::process(long ms)
 {
+	//logg.logging(String(mult->anaRead(sensor_pin)));
 	if (alarm) return;
-	if (mult->anaRead(sensor_pin)<limit) {
+	if (mult->anaRead(sensor_pin)>limit) {
 		counter--;
+		logg.logging("Warning sensor alarm " +String(mult->anaRead(sensor_pin)));
 		if (counter == 0)
 		{
+			logg.logging("Water sensor triggered " + String(mult->anaRead(sensor_pin)));
 			ext->digWrite(power_pin, LOW);
 			alarm = true;
 		}
@@ -41,12 +44,13 @@ void WaterSensor::process(long ms)
 
 
 
-void WaterSensor::arm(uint8_t lc)
+void WaterSensor::arm(uint8_t lim, uint8_t lc)
 {
 	ext->digWrite(power_pin, HIGH);
 	alarm = false;
 	limit_count = lc;
 	counter = limit_count;
+	limit = lim;
 }
 
 void WaterSensor::setLimit(int lm)

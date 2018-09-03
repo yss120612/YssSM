@@ -15,6 +15,8 @@ const uint8_t GPIOA = 0x12;
 const uint8_t GPIOB = 0x13;
 const uint8_t GPPUA = 0x0C;
 const uint8_t GPPUB = 0x0D;
+const uint8_t OLATA = 0x14;
+const uint8_t OLATB = 0x15;
 
 
 class PinExtender
@@ -24,9 +26,9 @@ public:
 
 	~PinExtender();
 
-	void setPinMode(int8_t pin, uint8_t mode);
+	//void setPinMode(int8_t pin, uint8_t mode);
 
-	void setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS);
+	//void setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS);
 
 	void setup(uint8_t addr = 0x20);
 
@@ -48,29 +50,29 @@ public:
 
 	void digWrite(uint8_t p, uint8_t d);
 
-	void setAll(uint16_t bitsToSend);
+	//void setAll(uint16_t bitsToSend);
 
-	void registerWrite(int8_t whichPin, uint8_t whichState);
+	//void registerWrite(int8_t whichPin, uint8_t whichState);
 
-	boolean getPin(int8_t whichPin);
+	//boolean getPin(int8_t whichPin);
 
-	uint16_t getAll();
+	//uint16_t getAll();
 
 private:
 	//Пин подключен к ST_CP входу 74HC595
-	uint8_t latchPin;
+	//uint8_t latchPin;
 	//Пин подключен к SH_CP входу 74HC595
-	uint8_t clockPin;
+	//uint8_t clockPin;
 	//Пин подключен к DS входу 74HC595
-	uint8_t dataPin;
+	//uint8_t dataPin;
 
 	uint8_t _address;
 
 	uint16_t data;
 
-	uint8_t dataA;
+	//uint8_t dataA;
 
-	uint8_t dataB;
+	//uint8_t dataB;
 
 };
 

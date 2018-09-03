@@ -22,8 +22,9 @@ Hardware::~Hardware()
 
 void Hardware::init()
 {
-	pinExtender.setup(EXT_LOCK, EXT_CLC, EXT_DATA);
-	mult.setup(A0, EX_PIN0, EX_PIN1, EX_PIN2, EX_PIN3, &pinExtender);
+	at24mem.begin();
+	pinExtender.setup();
+	mult.setup(A0, MP_PIN0, MP_PIN1, MP_PIN2, MP_PIN3, &pinExtender);
 	encoder.setup(ENC_A_PIN, ENC_B_PIN, ENC_BTN_PIN);
 	uroven.setup(WS1_PIN, WS1_PWR_PIN, &mult, &pinExtender);
 	flood.setup(WS2_PIN, WS2_PWR_PIN, &mult, &pinExtender);
@@ -31,7 +32,9 @@ void Hardware::init()
 	t_tsarga.set12bit();
 	t_tsa.set12bit();
 	t_triak.set12bit();
-	at24mem.begin();
+	//flood.setLimit(25);
+	//flood.arm();
+	
 }
 
 void Hardware::timed_process(long ms)

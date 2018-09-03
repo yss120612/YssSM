@@ -39,6 +39,7 @@ private:
 	int16_t curr;
 	volatile boolean heater_stopped;
 	boolean have_relay;
+	boolean relay_is_on;
 	void switchRelay(boolean on);
 	boolean relayIsOn();
 	Hardware * hard;

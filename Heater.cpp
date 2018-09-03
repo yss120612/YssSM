@@ -4,9 +4,12 @@
 
 Heater::Heater() {
 	have_relay = false;
+	relay_is_on = false;
 	heater_stopped = true;
 	cy = false;
 };
+
+//static int k = 0;
 
 void Heater::processHeater() {
 	
@@ -14,8 +17,7 @@ void Heater::processHeater() {
 		if (digitalRead(heater_pin) == HIGH) digitalWrite(heater_pin, LOW);
 		return;
 	}
-	//logg.logging("IN INTERRUPT-2");
-
+	
 	if (!relayIsOn()) return;
 	
 	cy = !cy;
@@ -33,8 +35,7 @@ void Heater::processHeater() {
 	{
 		digitalWrite(heater_pin, LOW);
 		
-	}
-	
+	}	
 }
 
 void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
@@ -52,23 +53,18 @@ void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
 void Heater::switchRelay(boolean on) {
 	if (have_relay)
 	{
+		relay_is_on = on;
 		boolean hs = heater_stopped;
 		heater_stopped = true;
 		delay(50);
-		hard->getExtender()->registerWrite(relay_pin, on ? HIGH : LOW);
+		hard->getExtender()->digWrite(relay_pin, on ? HIGH : LOW);
 	}
 	heater_stopped = !on;
 }
 
 //реле включено если его нет вообще или оно есть и включено
 boolean Heater::relayIsOn() {
-	return !have_relay || hard->getExtender()->getPin(relay_pin) == HIGH;
-	/*if (relay_pin >= 100) {
-		return extd->getPin(relay_pin - 100);
-	}
-	else {
-		return !have_relay || extd->getPin(relay_pin - 100) == HIGH;
-	}*/
+	return !have_relay || relay_is_on;
 }
 
 boolean Heater::isON() {

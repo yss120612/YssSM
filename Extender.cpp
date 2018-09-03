@@ -55,6 +55,7 @@ uint8_t PinExtender::readRegister(uint8_t regAddr) {
 	Wire.beginTransmission(_address);
 	Wire.write(regAddr);
 	Wire.endTransmission();
+	//delay(10);
 	Wire.requestFrom(_address, (uint8_t)1);
 	return Wire.read();
 }
@@ -63,7 +64,9 @@ void PinExtender::writeRegister(uint8_t regAddr, uint8_t regValue) {
 	// Write the register
 	Wire.beginTransmission(_address);
 	Wire.write(regAddr);
+	//delay(10);
 	Wire.write(regValue);
+	//delay(10);
 	Wire.endTransmission();
 }
 
@@ -119,7 +122,11 @@ void PinExtender::digWrite(uint8_t pin, uint8_t d) {
 		digitalWrite(pin, d);
 	}
 	else {
-		updateRegisterBit(pin - 100, d, GPIOA, GPIOB);
+		pin -= 100;
+		uint8_t gpio = readRegister(pin < 8 ? OLATA : OLATB);
+		uint8_t bit = pin % 8;
+		bitWrite(gpio, bit, d);
+		writeRegister(pin < 8 ? GPIOA : GPIOB, gpio);
 	}
 	
 }
@@ -128,65 +135,65 @@ void PinExtender::digWrite(uint8_t pin, uint8_t d) {
  * OLD
  */
 
-void PinExtender::setPinMode(int8_t pin, uint8_t mode)
-{
-	if (pin < 0 || pin >= 100) return;
-	pinMode(pin, mode);
-}
-
-void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
-{
-	latchPin = ST_CP;
-	clockPin = SH_CP;
-	dataPin = DS;
-	pinMode(latchPin, OUTPUT);
-	pinMode(dataPin, OUTPUT);
-	pinMode(clockPin, OUTPUT);
-	setAll(0);
-}
-
-void PinExtender::setAll(uint16_t bitsToSend) {
-	// для хранения 16 битов используем unsigned int
-	data = bitsToSend;
-	// выключаем на время передачи битов
-	digitalWrite(latchPin, LOW);
-	//delay(100);
-	// разбиваем наши 16 бит на два байта
-	// для записи в первый и второй регистр
-	// "проталкиваем" байты в регистры
-	shiftOut(dataPin, clockPin, MSBFIRST, lowByte(data));
-	shiftOut(dataPin, clockPin, MSBFIRST, highByte(data));
-
-	// "защелкиваем" регистр, чтобы биты появились на выходах регистра
-	digitalWrite(latchPin, HIGH);
-}
-
-
-void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
-	if (whichPin < 0)  return;
-	//logg.logging("Set pin " + String(whichPin) + " to " + String(whichState));
-	if (whichPin < 100) {
-		digitalWrite(whichPin, whichState);
-		return;
-	}
-
-	// для хранения 16 битов используем unsigned int
-	uint16_t bitsToSend = data;
-	// устанавливаем HIGH в соответствующий бит
-	bitWrite(bitsToSend, whichPin-100, whichState);
-	//УЖЕ УСТАНОВЛЕНО
-	if (bitsToSend == data) return;
-
-	setAll(bitsToSend);
-}
-
-
-boolean PinExtender::getPin(int8_t whichPin) {
-	if (whichPin < 0) return false;
-	if (whichPin < 100) return digitalRead(whichPin);
-	return  bitRead(data, whichPin-100);
-}
-
-uint16_t PinExtender::getAll() {
-	return data;
-}
+//void PinExtender::setPinMode(int8_t pin, uint8_t mode)
+//{
+//	if (pin < 0 || pin >= 100) return;
+//	pinMode(pin, mode);
+//}
+//
+//void PinExtender::setup(uint8_t ST_CP, uint8_t SH_CP, uint8_t DS)
+//{
+//	latchPin = ST_CP;
+//	clockPin = SH_CP;
+//	dataPin = DS;
+//	pinMode(latchPin, OUTPUT);
+//	pinMode(dataPin, OUTPUT);
+//	pinMode(clockPin, OUTPUT);
+//	setAll(0);
+//}
+//
+//void PinExtender::setAll(uint16_t bitsToSend) {
+//	// для хранения 16 битов используем unsigned int
+//	data = bitsToSend;
+//	// выключаем на время передачи битов
+//	digitalWrite(latchPin, LOW);
+//	//delay(100);
+//	// разбиваем наши 16 бит на два байта
+//	// для записи в первый и второй регистр
+//	// "проталкиваем" байты в регистры
+//	shiftOut(dataPin, clockPin, MSBFIRST, lowByte(data));
+//	shiftOut(dataPin, clockPin, MSBFIRST, highByte(data));
+//
+//	// "защелкиваем" регистр, чтобы биты появились на выходах регистра
+//	digitalWrite(latchPin, HIGH);
+//}
+//
+//
+//void PinExtender::registerWrite(int8_t whichPin, uint8_t whichState) {
+//	if (whichPin < 0)  return;
+//	//logg.logging("Set pin " + String(whichPin) + " to " + String(whichState));
+//	if (whichPin < 100) {
+//		digitalWrite(whichPin, whichState);
+//		return;
+//	}
+//
+//	// для хранения 16 битов используем unsigned int
+//	uint16_t bitsToSend = data;
+//	// устанавливаем HIGH в соответствующий бит
+//	bitWrite(bitsToSend, whichPin-100, whichState);
+//	//УЖЕ УСТАНОВЛЕНО
+//	if (bitsToSend == data) return;
+//
+//	setAll(bitsToSend);
+//}
+//
+//
+//boolean PinExtender::getPin(int8_t whichPin) {
+//	if (whichPin < 0) return false;
+//	if (whichPin < 100) return digitalRead(whichPin);
+//	return  bitRead(data, whichPin-100);
+//}
+//
+//uint16_t PinExtender::getAll() {
+//	return data;
+//}

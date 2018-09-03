@@ -19,7 +19,7 @@ void Cooler::setup(Hardware * h,uint8_t pin)
 
 void Cooler::run(boolean swc)
 {
-	hard->getExtender()->registerWrite(cooler_pin, swc);
+	hard->getExtender()->digWrite(cooler_pin, swc);
 	isON = swc;
 }
 

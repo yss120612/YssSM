@@ -297,7 +297,10 @@ void Suvid::process(long ms) {
 		
 		if (tmp >= tpause.getTemp()) {
 			work_mode = PROC_WORK;
+			readTime();
+			logg.logging("SuVid WORK started at " + String(tim));
 			armAlarm();//Завели будильник
+
 		}
 		break;
 	case PROC_WORK:
@@ -320,7 +323,9 @@ void Suvid::start() {
 	work_mode = PROC_OFF;
 	err = PROCERR_OK;
 	end_reason = PROCEND_NO;
-
+	//hardware->getUrovenWS()->arm();
+	//hardware->getFloodWS()->arm();
+	//hardware->getUrovenWS()->setLimit(0);
 	if (agg->getHeater() == NULL) {
 		error(PROCERR_NOHEATER);
 		return;
@@ -333,6 +338,8 @@ void Suvid::start() {
 	work_mode = PROC_FORSAJ;
 	agg->getHeater()->start();
 	agg->getHeater()->setPower(50);
+	readTime();
+	logg.logging("SuVid started at "+String(tim));
 	mcmd->setName("Stop");
 }
 
@@ -341,6 +348,28 @@ void Suvid::stop(uint8_t reason) {
 	agg->getHeater()->stop();
 	work_mode = PROC_OFF;
 	end_reason = reason;
+	readTime();
+	String st = "SuVid finished started at " + String(tim) + " by reason ";
+	
+	switch (reason)
+	{
+	case PROCEND_TIME:
+		st += "time end";
+		break;
+	case PROCEND_TEMPERATURE:
+		st += "temperature limit";
+		break;
+	case PROCEND_MANUAL:
+		st += "manual";
+		break;
+	case PROCEND_ERROR:
+		st += "error detected";
+		break;
+	case PROCEND_FAULT:
+		st += "fault";
+		break;
+	}
+	logg.logging(st);
 	mcmd->setName("Start");
 }
 

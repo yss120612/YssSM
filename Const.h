@@ -32,11 +32,17 @@ const uint8_t EX_PIN13 = 113;
 const uint8_t EX_PIN14 = 114;
 const uint8_t EX_PIN15 = 115;
 
+
+const uint8_t MP_PIN0 = EX_PIN8;
+const uint8_t MP_PIN1 = EX_PIN9;
+const uint8_t MP_PIN2 = EX_PIN1;
+const uint8_t MP_PIN3 = EX_PIN10;
+
 const uint8_t WS1_PIN= 0;
-const uint8_t WS1_PWR_PIN = EX_PIN4;
+const uint8_t WS1_PWR_PIN = EX_PIN2;
 
 const uint8_t WS2_PIN = 1;
-const uint8_t WS2_PWR_PIN = EX_PIN5;
+const uint8_t WS2_PWR_PIN = EX_PIN3;
 
 const uint8_t TEMPERATURE_PIN = D3;
 
@@ -48,14 +54,14 @@ const uint8_t EXT_CLC = D7;
 const uint8_t EXT_LOCK = D6;
 const uint8_t EXT_DATA = D8;
 
-const uint8_t HEAT_NUL_PIN = D10;
-const uint8_t HEAT_REL_PIN = EX_PIN15;
-const uint8_t HEAT_DRV_PIN = D9;
+const uint8_t HEAT_NUL_PIN = D7;
+const uint8_t HEAT_REL_PIN = EX_PIN6;
+const uint8_t HEAT_DRV_PIN = D6;
 
-const uint8_t TRIAC_COOL_PIN = EX_PIN2;
+const uint8_t TRIAC_COOL_PIN = EX_PIN5;
 
-const uint8_t KRAN_OPEN_PIN = EX_PIN6;
-const uint8_t KRAN_CLOSE_PIN = EX_PIN7;
+const uint8_t KRAN_OPEN_PIN = EX_PIN7;
+const uint8_t KRAN_CLOSE_PIN = EX_PIN15;
 
 
 const uint8_t term_addr [][8]={
