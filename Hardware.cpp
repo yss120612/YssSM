@@ -32,6 +32,7 @@ void Hardware::init()
 	t_tsarga.set12bit();
 	t_tsa.set12bit();
 	t_triak.set12bit();
+	beeper.setup(BEEPER_PIN);
 	//flood.setLimit(25);
 	//flood.arm();
 	

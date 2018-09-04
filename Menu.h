@@ -39,8 +39,12 @@ public:
 	void setEditParams(MenuParameter * ep);
 	MenuParameter * getEditParams();
 protected:
+	
+	void _prev();
+	void _next();
 	int8_t curr;
 	QList<MenuItem *> items;
+	QList<MenuItem *> vitems;
 	Menu * parent;
 	boolean active;
 	MenuParameter * edit_param;

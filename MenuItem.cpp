@@ -4,6 +4,7 @@ MenuItem::MenuItem(String nm)
 {
 	name = nm;
 	kind = ABSTRACT;
+	visible = true;
 }
 
 MenuItem::~MenuItem()

@@ -32,9 +32,9 @@ public:
 
 	void setup(uint8_t addr = 0x20);
 
-	void setAB(uint8_t bitsToSend, uint8_t ab);
+	//void setAB(uint8_t bitsToSend, uint8_t ab);
 
-	uint8_t getAB(uint8_t ab);
+	//uint8_t getAB(uint8_t ab);
 
 	uint8_t readRegister(uint8_t addr);
 
@@ -68,7 +68,7 @@ private:
 
 	uint8_t _address;
 
-	uint16_t data;
+	//uint16_t data;
 
 	//uint8_t dataA;
 

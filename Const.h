@@ -50,9 +50,11 @@ const uint8_t ENC_A_PIN = D4;
 const uint8_t ENC_B_PIN = D0;
 const uint8_t ENC_BTN_PIN = D5;
 
-const uint8_t EXT_CLC = D7;
-const uint8_t EXT_LOCK = D6;
-const uint8_t EXT_DATA = D8;
+//const uint8_t EXT_CLC = D7;
+//const uint8_t EXT_LOCK = D6;
+//const uint8_t EXT_DATA = D8;
+
+const uint8_t BEEPER_PIN = D8;
 
 const uint8_t HEAT_NUL_PIN = D7;
 const uint8_t HEAT_REL_PIN = EX_PIN6;
@@ -137,7 +139,8 @@ enum mydata {
 #define PROC_WORK 2
 #define PROC_GET_HEAD 3
 #define PROC_SELF_WORK 4
-
+#define PROC_WAIT_SELF 5
+#define PROC_WAIT_HEAD 6
 
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени
@@ -147,6 +150,8 @@ enum mydata {
 #define PROCEND_MANUAL 5 //закончили вручную
 #define PROCEND_UROVEN 6 //закончили по датчику уровня
 #define PROCEND_FLOOD 7 //закончили по датчику затопления
+#define PROCEND_NO_ATT_SELF 8 //закончили никто не подошел после работы на себя
+#define PROCEND_NO_ATT_HEAD 9 //закончили никто не подошел после отбора голов
 
 #define PROCERR_OK 0 //нет ошибок
 #define PROCERR_NOTKUB 1 //нет градусника в кубе

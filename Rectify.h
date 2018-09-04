@@ -27,7 +27,9 @@ protected:
 	void start();
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
+	void next();
 	MenuCommand * mcmd;
+	MenuCommand *cont;
 	float tcube;
 	float ttsa;
 	float tdef;

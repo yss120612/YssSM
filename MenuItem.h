@@ -34,10 +34,13 @@ public:
 	String getRAWName() {return name; }
 	void setName(String s) { name=s; }
 	void setId(uint8_t i) { id=i; }
+	void setVisible(boolean v) { visible = v; }
+	boolean isVisible() { return visible; }
 protected:
 	String name;
 	uint8_t kind;
 	uint8_t id;
+	boolean visible;
 };
 
 class MenuSubmenu : public MenuItem

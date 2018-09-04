@@ -45,13 +45,10 @@ void setup() {
 	hard.init();
 	agg.init();
 	
-	
-
 	CONF.setMem(hard.getAT24mem());
 	
-
-	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	CONF.seWiFi("Yss_GIGA","bqt3bqt3");
+	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	//CONF.seWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.seHttp("admin", "esp");
 	CONF.seScrSavMin(1);
 	CONF.seSuvidMin(60);
@@ -121,6 +118,11 @@ void A() {
 void Button() {
 	hard.getEncoder()->Button();
 }
+
+ICACHE_RAM_ATTR void t1IntHandler() {
+	hard.getBeeper()->process();
+}
+
 
 
 //int i = 0;

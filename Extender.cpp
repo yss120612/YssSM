@@ -29,26 +29,26 @@ void PinExtender::setup(uint8_t addr)
 }
 
 
-void PinExtender::setAB(uint8_t bitsToSend,uint8_t ab) {//ab=0:A ab=1:B
-	if (ab == 0)
-	{
-		writeRegister(GPIOA, bitsToSend);
-	}
-	else {
-		writeRegister(GPIOB, bitsToSend);
-	}
-}
-
-uint8_t PinExtender::getAB(uint8_t ab) {//ab=0-A< ab=1-B
-	if (ab == 0)
-	{
-		return readRegister(GPIOA);
-	}
-	else 
-	{
-		return readRegister(GPIOB);
-	}
-}
+//void PinExtender::setAB(uint8_t bitsToSend,uint8_t ab) {//ab=0:A ab=1:B
+//	if (ab == 0)
+//	{
+//		writeRegister(GPIOA, bitsToSend);
+//	}
+//	else {
+//		writeRegister(GPIOB, bitsToSend);
+//	}
+//}
+//
+//uint8_t PinExtender::getAB(uint8_t ab) {//ab=0-A< ab=1-B
+//	if (ab == 0)
+//	{
+//		return readRegister(GPIOA);
+//	}
+//	else 
+//	{
+//		return readRegister(GPIOB);
+//	}
+//}
 
 uint8_t PinExtender::readRegister(uint8_t regAddr) {
 	// read the current GPINTEN

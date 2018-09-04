@@ -81,6 +81,9 @@ void Rectify::makeMenu()
 	menu->setActive(true);
 	mcmd = new MenuCommand("Start", 1);
 	menu->add(mcmd);
+	cont = new MenuCommand("Continue", 4);
+	cont->setVisible(false);
+	menu->add(cont);
 	menu->add(new MenuCommand("Hide menu", 2));
 	menu->add(new MenuCommand("Return", 3));
 	Menu * setup = new Menu();
@@ -129,6 +132,10 @@ void Rectify::command(MenuCommand * id)
 		}
 		workMode.setCurrent(MODE_MAIN);
 		break;
+	case 4:
+		menu->setActive(true);
+		next();
+		break;
 	}
 }
 
@@ -172,7 +179,7 @@ void Rectify::start()
 	end_reason = PROCEND_NO;
 	agg->getHeater()->setPower(98);
 	agg->getHeater()->start();
-	hardware->getUrovenWS()->arm(25);
+	//hardware->getUrovenWS()->arm(25);
 	hardware->getFloodWS()->arm(25);
 	mcmd->setName("Stop");
 	TSAchecked = 0;
@@ -251,6 +258,24 @@ void Rectify::acceptParams(MenuParameter * mp)
 	}
 }
 
+void Rectify::next() {
+	switch (work_mode) {
+	case PROC_WAIT_SELF:
+		work_mode = PROC_GET_HEAD;
+		hardware->getUrovenWS()->arm(25);
+		cont->setVisible(false);
+		break;
+	case PROC_WAIT_HEAD:
+		work_mode = PROC_WORK;
+		agg->getHeater()->setPower(CONF.getRectWorkPower());
+		agg->getKran()->openQuantum(CONF.getRectKranOpened());
+		hardware->getUrovenWS()->disarm();
+		cont->setVisible(false);
+		break;
+}
+}
+
+
 void Rectify::process(long ms)
 {
 	if (work_mode == PROC_OFF) return;
@@ -276,14 +301,33 @@ void Rectify::process(long ms)
 		if (ms-workSelf>0){
 			readTime();
 			logg.logging("Rectify Work Self finished at " + String(tim));
-			work_mode = PROC_GET_HEAD;
+			work_mode = PROC_WAIT_SELF;
+			hardware->getBeeper()->beep(1000, 5000);
+			workSelf = ms + 1000 * 60 * 10;//10 минут
+			cont->setVisible(true);
+			menu->setActive(true);
+		}
+		break;
+	case PROC_WAIT_SELF:
+		if (ms - workSelf > 0) {//если за 10 минут никто не подошел
+		stop(PROCEND_NO_ATT_SELF);
 		}
 		break;
 	case PROC_GET_HEAD: 
-
-		work_mode = PROC_WORK;
-		//agg->getHeater()->setPower(CONF.getRectWorkPower());
-		//agg->getKran()->openQuantum(CONF.getRectKranOpened());
+		if (hardware->getUrovenWS()->isAlarmed()) {
+			readTime();
+			logg.logging("Rectify collect head finished at " + String(tim));
+			work_mode = PROC_WAIT_HEAD;
+			hardware->getBeeper()->beep(1000, 5000);
+			workSelf = ms + 1000 * 60 * 10;//10 минут
+			cont->setVisible(true);
+			menu->setActive(true);
+		}
+		break;
+	case PROC_WAIT_HEAD: 
+		if (ms - workSelf > 0) {//если за 10 минут никто не подошел
+			stop(PROCEND_NO_ATT_HEAD);
+		}
 		break;
 	case PROC_WORK:
 		if (tdef > CONF.getRectStopTemp()) {//end of forsaj
@@ -339,10 +383,6 @@ void Rectify::process(long ms)
 		readTime();
 		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + String(tim));
 		stop(PROCEND_FAULT);
-	}
-
-	if (hardware->getUrovenWS()->isAlarmed()) {
-		stop(PROCEND_UROVEN);
 	}
 
 	if (hardware->getFloodWS()->isAlarmed()) {
