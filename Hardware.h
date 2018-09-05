@@ -28,6 +28,8 @@
 #include "RTCmemory.h"
 #include "Multiplexor.h"
 #include "WaterSensor.h"
+#include "Pump.h"
+
 
 class Hardware
 {
@@ -55,6 +57,7 @@ public:
 	Multiplexor * getMultiplexor();
 	WaterSensor * getUrovenWS();
 	WaterSensor * getFloodWS();
+	Pump * getPump();
 	//void setDisplay(SSD1306Wire * d);
 	//void setTKube(DallasTerm * k);
 	//void setTTsarga(DallasTerm * t);
@@ -91,6 +94,8 @@ protected:
 
 	WaterSensor uroven;
 	WaterSensor flood;
+
+	Pump pump;
 	//OneWire ow(TEMPERATURE_PIN);
 	//SSD1306Wire display(0x3C, SDA, SCL);
 	//DallasTerm t_kube(tkube, &ow, 2.5);

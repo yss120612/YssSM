@@ -18,6 +18,7 @@ public:
 	Rectify(Aggregates * a, Hardware *h);
 	~Rectify();
 	String getData(uint w);
+	void press();
 protected:
 	void showState();
 	void process(long ms);

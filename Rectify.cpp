@@ -9,6 +9,7 @@ Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 Rectify::~Rectify()
 {
 	delete mcmd;
+	delete cont;
 }
 
 String Rectify::getData(uint w)
@@ -30,6 +31,15 @@ String Rectify::getData(uint w)
 			case PROC_GET_HEAD:
 				return "GET HEAD";
 				break;
+			case PROC_SELF_WORK:
+				return "SELF WORK";
+				break;
+			case PROC_WAIT_HEAD:
+				return "WAIT USER TO WORK";
+				break;
+			case PROC_WAIT_SELF:
+				return "WAIT USER TO GET HEAD";
+				break;
 			}
 			break;
 		case DS_RECTSTOP:
@@ -43,6 +53,12 @@ String Rectify::getData(uint w)
 	}
 	else
 	return Mode::getData(w);
+}
+
+void Rectify::press()
+{
+	Mode::press();
+	if (hardware->getBeeper()->isOn()) hardware->getBeeper()->stop();
 }
 
 void Rectify::showState()
@@ -89,8 +105,7 @@ void Rectify::makeMenu()
 	Menu * setup = new Menu();
 	setup->setParent(menu);
 	setup->setActive(true);
-
-	
+		
 	MenuIParameter * pwHWork = new MenuIParameter("Head Power", setup, 10);
 	MenuFParameter * pwHKran = new MenuFParameter("Head Kran", setup, 11);
 	MenuIParameter * pwWork = new MenuIParameter("Power", setup, 12);
@@ -294,16 +309,16 @@ void Rectify::process(long ms)
 			readTime();
 			logg.logging("Rectify forsaj finished at " + String(tim));
 			work_mode = PROC_SELF_WORK;
-			workSelf = ms + 1000 * 60 * CONF.getRectWorkSelf();//через 15 мин заканчиваем работать на себя
+			workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через 15 мин заканчиваем работать на себя
 		}
 		break;
 	case PROC_SELF_WORK:
 		if (ms-workSelf>0){
 			readTime();
-			logg.logging("Rectify Work Self finished at " + String(tim));
+			//logg.logging("Rectify Work Self finished at " + String(tim));
 			work_mode = PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
-			workSelf = ms + 1000 * 60 * 10;//10 минут
+			workSelf = ms + 60000 * 10;//10 минут
 			cont->setVisible(true);
 			menu->setActive(true);
 		}
@@ -319,7 +334,7 @@ void Rectify::process(long ms)
 			logg.logging("Rectify collect head finished at " + String(tim));
 			work_mode = PROC_WAIT_HEAD;
 			hardware->getBeeper()->beep(1000, 5000);
-			workSelf = ms + 1000 * 60 * 10;//10 минут
+			workSelf = ms + 60000  * 10;//10 минут
 			cont->setVisible(true);
 			menu->setActive(true);
 		}

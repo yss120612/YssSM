@@ -900,6 +900,9 @@
     <ClInclude Include="Multiplexor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Pump.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -1338,6 +1341,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Multiplexor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pump.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

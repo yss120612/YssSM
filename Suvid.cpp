@@ -338,6 +338,7 @@ void Suvid::start() {
 	work_mode = PROC_FORSAJ;
 	agg->getHeater()->start();
 	agg->getHeater()->setPower(50);
+	hardware->getPump()->start();
 	readTime();
 	logg.logging("SuVid started at "+String(tim));
 	mcmd->setName("Stop");
@@ -346,6 +347,7 @@ void Suvid::start() {
 void Suvid::stop(uint8_t reason) {
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
+	hardware->getPump()->stop();
 	work_mode = PROC_OFF;
 	end_reason = reason;
 	readTime();

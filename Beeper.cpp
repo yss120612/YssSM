@@ -31,7 +31,8 @@ void Beeper::beep(uint16_t freq, uint16_t dur) {
 void Beeper::process() {
 	if (tone_time > 0) {
 		// toggle the pin
-		digitalWrite(beeper_pin, tone_time-- % 2);
+		digitalWrite(beeper_pin, tone_time % 2);
+		tone_time -- ;
 	}
 	else {
 		stop();

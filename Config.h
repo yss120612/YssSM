@@ -119,7 +119,7 @@ private:
 	float distKranOpened;
 	uint8_t distForsajTemp;
 
-	uint8_t rectWorkSelf;
+	uint8_t rectWorkSlf;
 	uint8_t rectHeadPower;
 	float	rectHeadKranOpened;
 	uint8_t rectWorkPower;

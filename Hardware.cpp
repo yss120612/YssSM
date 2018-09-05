@@ -33,6 +33,7 @@ void Hardware::init()
 	t_tsa.set12bit();
 	t_triak.set12bit();
 	beeper.setup(BEEPER_PIN);
+	pump.setup(PUMP_PIN, &pinExtender);
 	//flood.setLimit(25);
 	//flood.arm();
 	
@@ -71,6 +72,7 @@ RTCmemory * Hardware::getRTCmem() { return &RTCmem; }
 Multiplexor * Hardware::getMultiplexor(){ return &mult;}
 WaterSensor * Hardware::getUrovenWS(){	return &uroven;}
 WaterSensor * Hardware::getFloodWS(){	return &flood;}
+Pump * Hardware::getPump(){	return &pump;}
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }

@@ -353,6 +353,7 @@
     <ClInclude Include="MenuItem.h" />
     <ClInclude Include="Mode.h" />
     <ClInclude Include="Multiplexor.h" />
+    <ClInclude Include="Pump.h" />
     <ClInclude Include="Rectify.h" />
     <ClInclude Include="RTCmemory.h" />
     <ClInclude Include="Suvid.h" />
@@ -502,6 +503,7 @@
     <ClCompile Include="MenuItem.cpp" />
     <ClCompile Include="Mode.cpp" />
     <ClCompile Include="Multiplexor.cpp" />
+    <ClCompile Include="Pump.cpp" />
     <ClCompile Include="Rectify.cpp" />
     <ClCompile Include="RTCmemory.cpp" />
     <ClCompile Include="Suvid.cpp" />

@@ -11,7 +11,7 @@
 
 
 #define ENCODER_LOG1
-#define _SERIAL1
+#define _SERIAL
 
 
 const uint8_t EX_PIN0 = 100;
@@ -45,6 +45,8 @@ const uint8_t WS2_PIN = 1;
 const uint8_t WS2_PWR_PIN = EX_PIN3;
 
 const uint8_t TEMPERATURE_PIN = D3;
+
+const uint8_t PUMP_PIN = EX_PIN7;
 
 const uint8_t ENC_A_PIN = D4;
 const uint8_t ENC_B_PIN = D0;

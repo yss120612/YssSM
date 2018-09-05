@@ -127,15 +127,15 @@ void Config::seRectWorkPower(uint8_t st)
 
 void Config::setRectWorkSelf(uint8_t st)
 {
-	if (rectWorkSelf != st) changed = true;
-	rectWorkSelf = st;
+	if (rectWorkSlf != st) changed = true;
+	rectWorkSlf = st;
 	write();
 }
 
 void Config::seRectWorkSelf(uint8_t st)
 {
-	if (rectWorkSelf != st) changed = true;
-	rectWorkSelf = st;
+	if (rectWorkSlf != st) changed = true;
+	rectWorkSlf = st;
 }
 
 void Config::setRectHeadPower(uint8_t st)
@@ -292,8 +292,6 @@ void Config::seTSAcritical(uint8_t st)
 
 }
 
-
-
 const String Config::getHttpU() { return www_username; };
 const String Config::getHttpP() { return www_password; };
 const String Config::getWiFiN() { return wifi_ssid; };
@@ -308,8 +306,8 @@ const float Config::getDistStopTemp() { return distStopTemp;}
 const float Config::getDistKranOpened(){	return distKranOpened;}
 const uint8_t Config::getDistForsajTemp() { return distForsajTemp; }
 
-const uint8_t Config::getRectWorkSelf(){return rectWorkSelf;}
-const uint8_t Config::getRectHeadPower() { return rectWorkPower; }
+const uint8_t Config::getRectWorkSelf() { return rectWorkSlf; }
+const uint8_t Config::getRectHeadPower() { return rectHeadPower; }
 const uint8_t Config::getRectWorkPower() { return rectWorkPower; }
 const float Config::getRectKranOpened() { return rectKranOpened; }
 const float Config::getRectHeadKranOpened() { return rectHeadKranOpened; }
@@ -348,7 +346,7 @@ void Config::write()
 	*(buff + idx++) = suvidTemp;
 	*(buff + idx++) = distWorkPower;
 	*(buff + idx++) = distForsajTemp;
-	*(buff + idx++) = rectWorkSelf;
+	*(buff + idx++) = rectWorkSlf;
 	*(buff + idx++) = rectWorkPower;
 	*(buff + idx++) = rectHeadPower;
 	*(buff + idx++) = rectForsajTemp;
