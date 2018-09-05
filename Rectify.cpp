@@ -315,7 +315,7 @@ void Rectify::process(long ms)
 	case PROC_SELF_WORK:
 		if (ms-workSelf>0){
 			readTime();
-			//logg.logging("Rectify Work Self finished at " + String(tim));
+			logg.logging("Rectify Work Self finished at " + String(tim));
 			work_mode = PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
 			workSelf = ms + 60000 * 10;//10 минут
@@ -375,8 +375,7 @@ void Rectify::process(long ms)
 			TSAchecked = ms;
 			tsa_alarms++;
 		}
-	}
-	else {
+	} else {
 		if (tsa_alarms > 0)
 		{
 			readTime();

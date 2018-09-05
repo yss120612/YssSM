@@ -142,4 +142,3 @@ private:
 extern Config CONF;
 
 #endif
-

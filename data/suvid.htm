@@ -18,14 +18,7 @@
 		<div class="col-md-12">
 			<a href="/" class="btn btn-info">Дом</a>
 		</div>
-		<div class="col-md-12">
-			<button class="btn btn-info" id="button">qqq</button>
-		</div>
-		
-		<div class="col-md-12">
-			<button class="btn btn-info" id="button1">qqq1</button>
-		</div>
-		
+				
 		<div class="col-md-offset-1 col-md-10">
 		<h3>Сувид</h3>
 		</div>
@@ -33,6 +26,7 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TTARGET"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMELEFT"></div>		
 		</div>
@@ -40,9 +34,11 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TKUBE"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TTRIAK"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="HPOWER"></div>		
 		</div>
@@ -150,9 +146,7 @@
             }
         }
         },
-	
-
-		
+			
 		
         series: [{
 			name:'Температура',
@@ -168,21 +162,6 @@
             pointStart: (new Date()).getTime()-10000,
 		}]
     });
-	
-	
-	
-	$('#button1').click(function () {
-    
-	 chart1.update({
-        xAxis: {
-           plotLines: [{
-                value: 30
-				}]
-        }
-    });
-   });
-
-	
 	});
 	
 	function randomInteger(min, max) {
@@ -205,12 +184,6 @@
 		});
 		setTimeout('process()',3000);
 	};
-
-	
-	
-
-
-
-	</script>
+		</script>
 	</body>
 </html>

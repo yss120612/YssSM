@@ -62,6 +62,8 @@ void Main::makeMenu()
 	menu->add(new MenuCommand("Brewing",2));
 	menu->add(new MenuCommand("Distill",3));
 	menu->add(new MenuCommand("Rectify",4));
+	menu->add(new MenuCommand("Beep1", 5));
+	menu->add(new MenuCommand("Beep2", 6));
 		Menu * setup = new Menu();
 		setup->setParent(menu);
 		setup->setActive(true);
@@ -215,6 +217,12 @@ void Main::command(MenuCommand * id)
 	case 4:
 		workMode.setCurrent(MODE_RECTIFY);
 		break;
+	case 5:
+		hardware->getBeeper()->beep(1000, 5000);
+		break;
+	case 6:
+		hardware->getBeeper()->beep(3000, 5000);
+		break;
 	case 11:
 		byte addr[8];
 		logg.logging("begin of OneWire devices");
@@ -248,7 +256,6 @@ void Main::command(MenuCommand * id)
 		}
 		logg.logging("end of i2c devices");
 		break;
-
 	}
 
 	drawImmed = true;
