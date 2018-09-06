@@ -1,4 +1,5 @@
 
+#include "Manual.h"
 #include "Pump.h"
 #include "Multiplexor.h"
 #include "Rectify.h"
@@ -33,6 +34,7 @@ Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
 Mode * distill = new Distillation(&agg, &hard);
 Mode * rectify = new Rectify(&agg, &hard);
+Mode * manual = new Manual(&agg, &hard);
 
 
 void setup() {
@@ -48,8 +50,8 @@ void setup() {
 	
 	CONF.setMem(hard.getAT24mem());
 	
-	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	CONF.seWiFi("Yss_GIGA","bqt3bqt3");
+	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	//CONF.seWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.seHttp("admin", "esp");
 	CONF.seScrSavMin(1);
 	CONF.seSuvidMin(60);
@@ -60,6 +62,9 @@ void setup() {
 	CONF.seDistWorkPower(42);
 	CONF.seDistForsajTemp(57);
 	
+	CONF.seManualKranOpened(19.5);
+	CONF.seManualWorkPower(42);
+
 	CONF.seRectWorkSelf(20);
 	CONF.seRectKranOpened(21.5);
 	CONF.seRectHeadKranOpened(21.5);
@@ -90,6 +95,7 @@ void setup() {
 	workMode.addMode(suvid);
 	workMode.addMode(distill);
 	workMode.addMode(rectify);
+	workMode.addMode(manual);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");

@@ -35,7 +35,7 @@ String Rectify::getData(uint w)
 				return "SELF WORK";
 				break;
 			case PROC_WAIT_HEAD:
-				return "WAIT USER TO WORK";
+				return "WAIT USER TO BODY COLLE";
 				break;
 			case PROC_WAIT_SELF:
 				return "WAIT USER TO GET HEAD";
@@ -55,11 +55,13 @@ String Rectify::getData(uint w)
 	return Mode::getData(w);
 }
 
-void Rectify::press()
+void Rectify::initDraw()
 {
-	Mode::press();
-	if (hardware->getBeeper()->isOn()) hardware->getBeeper()->stop();
+	Mode::initDraw();
+	head_collected = false;
 }
+
+
 
 void Rectify::showState()
 {
@@ -73,14 +75,25 @@ void Rectify::showState()
 		x = 0;
 		y = 0;
 	}
-	hardware->getDisplay()->drawString(x, 0, "Dist");
+	hardware->getDisplay()->drawString(x, 0, "Rectify");
 	hardware->getDisplay()->drawString(x + 40, 0, "PW="+String(agg->getHeater()->getPower()));
-
 	hardware->getDisplay()->drawString(x, y + 13, "TSA=" + String(hardware->getTTSA()->getTemp()));
 	hardware->getDisplay()->drawString(x, y + 29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
 	switch (work_mode) {
 	case PROC_OFF:
 		hardware->getDisplay()->drawString(x, y + 45, "OFF");
+		break;
+	case PROC_SELF_WORK:
+		hardware->getDisplay()->drawString(x, y + 45, "SELF");
+		break;
+	case PROC_WAIT_SELF:
+		hardware->getDisplay()->drawString(x, y + 45, "READY HEAD!");
+		break;
+	case PROC_WAIT_HEAD:
+		hardware->getDisplay()->drawString(x, y + 45, "READY BODY!");
+		break;
+	case PROC_GET_HEAD:
+		hardware->getDisplay()->drawString(x, y + 45, "GET HEAD");
 		break;
 	case PROC_FORSAJ:
 		hardware->getDisplay()->drawString(x, y + 45, "FORSAJ");
@@ -113,6 +126,7 @@ void Rectify::makeMenu()
 	MenuIParameter * tFor = new MenuIParameter("T Forsaj", setup, 14);
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 15);
 	MenuIParameter * wSelf = new MenuIParameter("Work Self", setup, 16);
+	MenuBParameter * hColl = new MenuBParameter("HeadCollected", setup, 17);//to continue (head already collected)
 
 	setup->add(wSelf);
 	setup->add(pwHWork);
@@ -121,6 +135,7 @@ void Rectify::makeMenu()
 	setup->add(pwKran);
 	setup->add(tFor);
 	setup->add(tEnd);
+	setup->add(hColl);
 
 	menu->add(new MenuSubmenu("Setup", setup));
 }
@@ -230,6 +245,9 @@ void Rectify::initParams(MenuParameter * mp)
 	case 16:
 		((MenuIParameter *)mp)->setup(CONF.getRectWorkSelf(), 5, 5, 100);
 		break;
+	case 17:
+		((MenuBParameter *)mp)->setup(head_collected);
+		break;
 	}
 }
 
@@ -249,6 +267,7 @@ void Rectify::acceptParams(MenuParameter * mp)
 		if (work_mode == PROC_GET_HEAD) {
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
 		}
+		break;
 	case 12:
 		CONF.setRectWorkPower(((MenuIParameter *)mp)->getCurrent());
 		if (work_mode == PROC_WORK) {
@@ -267,7 +286,10 @@ void Rectify::acceptParams(MenuParameter * mp)
 		CONF.setRectStopTemp(((MenuFParameter *)mp)->getCurrent());
 		break;
 	case 16:
-		CONF.setRectWorkSelf(((MenuFParameter *)mp)->getCurrent());
+		CONF.setRectWorkSelf(((MenuIParameter *)mp)->getCurrent());
+		break;
+	case 17:
+		head_collected=((MenuBParameter *)mp)->getCurrent();
 		break;
 	
 	}
@@ -276,7 +298,12 @@ void Rectify::acceptParams(MenuParameter * mp)
 void Rectify::next() {
 	switch (work_mode) {
 	case PROC_WAIT_SELF:
-		work_mode = PROC_GET_HEAD;
+		if (head_collected) {
+			work_mode = PROC_WORK;
+		}
+		else {
+			work_mode = PROC_GET_HEAD;
+		}
 		hardware->getUrovenWS()->arm(25);
 		cont->setVisible(false);
 		break;
@@ -309,7 +336,7 @@ void Rectify::process(long ms)
 			readTime();
 			logg.logging("Rectify forsaj finished at " + String(tim));
 			work_mode = PROC_SELF_WORK;
-			workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через 15 мин заканчиваем работать на себя
+			workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
 		}
 		break;
 	case PROC_SELF_WORK:
@@ -333,7 +360,7 @@ void Rectify::process(long ms)
 			readTime();
 			logg.logging("Rectify collect head finished at " + String(tim));
 			work_mode = PROC_WAIT_HEAD;
-			hardware->getBeeper()->beep(1000, 5000);
+			hardware->getBeeper()->beep(2000, 5000);
 			workSelf = ms + 60000  * 10;//10 минут
 			cont->setVisible(true);
 			menu->setActive(true);
@@ -345,8 +372,9 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_WORK:
-		if (tdef > CONF.getRectStopTemp()) {//end of forsaj
+		if (tdef > CONF.getRectStopTemp()) {//end of collect body
 			stop(PROCEND_TEMPERATURE);
+			hardware->getBeeper()->beep(1000, 5000);
 		}
 		//if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
 		break;

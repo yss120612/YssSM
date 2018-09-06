@@ -47,6 +47,7 @@ void Mode::right()
 
 void Mode::press()
 {
+	if (hardware->getBeeper()->isOn()) hardware->getBeeper()->stop();
 	if (ss_active) {
 		ss_active = false;
 		last_action = millis();

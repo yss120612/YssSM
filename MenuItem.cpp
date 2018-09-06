@@ -57,3 +57,8 @@ MenuFParameter::MenuFParameter(String nm, Menu * par, int i) : MenuParameter(nm,
 {
 	kind = PARAMETRFLOAT;
 }
+
+MenuBParameter::MenuBParameter(String nm, Menu * par, int i) : MenuParameter(nm, par, i)
+{
+	kind = PARAMETRBOOL;
+}

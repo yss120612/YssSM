@@ -903,6 +903,9 @@
     <ClInclude Include="Pump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Manual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -1344,6 +1347,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Manual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

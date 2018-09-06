@@ -31,7 +31,6 @@ public:
 
 	void setTriakCoolerTemp(uint8_t st);
 	void setTriakCoolerGist(uint8_t st);
-
 	void seTriakCoolerGist(uint8_t st);
 
 	void setDistWorkPower(uint8_t st);
@@ -41,9 +40,14 @@ public:
 	void setDistKranOpened(float st);
 	void seDistKranOpened(float st);
 	void setDistForsajTemp(uint8_t st);
-
 	void seDistForsajTemp(uint8_t st);
 	
+	void setManualWorkPower(uint8_t st);
+	void seManualWorkPower(uint8_t st);
+	void setManualKranOpened(float st);
+	void seManualKranOpened(float st);
+
+
 	void setRectWorkSelf(uint8_t st);//in minutes
 	void seRectWorkSelf(uint8_t st);//in minutes
 	void setRectHeadPower(uint8_t st);
@@ -89,6 +93,9 @@ public:
 	const float getDistKranOpened();
 	const uint8_t getDistForsajTemp();
 
+	const float getManualKranOpened();
+	const uint8_t getManualWorkPower();
+
 	const uint8_t getTriakCoolerTemp();
 	const uint8_t getTriakCoolerGist();
 
@@ -118,6 +125,9 @@ private:
 	float distStopTemp;
 	float distKranOpened;
 	uint8_t distForsajTemp;
+
+	float manualKranOpened;
+	uint8_t manualWorkPower;
 
 	uint8_t rectWorkSlf;
 	uint8_t rectHeadPower;

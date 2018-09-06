@@ -352,7 +352,7 @@ void Suvid::stop(uint8_t reason) {
 	end_reason = reason;
 	readTime();
 	String st = "SuVid finished started at " + String(tim) + " by reason ";
-	
+	hardware->getBeeper()->beep(2000, 3000);
 	switch (reason)
 	{
 	case PROCEND_TIME:

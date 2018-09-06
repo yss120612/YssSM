@@ -109,7 +109,8 @@ enum mo{
 	MODE_MAIN,
 	MODE_SUVID,
 	MODE_DISTILL,
-	MODE_RECTIFY
+	MODE_RECTIFY,
+	MODE_MANUAL
 };
 
 enum mydata {

@@ -17,6 +17,7 @@ enum MI_Kind {
 	COMMAND,
 	PARAMETRINT,
 	PARAMETRFLOAT,
+	PARAMETRBOOL,
 	PARAMETRSTR
 };
 
@@ -113,6 +114,18 @@ protected:
 	float step;
 	int mi;
 	int ma;
+};
+
+class MenuBParameter : public MenuParameter {
+public:
+	MenuBParameter(String nm, Menu * par, int i);
+	boolean getCurrent() { return current; };
+	void setup(boolean curr) { current = curr; }
+	String getStCurr() { return current ? "YES" : "NO"; };
+	void up() { current = !current; }
+	void down() { current = !current; }
+protected:
+	int current;
 };
 
 #endif

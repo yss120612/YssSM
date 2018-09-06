@@ -18,7 +18,7 @@ public:
 	Rectify(Aggregates * a, Hardware *h);
 	~Rectify();
 	String getData(uint w);
-	void press();
+	void initDraw();
 protected:
 	void showState();
 	void process(long ms);
@@ -31,6 +31,7 @@ protected:
 	void next();
 	MenuCommand * mcmd;
 	MenuCommand *cont;
+	boolean head_collected;
 	float tcube;
 	float ttsa;
 	float tdef;

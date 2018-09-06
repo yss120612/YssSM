@@ -8,7 +8,7 @@
 Config::Config()
 {
 	changed = false;
-	version = 1;
+	version = 2;
 }
 
 Config::~Config()
@@ -264,6 +264,32 @@ void Config::seDistForsajTemp(uint8_t st)
 	distForsajTemp = st;
 }
 
+void Config::setManualWorkPower(uint8_t st)
+{
+	if (manualWorkPower != st) changed = true;
+	manualWorkPower = st;
+	write();
+}
+
+void Config::seManualWorkPower(uint8_t st)
+{
+	if (manualWorkPower != st) changed = true;
+	manualWorkPower = st;
+}
+
+void Config::setManualKranOpened(float st)
+{
+	if (manualKranOpened != st) changed = true;
+	manualKranOpened = st;
+	write();
+}
+
+void Config::seManualKranOpened(float st)
+{
+	if (manualKranOpened != st) changed = true;
+	manualKranOpened = st;
+}
+
 
 void Config::setTSAmin(uint8_t st)
 {
@@ -306,6 +332,9 @@ const float Config::getDistStopTemp() { return distStopTemp;}
 const float Config::getDistKranOpened(){	return distKranOpened;}
 const uint8_t Config::getDistForsajTemp() { return distForsajTemp; }
 
+const float Config::getManualKranOpened(){	return manualKranOpened;}
+const uint8_t Config::getManualWorkPower(){	return manualWorkPower;}
+
 const uint8_t Config::getRectWorkSelf() { return rectWorkSlf; }
 const uint8_t Config::getRectHeadPower() { return rectHeadPower; }
 const uint8_t Config::getRectWorkPower() { return rectWorkPower; }
@@ -339,6 +368,7 @@ void Config::write()
 	memcpy((buff + idx), &rectStopTemp,		sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &rectKranOpened,	sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &rectHeadKranOpened,	sizeof(float)); idx += sizeof(float);
+	memcpy((buff + idx), &manualKranOpened, sizeof(float)); idx += sizeof(float);
 
 	memcpy((buff + idx), &scrSaverMin,		sizeof(int));	idx += sizeof(int);
 	memcpy((buff + idx), &suvidMin,			sizeof(int));	idx += sizeof(int);
@@ -346,6 +376,7 @@ void Config::write()
 	*(buff + idx++) = suvidTemp;
 	*(buff + idx++) = distWorkPower;
 	*(buff + idx++) = distForsajTemp;
+	*(buff + idx++) = manualWorkPower;
 	*(buff + idx++) = rectWorkSlf;
 	*(buff + idx++) = rectWorkPower;
 	*(buff + idx++) = rectHeadPower;
@@ -385,13 +416,15 @@ void Config::read()
 	rectStopTemp =			*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
 	rectKranOpened =		*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
 	rectHeadKranOpened =	*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
+	manualKranOpened	=	*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
 
 	scrSaverMin =		*reinterpret_cast<int *>(buff + idx); idx += sizeof(int);
 	suvidMin =			*reinterpret_cast<int *>(buff + idx); idx += sizeof(int);
 
-	/*suvidTemp =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
+	/*suvidTemp =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	distWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	distForsajTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
+	manualWorkPower =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectWorkSelf =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
 	rectHeadPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
@@ -438,7 +471,7 @@ void Config::read()
 
 uint16_t Config::calcLength()
 {
-	length = sizeof(int) * 2 + sizeof(float)*5 + sizeof(uint8_t) * 13 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
+	length = sizeof(int) * 2 + sizeof(float)*6 + sizeof(uint8_t) * 14 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
 	return length;
 }
 
