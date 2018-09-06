@@ -76,7 +76,7 @@ void Rectify::showState()
 		y = 0;
 	}
 	hardware->getDisplay()->drawString(x, 0, "Rectify");
-	hardware->getDisplay()->drawString(x + 40, 0, "PW="+String(agg->getHeater()->getPower()));
+	hardware->getDisplay()->drawString(x + 50, 0, "PW="+String(agg->getHeater()->getPower()));
 	hardware->getDisplay()->drawString(x, y + 13, "TSA=" + String(hardware->getTTSA()->getTemp()));
 	hardware->getDisplay()->drawString(x, y + 29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
 	switch (work_mode) {
@@ -126,7 +126,7 @@ void Rectify::makeMenu()
 	MenuIParameter * tFor = new MenuIParameter("T Forsaj", setup, 14);
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 15);
 	MenuIParameter * wSelf = new MenuIParameter("Work Self", setup, 16);
-	MenuBParameter * hColl = new MenuBParameter("HeadCollected", setup, 17);//to continue (head already collected)
+	MenuBParameter * hColl = new MenuBParameter("No Head", setup, 17);//to continue (head already collected)
 
 	setup->add(wSelf);
 	setup->add(pwHWork);
@@ -279,6 +279,7 @@ void Rectify::acceptParams(MenuParameter * mp)
 		if (work_mode == PROC_WORK) {
 			agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		}
+		break;
 	case 14:
 		CONF.setRectForsajTemp(((MenuIParameter *)mp)->getCurrent());
 		break;

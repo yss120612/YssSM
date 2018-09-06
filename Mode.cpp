@@ -169,7 +169,7 @@ void Mode::processMenuPress()
 		{
 			menu->setEditParams((MenuParameter *)(menu->current()));
 		}
-		initParams(menu->getEditParams());
+		if (menu->isEditMode()) initParams(menu->getEditParams());
 	}
 }
 

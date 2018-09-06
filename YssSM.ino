@@ -50,8 +50,8 @@ void setup() {
 	
 	CONF.setMem(hard.getAT24mem());
 	
-	CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	//CONF.seWiFi("Yss_GIGA","bqt3bqt3");
+	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
+	CONF.seWiFi("Yss_GIGA","bqt3bqt3");
 	CONF.seHttp("admin", "esp");
 	CONF.seScrSavMin(1);
 	CONF.seSuvidMin(60);

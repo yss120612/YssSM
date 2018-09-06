@@ -125,7 +125,7 @@ public:
 	void up() { current = !current; }
 	void down() { current = !current; }
 protected:
-	int current;
+	boolean current;
 };
 
 #endif

@@ -95,16 +95,24 @@ void Menu::display(SSD1306Wire *d)
 {
 	if (curr < 0) return;
 	
-	int8_t first = (curr / DISP_LINES) * DISP_LINES;
+	//int8_t first = (curr / DISP_LINES) * DISP_LINES;
 	d->setTextAlignment(TEXT_ALIGN_LEFT);
 	vitems.clear();
+	int8_t cu = curr;
 	for (uint8_t i = 0; i < items.size(); i++) {
-		if (items[i]->isVisible()) vitems.push_back(items[i]);
+		if (items[i]->isVisible())
+		{
+			vitems.push_back(items[i]);
+		}
+		else {
+			if (i <= cu) cu--;
+		}
 	}
 	
+	int8_t first = (cu / DISP_LINES) * DISP_LINES;
 	for (uint8_t i = 0; i < DISP_LINES && first+i < vitems.size(); i++) {
 		
-		if (curr == first+i) {
+		if (cu == first+i) {
 			//d->getDisplay()->drawRect(SHIFT_X, SHIFT_Y + DELTA_Y*i, d->getDisplay()->getWidth() - SHIFT_X * 2, DELTA_Y);
 			d->drawString(0, SHIFT_Y+DELTA_Y*i,">"+vitems.get(first+i)->getName());
 		}
