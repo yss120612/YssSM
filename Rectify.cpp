@@ -8,8 +8,8 @@ Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 
 Rectify::~Rectify()
 {
-	delete mcmd;
-	delete cont;
+//	delete mcmd;
+//	delete cont;
 }
 
 String Rectify::getData(uint w)
@@ -60,8 +60,6 @@ void Rectify::initDraw()
 	Mode::initDraw();
 	head_collected = false;
 }
-
-
 
 void Rectify::showState()
 {
@@ -115,6 +113,7 @@ void Rectify::makeMenu()
 	menu->add(cont);
 	menu->add(new MenuCommand("Hide menu", 2));
 	menu->add(new MenuCommand("Return", 3));
+
 	Menu * setup = new Menu();
 	setup->setParent(menu);
 	setup->setActive(true);

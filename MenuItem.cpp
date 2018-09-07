@@ -47,6 +47,10 @@ MenuParameter::MenuParameter(String nm, Menu * par, int i) :MenuItem(nm)
 	_next = NULL;
 }
 
+MenuBParameter::MenuBParameter(String nm, Menu * par, int i) : MenuParameter(nm, par, i)
+{
+	kind = PARAMETRBOOL;
+}
 
 MenuIParameter::MenuIParameter(String nm, Menu * par, int i) : MenuParameter(nm,par,i)
 {
@@ -58,7 +62,4 @@ MenuFParameter::MenuFParameter(String nm, Menu * par, int i) : MenuParameter(nm,
 	kind = PARAMETRFLOAT;
 }
 
-MenuBParameter::MenuBParameter(String nm, Menu * par, int i) : MenuParameter(nm, par, i)
-{
-	kind = PARAMETRBOOL;
-}
+
