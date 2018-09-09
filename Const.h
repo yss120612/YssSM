@@ -64,8 +64,8 @@ const uint8_t HEAT_DRV_PIN = D6;
 
 const uint8_t TRIAC_COOL_PIN = EX_PIN5;
 
-const uint8_t KRAN_OPEN_PIN = EX_PIN7;
-const uint8_t KRAN_CLOSE_PIN = EX_PIN15;
+const uint8_t KRAN_OPEN_PIN = EX_PIN15;
+const uint8_t KRAN_CLOSE_PIN = EX_PIN7;
 
 
 const uint8_t term_addr [][8]={

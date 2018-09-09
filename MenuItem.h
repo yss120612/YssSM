@@ -123,7 +123,7 @@ public:
 	void setup(boolean curr) { current = curr; }
 	String getStCurr() { return current ? "YES" : "NO"; };
 	void up() { current = !current; }
-	void down() { current = !current; }
+	void down() { up(); }
 protected:
 	boolean current;
 };

@@ -32,6 +32,7 @@ protected:
 	MenuCommand * mcmd;
 	MenuCommand *cont;
 	boolean head_collected;
+	boolean stop_defined;
 	float tcube;
 	float ttsa;
 	float tdef;

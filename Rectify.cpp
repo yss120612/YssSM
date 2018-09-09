@@ -59,6 +59,7 @@ void Rectify::initDraw()
 {
 	Mode::initDraw();
 	head_collected = false;
+	stop_defined = false;
 }
 
 void Rectify::showState()
@@ -313,6 +314,7 @@ void Rectify::next() {
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
 		cont->setVisible(false);
+		workSelf = millis() + 60000 * 30;//через 30 минут определим температуру окончания
 		break;
 }
 }
@@ -343,7 +345,7 @@ void Rectify::process(long ms)
 		if (ms-workSelf>0){
 			readTime();
 			logg.logging("Rectify Work Self finished at " + String(tim));
-			work_mode = PROC_WAIT_SELF;
+			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
 			workSelf = ms + 60000 * 10;//10 минут
 			cont->setVisible(true);
@@ -372,6 +374,13 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_WORK:
+		if (!stop_defined && (ms - workSelf > 0)) {
+			CONF.setRectStopTemp(tdef + 0.2f);
+			stop_defined = true;
+			readTime();
+			logg.logging("Rectify stop temperature defined ("+String(CONF.getRectStopTemp(),1)+"C) at " + String(tim));
+			hardware->getBeeper()->beep(1000, 2000);
+		}
 		if (tdef > CONF.getRectStopTemp()) {//end of collect body
 			stop(PROCEND_TEMPERATURE);
 			hardware->getBeeper()->beep(1000, 5000);

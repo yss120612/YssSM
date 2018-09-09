@@ -34,7 +34,7 @@ void Manual::showState()
 	}
 	hardware->getDisplay()->drawString(x, 0, "Manual");
 	hardware->getDisplay()->drawString(x, y + 13, "Kran=" + String(agg->getKran()->getState(),1));
-	hardware->getDisplay()->drawString(x, y + 29, "PUMP=" + hardware->getPump()->isWorking()?"ON":"OFF");
+	hardware->getDisplay()->drawString(x, y + 29, "PUMP=" + String(hardware->getPump()->isWorking()?"ON":"OFF"));
 	hardware->getDisplay()->drawString(x, y+45, "PW=" + String(agg->getHeater()->getPower()));
 }
 

@@ -45,6 +45,7 @@ MenuParameter::MenuParameter(String nm, Menu * par, int i) :MenuItem(nm)
 	id = i;
 	parent = par;
 	_next = NULL;
+	_prev = NULL;
 }
 
 MenuBParameter::MenuBParameter(String nm, Menu * par, int i) : MenuParameter(nm, par, i)
