@@ -12,7 +12,6 @@ void Suvid::initDraw() {
 	tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
 }
 
-
 void Suvid::showState() {
 	uint8_t X;
 	uint8_t Y;
@@ -195,7 +194,8 @@ void Suvid::acceptParams(MenuParameter * mp)
 
 void Suvid::armAlarm()
 {
-	hardware->getClock()->now();
+	hardware->setAlarm(tpause.getTime());
+	/*hardware->getClock()->now();
 	uint minutes = tpause.getTime() % 60;
 	uint hours = tpause.getTime() / 60;
 	hardware->getClock()->m += minutes;
@@ -258,11 +258,12 @@ void Suvid::armAlarm()
 	
 	}
 	hardware->getClock()->writeAlarm2(DS3231_ALM_DTHM);
-
+*/
 }
 
 void Suvid::timeLeft() {
-	hardware->getClock()->readAlarm2();
+	hardware->timeLeft(tleft);
+	/*hardware->getClock()->readAlarm2();
 	int8_t dd = hardware->getClock()->dd;
 	int8_t h = hardware->getClock()->h;
 	int8_t m = hardware->getClock()->m;
@@ -283,7 +284,7 @@ void Suvid::timeLeft() {
 	}
 	h -= hardware->getClock()->h;
 	if (h < 0) h += 24;
-	sprintf(tleft, "%02d:%02d:%02d", h, m, s);
+	sprintf(tleft, "%02d:%02d:%02d", h, m, s);*/
 }
 
 void Suvid::process(long ms) {

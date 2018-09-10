@@ -74,7 +74,7 @@ void Rectify::showState()
 		x = 0;
 		y = 0;
 	}
-	hardware->getDisplay()->drawString(x, 0, "Rectify");
+	hardware->getDisplay()->drawString(x, 0, "Rect");
 	hardware->getDisplay()->drawString(x + 50, 0, "PW="+String(agg->getHeater()->getPower()));
 	hardware->getDisplay()->drawString(x, y + 13, "TSA=" + String(hardware->getTTSA()->getTemp()));
 	hardware->getDisplay()->drawString(x, y + 29, "DEF=" + String(hardware->getTTsarga()->getTemp()));
@@ -86,10 +86,10 @@ void Rectify::showState()
 		hardware->getDisplay()->drawString(x, y + 45, "SELF");
 		break;
 	case PROC_WAIT_SELF:
-		hardware->getDisplay()->drawString(x, y + 45, "READY HEAD!");
+		hardware->getDisplay()->drawString(x, y + 45, "READY 2 HEAD!");
 		break;
 	case PROC_WAIT_HEAD:
-		hardware->getDisplay()->drawString(x, y + 45, "READY BODY!");
+		hardware->getDisplay()->drawString(x, y + 45, "READY 2 BODY!");
 		break;
 	case PROC_GET_HEAD:
 		hardware->getDisplay()->drawString(x, y + 45, "GET HEAD");
@@ -216,6 +216,7 @@ void Rectify::start()
 	TSAcheckedCold = 0;
 	coldBeginCheck = 0;
 	tsa_alarms = 0;
+	stop_defined = false;
 	readTime();
 	logg.logging("Distill process started at " + String(tim));
 }
@@ -299,12 +300,7 @@ void Rectify::acceptParams(MenuParameter * mp)
 void Rectify::next() {
 	switch (work_mode) {
 	case PROC_WAIT_SELF:
-		if (head_collected) {
-			work_mode = PROC_WORK;
-		}
-		else {
-			work_mode = PROC_GET_HEAD;
-		}
+		work_mode = PROC_GET_HEAD;
 		hardware->getUrovenWS()->arm(25);
 		cont->setVisible(false);
 		break;
@@ -314,10 +310,12 @@ void Rectify::next() {
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
 		cont->setVisible(false);
-		workSelf = millis() + 60000 * 30;//через 30 минут определим температуру окончания
+		hardware->setAlarm(60);//через 60 минут определим температуру окончания
+		//workSelf = millis() + 60000 * 30;//через 30 минут определим температуру окончания
 		break;
 }
 }
+
 
 
 void Rectify::process(long ms)
@@ -338,22 +336,24 @@ void Rectify::process(long ms)
 			readTime();
 			logg.logging("Rectify forsaj finished at " + String(tim));
 			work_mode = PROC_SELF_WORK;
-			workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
+			//workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
+			hardware->setAlarm((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
 		}
 		break;
 	case PROC_SELF_WORK:
-		if (ms-workSelf>0){
+		if (hardware->getClock()->checkAlarm2()){
 			readTime();
 			logg.logging("Rectify Work Self finished at " + String(tim));
 			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
-			workSelf = ms + 60000 * 10;//10 минут
+			//workSelf = ms + 60000 * 10;//10 минут
+			hardware->setAlarm(10);
 			cont->setVisible(true);
 			menu->setActive(true);
 		}
 		break;
 	case PROC_WAIT_SELF:
-		if (ms - workSelf > 0) {//если за 10 минут никто не подошел
+		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
 		stop(PROCEND_NO_ATT_SELF);
 		}
 		break;
@@ -363,18 +363,20 @@ void Rectify::process(long ms)
 			logg.logging("Rectify collect head finished at " + String(tim));
 			work_mode = PROC_WAIT_HEAD;
 			hardware->getBeeper()->beep(2000, 5000);
-			workSelf = ms + 60000  * 10;//10 минут
+			//workSelf = ms + 60000  * 10;//10 минут
+			hardware->setAlarm(10);
 			cont->setVisible(true);
 			menu->setActive(true);
 		}
 		break;
 	case PROC_WAIT_HEAD: 
-		if (ms - workSelf > 0) {//если за 10 минут никто не подошел
+		//if (ms - workSelf > 0) {//если за 10 минут никто не подошел
+		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
 			stop(PROCEND_NO_ATT_HEAD);
 		}
 		break;
 	case PROC_WORK:
-		if (!stop_defined && (ms - workSelf > 0)) {
+		if (!stop_defined && hardware->getClock()->checkAlarm2()) {
 			CONF.setRectStopTemp(tdef + 0.2f);
 			stop_defined = true;
 			readTime();

@@ -58,6 +58,11 @@ public:
 	WaterSensor * getUrovenWS();
 	WaterSensor * getFloodWS();
 	Pump * getPump();
+
+	void setAlarm(int minutes);
+
+	void timeLeft(char * buff);
+
 	//void setDisplay(SSD1306Wire * d);
 	//void setTKube(DallasTerm * k);
 	//void setTTsarga(DallasTerm * t);

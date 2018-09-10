@@ -74,6 +74,101 @@ WaterSensor * Hardware::getUrovenWS(){	return &uroven;}
 WaterSensor * Hardware::getFloodWS(){	return &flood;}
 Pump * Hardware::getPump(){	return &pump;}
 
+void Hardware::setAlarm(int minutes)
+{
+		RTC.now();
+		uint minutes = minutes % 60;
+		uint hours = minutes / 60;
+		RTC.m += minutes;
+		if (RTC.m >= 60) {
+			RTC.m -= 60;
+			hours += 1;
+		}
+		RTC.h += hours;
+		if (RTC.h >= 24)
+		{
+			RTC.h -= 24;
+			RTC.dd += 1;
+		}
+
+		switch (RTC.mm) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+			if (RTC.dd > 31)
+			{
+				RTC.dd = 1;
+				RTC.mm += 1;
+			}
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			if (RTC.dd > 30) RTC.dd = 1;
+			break;
+		case 2:
+			if (RTC.yyyy % 4 == 0) {
+				if (RTC.dd > 29)
+				{
+					RTC.dd = 1;
+					RTC.mm += 1;
+				}
+			}
+			else {
+				if (RTC.dd > 28)
+				{
+					RTC.dd = 1;
+					RTC.mm += 1;
+				}
+			}
+			break;
+		case 12:
+			if (RTC.dd > 31)
+			{
+				RTC.dd = 1;
+				RTC.mm = 1;
+				RTC.yyyy += 1;
+			}
+			break;
+
+
+
+		}
+		RTC.writeAlarm2(DS3231_ALM_DTHM);
+
+	
+}
+
+void Hardware::timeLeft(char * buff) {
+	RTC.readAlarm2();
+	int8_t dd = RTC.dd;
+	int8_t h = RTC.h;
+	int8_t m = RTC.m;
+	int8_t s = 0;
+	RTC.now();
+	s -= RTC.s;
+	if (s < 0)
+	{
+		m -= 1;
+		s += 60;
+	}
+
+	m -= RTC.m;
+	if (m < 0)
+	{
+		h -= 1;
+		m += 60;
+	}
+	h -= RTC.h;
+	if (h < 0) h += 24;
+	sprintf(buff, "%02d:%02d:%02d", h, m, s);
+}
+
+
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }
 void Hardware::setTTsarga(DallasTerm * t) { t_tsarga = t; }
