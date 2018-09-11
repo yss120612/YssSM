@@ -74,6 +74,42 @@ WaterSensor * Hardware::getUrovenWS(){	return &uroven;}
 WaterSensor * Hardware::getFloodWS(){	return &flood;}
 Pump * Hardware::getPump(){	return &pump;}
 
+String Hardware::owDevices()
+{
+	String result = "";
+	byte addr[8];
+	ow.reset_search();
+	while (ow.search(addr))
+	{
+		for (uint8_t i = 0; i < 8; i++)
+		{
+			if (i==0) result += "[";
+			result += "0x";
+			result += hex[(addr[i] >> 4) & 0x0F];
+			result += hex[addr[i] & 0x0F];
+			if (i < 7) result += ", ";
+			else result += "]\n";
+		}
+	}
+	return result;
+}
+
+String Hardware::i2cDevices()
+{
+	String result = "";
+	uint8_t cnt=0;
+	for (uint8_t i = 8; i < 127; i++) {
+		Wire.beginTransmission(i);
+		if (Wire.endTransmission() == 0) {
+			if (cnt++>0) result += ", ";
+			result += "0x";
+			result += hex[(i >> 4) & 0x0F];
+			result += hex[i & 0x0F];
+		}
+	}
+	return result;
+}
+
 void Hardware::setAlarm(int minutes)
 {
 		RTC.now();

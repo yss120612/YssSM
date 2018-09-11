@@ -335,6 +335,7 @@ void Rectify::process(long ms)
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
 			readTime();
 			logg.logging("Rectify forsaj finished at " + String(tim));
+			hardware->getBeeper()->beep(2000, 1000);
 			work_mode = PROC_SELF_WORK;
 			//workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
 			hardware->setAlarm((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя

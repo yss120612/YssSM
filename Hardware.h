@@ -59,6 +59,9 @@ public:
 	WaterSensor * getFloodWS();
 	Pump * getPump();
 
+	String owDevices();
+	String i2cDevices();
+
 	void setAlarm(int minutes);
 
 	void timeLeft(char * buff);

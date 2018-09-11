@@ -228,36 +228,13 @@ void Main::command(MenuCommand * id)
 		hardware->getBeeper()->beep(3000, 5000);
 		break;
 	case 11:
-		byte addr[8];
 		logg.logging("begin of OneWire devices");
-		hardware->getOneWire()->reset_search();
-		while (hardware->getOneWire()->search(addr))
-		{
-			for (i = 0; i < 8; i++)
-			{
-				result += "0x";
-				result += hex[(addr[i] >> 4) & 0x0F];
-				result += hex[addr[i] & 0x0F];
-				if (i < 7) result += ", ";
-			}
-			logg.logging(result);
-			result = "";
-		}
+		logg.logging(hardware->owDevices());
 		logg.logging("end of OneWire devices");
 		break;
 	case 12:
 		logg.logging("begin of i2c devices");
-		for (i = 8; i < 127; i++) {
-			Wire.beginTransmission(i);
-			if (Wire.endTransmission() == 0) {
-				result += "0x";
-				result += hex[(i >> 4) & 0x0F];
-				result += hex[i & 0x0F];
-				result += ", ";
-				logg.logging(result);
-				result = "";
-			}
-		}
+		logg.logging(hardware->i2cDevices());
 		logg.logging("end of i2c devices");
 		break;
 	}
