@@ -88,7 +88,7 @@ String Hardware::owDevices()
 			result += hex[(addr[i] >> 4) & 0x0F];
 			result += hex[addr[i] & 0x0F];
 			if (i < 7) result += ", ";
-			else result += "]\n";
+			else result += "]";
 		}
 	}
 	return result;
@@ -110,11 +110,12 @@ String Hardware::i2cDevices()
 	return result;
 }
 
-void Hardware::setAlarm(int minutes)
+void Hardware::setAlarm(int min)
 {
 		RTC.now();
-		uint minutes = minutes % 60;
-		uint hours = minutes / 60;
+		int minutes = min % 60;
+		int hours = min / 60;
+
 		RTC.m += minutes;
 		if (RTC.m >= 60) {
 			RTC.m -= 60;

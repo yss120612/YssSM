@@ -259,13 +259,13 @@ void Rectify::acceptParams(MenuParameter * mp)
 	{
 	case 10:
 		CONF.setRectHeadPower(((MenuIParameter *)mp)->getCurrent());
-		if (work_mode == PROC_GET_HEAD) {
+		if (work_mode == PROC_GET_HEAD || work_mode == PROC_SELF_WORK) {
 			agg->getHeater()->setPower(CONF.getRectHeadPower());
 		}
 		break;
 	case 11:
 		CONF.setRectHeadKranOpened(((MenuFParameter *)mp)->getCurrent());
-		if (work_mode == PROC_GET_HEAD) {
+		if (work_mode == PROC_GET_HEAD || work_mode == PROC_SELF_WORK) {
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
 		}
 		break;

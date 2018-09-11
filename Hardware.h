@@ -62,7 +62,7 @@ public:
 	String owDevices();
 	String i2cDevices();
 
-	void setAlarm(int minutes);
+	void setAlarm(int min);
 
 	void timeLeft(char * buff);
 
