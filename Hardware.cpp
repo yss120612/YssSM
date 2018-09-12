@@ -79,16 +79,18 @@ String Hardware::owDevices()
 	String result = "";
 	byte addr[8];
 	ow.reset_search();
+	bool first = true;
 	while (ow.search(addr))
 	{
 		for (uint8_t i = 0; i < 8; i++)
 		{
-			if (i==0) result += "[";
+			if (i==0) result += first?"\[":";\[";
+			first = false;
 			result += "0x";
 			result += hex[(addr[i] >> 4) & 0x0F];
 			result += hex[addr[i] & 0x0F];
 			if (i < 7) result += ", ";
-			else result += "]";
+			else result += "\]";
 		}
 	}
 	return result;
