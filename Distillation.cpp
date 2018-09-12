@@ -146,6 +146,8 @@ void Distillation::stop(uint8_t reason) {
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
 	agg->getKran()->forceClose();
+	hardware->getFloodWS()->disarm();
+	hardware->getUrovenWS()->disarm();
 	mcmd->setName("Start");
 }
 
@@ -156,10 +158,10 @@ void Distillation::start() {
 	agg->getHeater()->setPower(98);
 	agg->getHeater()->start();
 	mcmd->setName("Stop");
-	TSAchecked = 0;
-	TSAcheckedCold = 0;
-	coldBeginCheck = 0;
+	coldBeginCheck = false;
 	tsa_alarms = 0;
+	hardware->getUrovenWS()->disarm();
+	hardware->getFloodWS()->arm(50);
 	readTime();
 	logg.logging("Distill process started at " + String(tim));
 }
@@ -224,59 +226,65 @@ void Distillation::process(long ms) {
 			agg->getHeater()->setPower(CONF.getDistWorkPower());
 			agg->getKran()->openQuantum(CONF.getDistKranOpened());
 			readTime();
+			hardware->getBeeper()->beep(2000, 2000);
+			hardware->getUrovenWS()->arm(50);
 			logg.logging("Distill forsaj finished at "+String(tim));
 			work_mode = PROC_WORK;
+
 		}
 		break;
 	case PROC_WORK:
-		if (tcube > CONF.getDistStopTemp()) {//end of forsaj
+		if (tcube > CONF.getDistStopTemp()) {//end of collect product by T cube
+			hardware->getBeeper()->beep(2000, 3000);
 			stop(PROCEND_TEMPERATURE);
 		}
-		if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
+		if (hardware->getUrovenWS()->isAlarmed()) {//end of collect product by level sensor
+			hardware->getBeeper()->beep(2000, 3000);
+			stop(PROCEND_UROVEN);
+		}
+		if (!coldBeginCheck)
+		{
+			hardware->setAlarm(15);
+			coldBeginCheck = true;
+			//coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
+		}
 		break;
 	}
 
-
-	if (coldBeginCheck > 0 && ms- coldBeginCheck > 0 && ttsa < CONF.getTSAmin()) {
-		if (TSAcheckedCold == 0 || (ms - TSAcheckedCold) > checkTSA) {
-			readTime();
+	boolean evnt = false;
+	if (hardware->getClock()->checkAlarm2()) {
+		readTime();
+		if (ttsa < CONF.getTSAmin())
+		{
+			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
 			agg->getHeater()->shiftPower(3);
-			//agg->getKran()->shiftQuantum(-0.5);
-			TSAcheckedCold = ms;
+			evnt = true;
 		}
-	}
-	else {
-		TSAcheckedCold= 0;
-	}
-
-	if (ttsa > CONF.getTSAmax()) {
-		if (TSAchecked == 0 || (ms - TSAchecked) > checkTSA){
-		readTime();
-		logg.logging("TSA alarm ("+String(ttsa)+"C) at " + String(tim));
-		agg->getHeater()->shiftPower(-10);
-		//agg->getKran()->shiftQuantum(0.5);
-		TSAchecked = ms;
-		tsa_alarms++;
+		if (ttsa > CONF.getTSAmax()) {
+			hardware->getBeeper()->beep(1000, 500);
+			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + String(tim));
+			agg->getHeater()->shiftPower(-10);
+			tsa_alarms++;
+			evnt = true;
+			if (tsa_alarms >= 3) {
+				hardware->getBeeper()->beep(1000, 5000);
+				logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
+				stop(PROCEND_FAULT);
+			}
 		}
-	}
-	else {
-		if (tsa_alarms > 0)
+		else 
 		{
-			readTime();
-			logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
-			tsa_alarms = 0;
+			if (tsa_alarms > 0) {
+				readTime();
+				logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
+				tsa_alarms = 0;
+			}
 		}
-		TSAchecked = 0;
-	}
-	
-	if (tsa_alarms > 3)
-	{
-		readTime();
-		logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
-		stop(PROCEND_FAULT);
+		hardware->setAlarm(evnt?5:10);
 	}
 
+	//Аварийные остановки
 	if (ttsa > CONF.getTSAcritical())
 	{
 		readTime();
@@ -284,4 +292,7 @@ void Distillation::process(long ms) {
 		stop(PROCEND_FAULT);
 	}
 
+	if (hardware->getFloodWS()->isAlarmed()) {
+		stop(PROCEND_FLOOD);
+	}
 }

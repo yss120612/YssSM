@@ -31,8 +31,8 @@ protected:
 	void next();
 	MenuCommand * mcmd;
 	MenuCommand *cont;
-	boolean head_collected;
-	boolean stop_defined;
+	bool head_collected;
+	bool stop_defined;
 	float tcube;
 	float ttsa;
 	float tdef;

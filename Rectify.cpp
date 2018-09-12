@@ -191,6 +191,12 @@ void Rectify::stop(uint8_t reason)
 	case PROCEND_FLOOD:
 		logg.logging("Rectify finished at " + String(tim) + " by flood sensor");
 		break;
+	case PROCEND_NO_ATT_HEAD:
+		logg.logging("Rectify finished at " + String(tim) + " by no attention after head");
+		break;
+	case PROCEND_NO_ATT_SELF:
+		logg.logging("Rectify finished at " + String(tim) + " by no attention after self work");
+		break;
 	default:
 		break;
 	}
@@ -303,20 +309,21 @@ void Rectify::next() {
 		work_mode = PROC_GET_HEAD;
 		hardware->getUrovenWS()->arm(25);
 		cont->setVisible(false);
+		menu->setActive(false);
 		break;
 	case PROC_WAIT_HEAD:
 		work_mode = PROC_WORK;
 		agg->getHeater()->setPower(CONF.getRectWorkPower());
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
-		cont->setVisible(false);
+		CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 1.5f);//пока так а
 		hardware->setAlarm(60);//через 60 минут определим температуру окончания
 		//workSelf = millis() + 60000 * 30;//через 30 минут определим температуру окончания
+		cont->setVisible(false);
+		menu->setActive(false);
 		break;
 }
 }
-
-
 
 void Rectify::process(long ms)
 {

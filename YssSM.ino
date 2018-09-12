@@ -69,8 +69,8 @@ void setup() {
 	CONF.seRectKranOpened(21.5);
 	CONF.seRectHeadKranOpened(21.5);
 	CONF.seRectStopTemp(80.8);
-	CONF.seRectHeadPower(35);
-	CONF.seRectWorkPower(35);
+	CONF.seRectHeadPower(32);
+	CONF.seRectWorkPower(32);
 	CONF.seRectForsajTemp(57);
 
 	CONF.setTSAmin(28);

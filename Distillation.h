@@ -35,9 +35,7 @@ protected:
 	float tcube;
 	float ttsa;
 	float tdef;
-	long TSAchecked;
-	long TSAcheckedCold;
-	long coldBeginCheck;
+	bool coldBeginCheck;
 	uint8_t tsa_alarms;
 };
 

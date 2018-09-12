@@ -73,7 +73,15 @@ boolean Heater::isON() {
 
 void Heater::shiftPower(int8_t sh)
 {
-	if (power + sh <= max_power && power + sh>=0) power += sh;
+	if (power + sh > max_power) {
+		power = max_power;
+	}
+	else if (power + sh < 0) {
+		power = 0;
+	}
+	else {
+		power += sh;
+	}
 }
 
 void Heater::setPID(float inp, float targetT)

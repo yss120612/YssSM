@@ -119,13 +119,13 @@ protected:
 class MenuBParameter : public MenuParameter {
 public:
 	MenuBParameter(String nm, Menu * par, int i);
-	boolean getCurrent() { return current; };
-	void setup(boolean curr) { current = curr; }
+	bool getCurrent() { return current; };
+	void setup(bool curr) { current = curr; }
 	String getStCurr() { return current ? "YES" : "NO"; };
 	void up() { current = !current; }
 	void down() { up(); }
 protected:
-	boolean current;
+	bool current;
 };
 
 #endif
