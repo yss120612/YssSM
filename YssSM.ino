@@ -57,7 +57,7 @@ void setup() {
 	CONF.seSuvidMin(60);
 	CONF.seSuvidTemp(60);
 
-	CONF.seDistKranOpened(19.5);
+	CONF.seDistKranOpened(21.2);
 	CONF.seDistStopTemp(98.8);
 	CONF.seDistWorkPower(42);
 	CONF.seDistForsajTemp(57);

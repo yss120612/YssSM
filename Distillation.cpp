@@ -59,6 +59,9 @@ String Distillation::getData(uint w)
 				break;
 			}
 			break;
+		case DS_DISTSTOP:
+			return String(CONF.getDistStopTemp(), 1);
+			break;
 		default:
 			return "";
 		break;
@@ -226,11 +229,10 @@ void Distillation::process(long ms) {
 			agg->getHeater()->setPower(CONF.getDistWorkPower());
 			agg->getKran()->openQuantum(CONF.getDistKranOpened());
 			readTime();
-			hardware->getBeeper()->beep(2000, 2000);
 			hardware->getUrovenWS()->arm(50);
 			logg.logging("Distill forsaj finished at "+String(tim));
+			hardware->getBeeper()->beep(2000, 2000);
 			work_mode = PROC_WORK;
-
 		}
 		break;
 	case PROC_WORK:
