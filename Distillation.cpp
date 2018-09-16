@@ -135,7 +135,7 @@ void Distillation::stop(uint8_t reason) {
 		logg.logging("Distill manually stopped at " + String(tim));
 		break;
 	case PROCEND_TEMPERATURE:
-		logg.logging("Distill normal finished at " + String(tim));
+		logg.logging("Distill normal finished at " + String(tim) + " by kube temperature");
 		break;
 	case PROCEND_UROVEN:
 		logg.logging("Distill normal finished at " + String(tim) + " by uroven sensor");
