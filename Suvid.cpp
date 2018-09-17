@@ -194,7 +194,7 @@ void Suvid::acceptParams(MenuParameter * mp)
 
 void Suvid::armAlarm()
 {
-	hardware->setAlarm(tpause.getTime());
+	hardware->setAlarm2(tpause.getTime());
 	/*hardware->getClock()->now();
 	uint minutes = tpause.getTime() % 60;
 	uint hours = tpause.getTime() / 60;

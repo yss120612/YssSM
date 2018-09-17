@@ -161,7 +161,7 @@ void Distillation::start() {
 	agg->getHeater()->setPower(98);
 	agg->getHeater()->start();
 	mcmd->setName("Stop");
-	coldBeginCheck = false;
+	coldBeginCheck = 0;
 	tsa_alarms = 0;
 	hardware->getUrovenWS()->disarm();
 	hardware->getFloodWS()->arm(50);
@@ -232,6 +232,7 @@ void Distillation::process(long ms) {
 			hardware->getUrovenWS()->arm(50);
 			logg.logging("Distill forsaj finished at "+String(tim));
 			hardware->getBeeper()->beep(2000, 2000);
+			hardware->setAlarm1(3);
 			work_mode = PROC_WORK;
 		}
 		break;
@@ -244,29 +245,33 @@ void Distillation::process(long ms) {
 			hardware->getBeeper()->beep(2000, 3000);
 			stop(PROCEND_UROVEN);
 		}
-		if (!coldBeginCheck)
+		if (coldBeginCheck==0)
 		{
-			hardware->setAlarm(15);
-			coldBeginCheck = true;
-			//coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
+			hardware->setAlarm2(15);
+			coldBeginCheck = 1;
+		}
+		if (coldBeginCheck==1 && hardware->getClock()->checkAlarm2()) {
+			coldBeginCheck = 2;
 		}
 		break;
 	}
 
 	boolean evnt = false;
-	if (hardware->getClock()->checkAlarm2()) {
+	if (hardware->getClock()->checkAlarm1()) {
 		readTime();
-		if (ttsa < CONF.getTSAmin())
+		if (ttsa < CONF.getTSAmin() && coldBeginCheck==2)
 		{
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
 			agg->getHeater()->shiftPower(3);
+			agg->getKran()->openQuantum(agg->getKran()->getState() - 0.2);
 			evnt = true;
 		}
 		if (ttsa > CONF.getTSAmax()) {
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + String(tim));
-			agg->getHeater()->shiftPower(-10);
+			agg->getHeater()->shiftPower(-5);
+			agg->getKran()->openQuantum(agg->getKran()->getState() + 0.5);
 			tsa_alarms++;
 			evnt = true;
 			if (tsa_alarms >= 3) {
@@ -283,7 +288,7 @@ void Distillation::process(long ms) {
 				tsa_alarms = 0;
 			}
 		}
-		hardware->setAlarm(evnt?5:10);
+		hardware->setAlarm1(evnt?3:5);
 	}
 
 	//Аварийные остановки

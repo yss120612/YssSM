@@ -112,7 +112,76 @@ String Hardware::i2cDevices()
 	return result;
 }
 
-void Hardware::setAlarm(int min)
+void Hardware::setAlarm1(int min)
+{
+	RTC.now();
+	int minutes = min % 60;
+	int hours = min / 60;
+
+	RTC.m += minutes;
+	if (RTC.m >= 60) {
+		RTC.m -= 60;
+		hours += 1;
+	}
+	RTC.h += hours;
+	if (RTC.h >= 24)
+	{
+		RTC.h -= 24;
+		RTC.dd += 1;
+	}
+
+	switch (RTC.mm) {
+	case 1:
+	case 3:
+	case 5:
+	case 7:
+	case 8:
+	case 10:
+		if (RTC.dd > 31)
+		{
+			RTC.dd = 1;
+			RTC.mm += 1;
+		}
+		break;
+	case 4:
+	case 6:
+	case 9:
+	case 11:
+		if (RTC.dd > 30) RTC.dd = 1;
+		break;
+	case 2:
+		if (RTC.yyyy % 4 == 0) {
+			if (RTC.dd > 29)
+			{
+				RTC.dd = 1;
+				RTC.mm += 1;
+			}
+		}
+		else {
+			if (RTC.dd > 28)
+			{
+				RTC.dd = 1;
+				RTC.mm += 1;
+			}
+		}
+		break;
+	case 12:
+		if (RTC.dd > 31)
+		{
+			RTC.dd = 1;
+			RTC.mm = 1;
+			RTC.yyyy += 1;
+		}
+		break;
+
+
+
+	}
+	RTC.s = 0;
+	RTC.writeAlarm1(DS3231_ALM_DTHMS);
+}
+
+void Hardware::setAlarm2(int min)
 {
 		RTC.now();
 		int minutes = min % 60;
@@ -181,6 +250,9 @@ void Hardware::setAlarm(int min)
 
 	
 }
+
+
+
 
 void Hardware::timeLeft(char * buff) {
 	RTC.readAlarm2();

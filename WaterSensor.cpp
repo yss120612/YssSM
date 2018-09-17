@@ -55,6 +55,7 @@ void WaterSensor::disarm()
 	alarm = false;
 	check_me = false;
 	counter = 0;
+	data = 0;
 }
 
 void WaterSensor::arm(uint8_t lim, uint8_t lc)

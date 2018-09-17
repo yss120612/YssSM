@@ -218,8 +218,8 @@ void Rectify::start()
 	//hardware->getUrovenWS()->arm(25);
 	hardware->getFloodWS()->arm(25);
 	mcmd->setName("Stop");
-	TSAchecked = 0;
-	TSAcheckedCold = 0;
+	//TSAchecked = 0;
+	//TSAcheckedCold = 0;
 	coldBeginCheck = 0;
 	tsa_alarms = 0;
 	stop_defined = false;
@@ -313,11 +313,12 @@ void Rectify::next() {
 		break;
 	case PROC_WAIT_HEAD:
 		work_mode = PROC_WORK;
+		coldBeginCheck = false;
 		agg->getHeater()->setPower(CONF.getRectWorkPower());
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
 		CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 1.5f);//пока так а
-		hardware->setAlarm(60);//через 60 минут определим температуру окончания
+		hardware->setAlarm2(60);//через 60 минут определим температуру окончания
 		//workSelf = millis() + 60000 * 30;//через 30 минут определим температуру окончания
 		cont->setVisible(false);
 		menu->setActive(false);
@@ -345,7 +346,8 @@ void Rectify::process(long ms)
 			hardware->getBeeper()->beep(2000, 1000);
 			work_mode = PROC_SELF_WORK;
 			//workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
-			hardware->setAlarm((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
+			hardware->setAlarm2((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
+			hardware->setAlarm1(3);//начинаем проверять ТСА
 		}
 		break;
 	case PROC_SELF_WORK:
@@ -355,9 +357,11 @@ void Rectify::process(long ms)
 			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
 			//workSelf = ms + 60000 * 10;//10 минут
-			hardware->setAlarm(10);
+			hardware->setAlarm2(10);
 			cont->setVisible(true);
 			menu->setActive(true);
+			ss_active = false;
+			last_action = ms;
 		}
 		break;
 	case PROC_WAIT_SELF:
@@ -372,9 +376,11 @@ void Rectify::process(long ms)
 			work_mode = PROC_WAIT_HEAD;
 			hardware->getBeeper()->beep(2000, 5000);
 			//workSelf = ms + 60000  * 10;//10 минут
-			hardware->setAlarm(10);
+			hardware->setAlarm2(10);
 			cont->setVisible(true);
 			menu->setActive(true);
+			last_action = ms;
+			ss_active = false;
 		}
 		break;
 	case PROC_WAIT_HEAD: 
@@ -395,48 +401,55 @@ void Rectify::process(long ms)
 			stop(PROCEND_TEMPERATURE);
 			hardware->getBeeper()->beep(1000, 5000);
 		}
+		if (coldBeginCheck==0)
+		{
+			hardware->setAlarm2(15);
+			coldBeginCheck = 1;
+		}
+		if (!coldBeginCheck && hardware->getClock()->checkAlarm2()) {
+			coldBeginCheck = 2;
+		}
+		break;
 		//if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
 		break;
 	}
 
 
-	//if (coldBeginCheck > 0 && ms - coldBeginCheck > 0 && ttsa < CONF.getTSAmin()) {
-	//	if (TSAcheckedCold == 0 || (ms - TSAcheckedCold) > checkTSA) {
-	//		readTime();
-	//		logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
-	//		agg->getHeater()->shiftPower(3);
-	//		//agg->getKran()->shiftQuantum(-0.5);
-	//		TSAcheckedCold = ms;
-	//	}
-	//}
-	//else {
-	//	TSAcheckedCold = 0;
-	//}
+	
 
-	if (ttsa > CONF.getTSAmax()) {
-		if (TSAchecked == 0 || (ms - TSAchecked) > checkTSA) {
-			readTime();
-			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + String(tim));
-			agg->getHeater()->shiftPower(-10);
-			//agg->getKran()->shiftQuantum(0.5);
-			TSAchecked = ms;
-			tsa_alarms++;
-		}
-	} else {
-		if (tsa_alarms > 0)
-		{
-			readTime();
-			logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
-			tsa_alarms = 0;
-		}
-		TSAchecked = 0;
-	}
-
-	if (tsa_alarms > 3)
-	{
+	boolean evnt = false;
+	if (hardware->getClock()->checkAlarm1()) {
 		readTime();
-		logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
-		stop(PROCEND_FAULT);
+		if (ttsa < CONF.getTSAmin() && coldBeginCheck==2)
+		{
+			hardware->getBeeper()->beep(1000, 500);
+			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
+			agg->getHeater()->shiftPower(3);
+			agg->getKran()->openQuantum(agg->getKran()->getState() - 0.2);
+			evnt = true;
+		}
+		if (ttsa > CONF.getTSAmax()) {
+			hardware->getBeeper()->beep(1000, 500);
+			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + String(tim));
+			agg->getHeater()->shiftPower(-5);
+			agg->getKran()->openQuantum(agg->getKran()->getState() + 0.5);
+			tsa_alarms++;
+			evnt = true;
+			if (tsa_alarms >= 3) {
+				hardware->getBeeper()->beep(1000, 5000);
+				logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
+				stop(PROCEND_FAULT);
+			}
+		}
+		else
+		{
+			if (tsa_alarms > 0) {
+				readTime();
+				logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
+				tsa_alarms = 0;
+			}
+		}
+		hardware->setAlarm1(evnt ? 3 : 5);
 	}
 
 	if (ttsa > CONF.getTSAcritical())

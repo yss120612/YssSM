@@ -36,10 +36,10 @@ protected:
 	float tcube;
 	float ttsa;
 	float tdef;
-	long TSAchecked;
-	long TSAcheckedCold;
-	long coldBeginCheck;
-	long workSelf;
+	//long TSAchecked;
+	//long TSAcheckedCold;
+	uint8_t coldBeginCheck;
+	//long workSelf;
 	uint8_t tsa_alarms;
 };
 
