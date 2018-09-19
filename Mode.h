@@ -31,6 +31,7 @@ public:
 	virtual void showState() = 0;
 	virtual void drawImm(long m);
 	void readTime();
+	String getTimeStr();
 	virtual void makeMenu() = 0;
 	virtual void command(MenuCommand * id) = 0;
 	virtual void initParams(MenuParameter * mp)=0;

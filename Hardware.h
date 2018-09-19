@@ -66,7 +66,13 @@ public:
 
 	void setAlarm2(int min);
 
-	void timeLeft(char * buff);
+	void timeLeft1(char * buff);
+
+	void timeLeft2(char * buff);
+
+	int minutesLeft1();
+
+	int minutesLeft2();
 
 	//void setDisplay(SSD1306Wire * d);
 	//void setTKube(DallasTerm * k);
@@ -81,6 +87,9 @@ public:
 
 
 protected:
+	void prepareAlarm(int min);
+	void timeLeft(char * buff);
+	int minutesLeft();
 	
 	OneWire ow;
 	AT24C32 at24mem;

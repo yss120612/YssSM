@@ -310,6 +310,7 @@ void Rectify::next() {
 		hardware->getUrovenWS()->arm(25);
 		cont->setVisible(false);
 		menu->setActive(false);
+		logg.logging("Rectify Collech HEAD started at " + getTimeStr());
 		break;
 	case PROC_WAIT_HEAD:
 		work_mode = PROC_WORK;
@@ -318,10 +319,10 @@ void Rectify::next() {
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
 		CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 1.5f);//пока так а
-		hardware->setAlarm2(60);//через 60 минут определим температуру окончания
-		//workSelf = millis() + 60000 * 30;//через 30 минут определим температуру окончания
+		hardware->setAlarm2(40);//через N минут определим температуру окончания
 		cont->setVisible(false);
 		menu->setActive(false);
+		logg.logging("Rectify Collech BODY started at " + getTimeStr());
 		break;
 }
 }
@@ -341,8 +342,7 @@ void Rectify::process(long ms)
 		if (tdef > CONF.getRectForsajTemp()) {//end of forsaj
 			agg->getHeater()->setPower(CONF.getRectHeadPower());
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
-			readTime();
-			logg.logging("Rectify forsaj finished at " + String(tim));
+			logg.logging("Rectify forsaj finished at " + getTimeStr());
 			hardware->getBeeper()->beep(2000, 1000);
 			work_mode = PROC_SELF_WORK;
 			//workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
@@ -352,8 +352,7 @@ void Rectify::process(long ms)
 		break;
 	case PROC_SELF_WORK:
 		if (hardware->getClock()->checkAlarm2()){
-			readTime();
-			logg.logging("Rectify Work Self finished at " + String(tim));
+			logg.logging("Rectify Work Self finished at " + getTimeStr());
 			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
 			//workSelf = ms + 60000 * 10;//10 минут
@@ -371,8 +370,7 @@ void Rectify::process(long ms)
 		break;
 	case PROC_GET_HEAD: 
 		if (hardware->getUrovenWS()->isAlarmed()) {
-			readTime();
-			logg.logging("Rectify collect head finished at " + String(tim));
+			logg.logging("Rectify collect head finished at " + getTimeStr());
 			work_mode = PROC_WAIT_HEAD;
 			hardware->getBeeper()->beep(2000, 5000);
 			//workSelf = ms + 60000  * 10;//10 минут
@@ -393,20 +391,20 @@ void Rectify::process(long ms)
 		if (!stop_defined && hardware->getClock()->checkAlarm2()) {
 			CONF.setRectStopTemp(tdef + 0.2f);
 			stop_defined = true;
-			readTime();
-			logg.logging("Rectify stop temperature defined ("+String(CONF.getRectStopTemp(),1)+"C) at " + String(tim));
-			hardware->getBeeper()->beep(1000, 2000);
+			logg.logging("Rectify stop temperature defined ("+String(CONF.getRectStopTemp(),1)+"C) at " + getTimeStr());
+			hardware->getBeeper()->beep(1000, 1000);
 		}
 		if (tdef > CONF.getRectStopTemp()) {//end of collect body
 			stop(PROCEND_TEMPERATURE);
 			hardware->getBeeper()->beep(1000, 5000);
 		}
+
 		if (coldBeginCheck==0)
 		{
 			hardware->setAlarm2(15);
 			coldBeginCheck = 1;
 		}
-		if (!coldBeginCheck && hardware->getClock()->checkAlarm2()) {
+		if (coldBeginCheck==1 && hardware->getClock()->checkAlarm2()) {
 			coldBeginCheck = 2;
 		}
 		break;
@@ -419,33 +417,31 @@ void Rectify::process(long ms)
 
 	boolean evnt = false;
 	if (hardware->getClock()->checkAlarm1()) {
-		readTime();
 		if (ttsa < CONF.getTSAmin() && coldBeginCheck==2)
 		{
 			hardware->getBeeper()->beep(1000, 500);
-			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
+			logg.logging("TSA cold (" + String(ttsa) + "C) at " + getTimeStr());
 			agg->getHeater()->shiftPower(3);
 			agg->getKran()->openQuantum(agg->getKran()->getState() - 0.2);
 			evnt = true;
 		}
 		if (ttsa > CONF.getTSAmax()) {
 			hardware->getBeeper()->beep(1000, 500);
-			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + String(tim));
+			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + getTimeStr());
 			agg->getHeater()->shiftPower(-5);
 			agg->getKran()->openQuantum(agg->getKran()->getState() + 0.5);
 			tsa_alarms++;
 			evnt = true;
 			if (tsa_alarms >= 3) {
 				hardware->getBeeper()->beep(1000, 5000);
-				logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
+				logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + getTimeStr());
 				stop(PROCEND_FAULT);
 			}
 		}
 		else
 		{
 			if (tsa_alarms > 0) {
-				readTime();
-				logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
+				logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + getTimeStr());
 				tsa_alarms = 0;
 			}
 		}
@@ -454,8 +450,7 @@ void Rectify::process(long ms)
 
 	if (ttsa > CONF.getTSAcritical())
 	{
-		readTime();
-		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + String(tim));
+		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + getTimeStr());
 		stop(PROCEND_FAULT);
 	}
 

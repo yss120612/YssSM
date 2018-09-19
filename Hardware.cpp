@@ -34,9 +34,6 @@ void Hardware::init()
 	t_triak.set12bit();
 	beeper.setup(BEEPER_PIN);
 	pump.setup(PUMP_PIN, &pinExtender);
-	//flood.setLimit(25);
-	//flood.arm();
-	
 }
 
 void Hardware::timed_process(long ms)
@@ -54,13 +51,11 @@ void Hardware::process(long ms)
 	encoder.process(ms);
 }
 
-
 DallasTerm * Hardware::getTKube() { return &t_kube; }
 DallasTerm * Hardware::getTTsarga() { return &t_tsarga; }
 DallasTerm * Hardware::getTWater() { return NULL; }
 DallasTerm * Hardware::getTTriak() { return &t_triak; }
 DallasTerm * Hardware::getTTSA() { return &t_tsa; }
-//HttpHelper * Hardware::getHttpHelper() { return &httpHelper; }
 Config * Hardware::getConfig() { return &config; }
 Beeper * Hardware::getBeeper() { return &beeper; }
 PinExtender * Hardware::getExtender() { return &pinExtender; }
@@ -114,6 +109,17 @@ String Hardware::i2cDevices()
 
 void Hardware::setAlarm1(int min)
 {
+	prepareAlarm(min);
+	RTC.writeAlarm1(DS3231_ALM_DTHMS);
+}
+
+void Hardware::setAlarm2(int min)
+{
+	prepareAlarm(min);
+	RTC.writeAlarm2(DS3231_ALM_DTHM);
+}
+
+void Hardware::prepareAlarm(int min) {
 	RTC.now();
 	int minutes = min % 60;
 	int hours = min / 60;
@@ -173,84 +179,80 @@ void Hardware::setAlarm1(int min)
 			RTC.yyyy += 1;
 		}
 		break;
-
-
-
 	}
 	RTC.s = 0;
-	RTC.writeAlarm1(DS3231_ALM_DTHMS);
 }
 
-void Hardware::setAlarm2(int min)
-{
-		RTC.now();
-		int minutes = min % 60;
-		int hours = min / 60;
-
-		RTC.m += minutes;
-		if (RTC.m >= 60) {
-			RTC.m -= 60;
-			hours += 1;
-		}
-		RTC.h += hours;
-		if (RTC.h >= 24)
-		{
-			RTC.h -= 24;
-			RTC.dd += 1;
-		}
-
-		switch (RTC.mm) {
-		case 1:
-		case 3:
-		case 5:
-		case 7:
-		case 8:
-		case 10:
-			if (RTC.dd > 31)
-			{
-				RTC.dd = 1;
-				RTC.mm += 1;
-			}
-			break;
-		case 4:
-		case 6:
-		case 9:
-		case 11:
-			if (RTC.dd > 30) RTC.dd = 1;
-			break;
-		case 2:
-			if (RTC.yyyy % 4 == 0) {
-				if (RTC.dd > 29)
-				{
-					RTC.dd = 1;
-					RTC.mm += 1;
-				}
-			}
-			else {
-				if (RTC.dd > 28)
-				{
-					RTC.dd = 1;
-					RTC.mm += 1;
-				}
-			}
-			break;
-		case 12:
-			if (RTC.dd > 31)
-			{
-				RTC.dd = 1;
-				RTC.mm = 1;
-				RTC.yyyy += 1;
-			}
-			break;
-
-
-
-		}
-		RTC.writeAlarm2(DS3231_ALM_DTHM);
-
-	
+void Hardware::timeLeft2(char * buff) {
+	RTC.readAlarm2();
+	timeLeft(buff);
 }
 
+void Hardware::timeLeft1(char * buff) {
+	RTC.readAlarm1();
+	timeLeft(buff);
+}
+
+void Hardware::timeLeft(char * buff) {
+
+	int8_t dd = RTC.dd;
+	int8_t h = RTC.h;
+	int8_t m = RTC.m;
+	int8_t s = 0;
+	RTC.now();
+	s -= RTC.s;
+	if (s < 0)
+	{
+		m -= 1;
+		s += 60;
+	}
+
+	m -= RTC.m;
+	if (m < 0)
+	{
+		h -= 1;
+		m += 60;
+	}
+	h -= RTC.h;
+	if (h < 0) h += 24;
+	sprintf(buff, "%02d:%02d:%02d", h, m, s);
+}
+
+int Hardware::minutesLeft1() {
+	RTC.readAlarm1();
+	return minutesLeft();
+}
+
+int Hardware::minutesLeft2() {
+	RTC.readAlarm2();
+	return minutesLeft();
+}
+
+int Hardware::minutesLeft() {
+
+	int8_t dd = RTC.dd;
+	int8_t h = RTC.h;
+	int8_t m = RTC.m;
+	int8_t s = 0;
+	RTC.now();
+	s -= RTC.s;
+	if (s < 0)
+	{
+		m -= 1;
+		s += 60;
+	}
+
+	m -= RTC.m;
+	if (m < 0)
+	{
+		h -= 1;
+		m += 60;
+	}
+
+	h -= RTC.h;
+	if (h < 0) h += 24;
+	return h * 60 + m;
+}
 
 
 

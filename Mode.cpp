@@ -143,6 +143,12 @@ void Mode::readTime() {
 	sprintf(tim, "%02d:%02d:%02d", hardware->getClock()->h, hardware->getClock()->m, hardware->getClock()->s);
 }
 
+String Mode::getTimeStr() {
+	readTime();
+	return String(tim);
+}
+
+
 void Mode::processMenuPress()
 {
 	MenuParameter * mp;
