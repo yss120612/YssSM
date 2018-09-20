@@ -60,7 +60,7 @@ void Suvid::showState() {
 		hardware->getDisplay()->drawString(X, Y + 16," PWR:" + String(agg->getHeater()->getPower()));
 		break;
 	case PROC_WORK:
-		timeLeft();
+		hardware->timeLeft2(tleft);
 		hardware->getDisplay()->drawString(X, Y, "Working T:" + String(t));
 		hardware->getDisplay()->drawString(X, Y + 16, " PWR:" + String(agg->getHeater()->getPower()));
 		hardware->getDisplay()->drawString(X, Y + 32, " Left:"+ String(tleft));
@@ -92,7 +92,7 @@ String Suvid::getData(uint w)
 			break;
 		case DS_SUVIDTIMELEFT:
 			if (work_mode == PROC_WORK) {
-				timeLeft();
+				hardware->timeLeft2(tleft);
 				return String(tleft);
 			}
 			else {
@@ -192,100 +192,6 @@ void Suvid::acceptParams(MenuParameter * mp)
 	}
 }
 
-void Suvid::armAlarm()
-{
-	hardware->setAlarm2(tpause.getTime());
-	/*hardware->getClock()->now();
-	uint minutes = tpause.getTime() % 60;
-	uint hours = tpause.getTime() / 60;
-	hardware->getClock()->m += minutes;
-	if (hardware->getClock()->m >= 60) {
-		hardware->getClock()->m -= 60;
-		hours += 1;
-	}
-	hardware->getClock()->h += hours;
-	if (hardware->getClock()->h >= 24)
-	{
-		hardware->getClock()->h -= 24;
-		hardware->getClock()->dd += 1;
-	}
-
-	switch (hardware->getClock()->mm) {
-	case 1:
-	case 3:
-	case 5:
-	case 7:
-	case 8:
-	case 10:
-		if (hardware->getClock()->dd > 31)
-		{
-			hardware->getClock()->dd = 1;
-			hardware->getClock()->mm += 1;
-		}
-		break;
-	case 4:
-	case 6:
-	case 9:
-	case 11:
-		if (hardware->getClock()->dd > 30) hardware->getClock()->dd = 1;
-		break;
-	case 2:
-		if (hardware->getClock()->yyyy % 4 == 0) {
-			if (hardware->getClock()->dd > 29)
-			{
-				hardware->getClock()->dd = 1;
-				hardware->getClock()->mm += 1;
-			}
-		}
-		else {
-			if (hardware->getClock()->dd > 28)
-			{
-				hardware->getClock()->dd = 1;
-				hardware->getClock()->mm += 1;
-			}
-		}
-		break;
-	case 12:
-		if (hardware->getClock()->dd > 31) 
-		{
-			hardware->getClock()->dd = 1;
-			hardware->getClock()->mm = 1;
-			hardware->getClock()->yyyy += 1;
-		}
-		break;
-	
-	
-	
-	}
-	hardware->getClock()->writeAlarm2(DS3231_ALM_DTHM);
-*/
-}
-
-void Suvid::timeLeft() {
-	hardware->timeLeft(tleft);
-	/*hardware->getClock()->readAlarm2();
-	int8_t dd = hardware->getClock()->dd;
-	int8_t h = hardware->getClock()->h;
-	int8_t m = hardware->getClock()->m;
-	int8_t s = 0;
-	hardware->getClock()->now();
-	s -= hardware->getClock()->s;
-	if (s < 0)
-	{
-		m -= 1;
-		s += 60;
-	}
-
-	m -= hardware->getClock()->m;
-	if (m < 0)
-	{
-		h -= 1;
-		m += 60;
-	}
-	h -= hardware->getClock()->h;
-	if (h < 0) h += 24;
-	sprintf(tleft, "%02d:%02d:%02d", h, m, s);*/
-}
 
 void Suvid::process(long ms) {
 	if (work_mode == PROC_OFF) return;
@@ -298,9 +204,8 @@ void Suvid::process(long ms) {
 		
 		if (tmp >= tpause.getTemp()) {
 			work_mode = PROC_WORK;
-			readTime();
-			logg.logging("SuVid WORK started at " + String(tim));
-			armAlarm();//Завели будильник
+			logg.logging("SuVid WORK started at " + getTimeStr());
+			hardware->setAlarm2(tpause.getTime());//Завели будильник
 
 		}
 		break;
@@ -340,8 +245,7 @@ void Suvid::start() {
 	agg->getHeater()->start();
 	agg->getHeater()->setPower(50);
 	hardware->getPump()->start();
-	readTime();
-	logg.logging("SuVid started at "+String(tim));
+	logg.logging("SuVid started at "+ getTimeStr());
 	mcmd->setName("Stop");
 }
 
@@ -351,8 +255,7 @@ void Suvid::stop(uint8_t reason) {
 	hardware->getPump()->stop();
 	work_mode = PROC_OFF;
 	end_reason = reason;
-	readTime();
-	String st = "SuVid finished started at " + String(tim) + " by reason ";
+	String st = "SuVid finished started at " + getTimeStr() + " by reason ";
 	hardware->getBeeper()->beep(2000, 3000);
 	switch (reason)
 	{
