@@ -256,31 +256,6 @@ int Hardware::minutesLeft() {
 
 
 
-void Hardware::timeLeft(char * buff) {
-	RTC.readAlarm2();
-	int8_t dd = RTC.dd;
-	int8_t h = RTC.h;
-	int8_t m = RTC.m;
-	int8_t s = 0;
-	RTC.now();
-	s -= RTC.s;
-	if (s < 0)
-	{
-		m -= 1;
-		s += 60;
-	}
-
-	m -= RTC.m;
-	if (m < 0)
-	{
-		h -= 1;
-		m += 60;
-	}
-	h -= RTC.h;
-	if (h < 0) h += 24;
-	sprintf(buff, "%02d:%02d:%02d", h, m, s);
-}
-
 
 /*void Hardware::setDisplay(SSD1306Wire * d) { display = d; }
 void Hardware::setTKube(DallasTerm * k) { t_kube = k; }
