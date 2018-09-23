@@ -52,7 +52,6 @@ void Suvid::showState() {
 		hardware->getDisplay()->drawString(X, Y, "End manual");
 		break;
 		}
-		//hardware->getDisplay()->drawString(X, Y, "Ready");
 		hardware->getDisplay()->drawString(X, Y+16, "T="+String(t));
 		break;
 	case PROC_FORSAJ:
@@ -64,7 +63,6 @@ void Suvid::showState() {
 		hardware->getDisplay()->drawString(X, Y, "Working T:" + String(t));
 		hardware->getDisplay()->drawString(X, Y + 16, " PWR:" + String(agg->getHeater()->getPower()));
 		hardware->getDisplay()->drawString(X, Y + 32, " Left:"+ String(tleft));
-		
 		break;
 	default:
 		break;
@@ -74,7 +72,6 @@ void Suvid::showState() {
 
 String Suvid::getData(uint w)
 {
-
 	if (w > DS_SUVIDSTART && w < DS_SUVIDEND) {
 		switch (w) {
 		case DS_SUVIDSTATE:
