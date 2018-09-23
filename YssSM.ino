@@ -100,13 +100,13 @@ void setup() {
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 
-	/*CONF.write();
+	//CONF.write();
 	if (CONF.checkVersion()) {
 		CONF.read();
 	}
 	else {
 		CONF.write();
-	}*/
+	}
 
 	logg.logging("ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000="+String((ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000));
 	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));

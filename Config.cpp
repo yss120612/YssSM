@@ -387,16 +387,11 @@ void Config::write()
 	*(buff + idx++) = triakCoolerTemp;
 	*(buff + idx++) = triakCoolerGist;
 
-	wifi_ssid.getBytes(buff + idx, wifi_ssid.length()); idx += wifi_ssid.length(); *(buff + idx++) = 0;
-	wifi_password.getBytes(buff + idx, wifi_password.length()); idx += wifi_password.length(); *(buff + idx++) = 0;
-	www_username.getBytes(buff + idx, www_username.length()); idx += www_username.length(); *(buff + idx++) = 0;
-	www_password.getBytes(buff + idx, www_password.length()); idx += www_password.length(); *(buff + idx) = 0;
-
-	//for (i = 0; i < wifi_ssid.length(); i++)		{ *(buff + idx++) = wifi_ssid.charAt(i); }		*(buff + idx++) = 0;
-	//for (i = 0; i < wifi_password.length(); i++)	{ *(buff + idx++) = wifi_password.charAt(i); }	*(buff + idx++) = 0;
-	//for (i = 0; i < www_username.length(); i++)		{ *(buff + idx++) = www_username.charAt(i); }	*(buff + idx++) = 0;
-	//for (i = 0; i < www_password.length(); i++)		{ *(buff + idx++) = www_password.charAt(i); }	*(buff + idx) = 0;
-
+	wifi_ssid.getBytes(buff + idx, wifi_ssid.length()); idx += wifi_ssid.length()+1;
+	wifi_password.getBytes(buff + idx, wifi_password.length()); idx += wifi_password.length() + 1;
+	www_username.getBytes(buff + idx, www_username.length()); idx += www_username.length() + 1;
+	www_password.getBytes(buff + idx, www_password.length()); idx += www_password.length();
+	
 	at24mem->write(0, buff, length);
 	logg.logging("CONFIG saved ("+String(idx)+" bytes)!");
 	changed = false;
@@ -411,36 +406,38 @@ void Config::read()
 	at24mem->read(0, buff, length);
 	uint16_t idx = 1;
 	
-	distStopTemp =			*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
-	distKranOpened =		*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
-	rectStopTemp =			*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
-	rectKranOpened =		*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
-	rectHeadKranOpened =	*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
-	manualKranOpened	=	*reinterpret_cast<float *>(buff + idx); idx += sizeof(float);
+	distStopTemp =			 static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	distKranOpened = static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	rectStopTemp = static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	rectKranOpened = static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	rectHeadKranOpened = static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	manualKranOpened	= static_cast<float>(*(buff + idx)); idx += sizeof(float);
 
-	scrSaverMin =		*reinterpret_cast<int *>(buff + idx); idx += sizeof(int);
-	suvidMin =			*reinterpret_cast<int *>(buff + idx); idx += sizeof(int);
+	scrSaverMin =		static_cast<int>(*(buff + idx)); idx += sizeof(int);
+	suvidMin = static_cast<int>(*(buff + idx)); idx += sizeof(int);
 
-	/*suvidTemp =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	distWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	distForsajTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	manualWorkPower =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	rectWorkSelf =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	rectWorkPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	rectHeadPower =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	rectForsajTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	TSAmin =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	TSAmax =			*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	TSAcritical =		*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	triakCoolerTemp =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);
-	triakCoolerGist =	*reinterpret_cast<uint8_t *>(buff + idx); idx += sizeof(uint8_t);*/
+	
+	suvidTemp =			static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	distWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	distForsajTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	manualWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	rectWorkSlf = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	rectWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	rectHeadPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	rectForsajTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	TSAmin = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	TSAmax = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	TSAcritical = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	triakCoolerTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	triakCoolerGist = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	
+	
+	wifi_ssid = "";		while (static_cast<uint8_t>(*(buff + idx)) != 0) { wifi_ssid += static_cast<char>(*(buff + idx)); idx += sizeof(char); } idx += sizeof(char);
+	wifi_password = ""; while (static_cast<uint8_t>(*(buff + idx)) != 0) { wifi_password += static_cast<char>(*(buff + idx)); idx += sizeof(char);} idx += sizeof(char);;
+	www_username = "";	while (static_cast<uint8_t>(*(buff + idx)) != 0) { www_username += static_cast<char>(*(buff + idx)); idx += sizeof(char); } sizeof(char);
+	www_password = "";	while (static_cast<uint8_t>(*(buff + idx)) != 0) { www_password += static_cast<char>(*(buff + idx)); idx += sizeof(char);}
 
-	//wifi_ssid = "";		while (*(buff + idx) != 0) { wifi_ssid +=		*reinterpret_cast<char *>(buff + idx++); } idx++;
-	//wifi_password = ""; while (*(buff + idx) != 0) { wifi_password +=	*reinterpret_cast<char *>(buff + idx++); } idx++;
-	//www_username = "";	while (*(buff + idx) != 0) { www_username +=	*reinterpret_cast<char *>(buff + idx++); } idx++;
-	//www_password = "";	while (*(buff + idx) != 0) { www_password +=	*reinterpret_cast<char *>(buff + idx++); }
-
-	logg.logging("CONFIG loaded (" + String(idx) + " bytes)!");
+	logg.logging("CONFIG loaded (" + String(idx) + " bytes)! www_username="+ www_username);
 	changed = false;
 	delete buff;
 
@@ -471,7 +468,13 @@ void Config::read()
 
 uint16_t Config::calcLength()
 {
-	length = sizeof(int) * 2 + sizeof(float)*6 + sizeof(uint8_t) * 14 + wifi_ssid.length() + 1 + wifi_password.length() + 1 + www_username.length() + 1 + www_password.length() + 1;
+	length =	sizeof(int) * 2 + 
+				sizeof(float) * 6 + 
+				sizeof(uint8_t) * 14 + 
+				wifi_ssid.length() + 1 + 
+				wifi_password.length() + 1 + 
+				www_username.length() + 1 + 
+				www_password.length() + 1;
 	return length;
 }
 
