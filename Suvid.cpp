@@ -180,7 +180,7 @@ void Suvid::acceptParams(MenuParameter * mp)
 		//logg.logging("Minutes=" + String(((MenuIParameter *)mp)->getCurrent()));
 		CONF.setSuvidMin(((MenuIParameter *)mp->getPrev())->getCurrent() * 60 + ((MenuIParameter *)mp)->getCurrent());
 		tpause.setTime(CONF.getSuvidMin());
-		CONF.read();
+		//CONF.read();
 		break;
 	case 12:
 		//logg.logging("Temp-ra=" + String(((MenuIParameter *)mp)->getCurrent()));
