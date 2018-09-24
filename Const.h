@@ -12,7 +12,7 @@
 
 #define ENCODER_LOG1
 #define _SERIAL1
-
+#define HAVE_AT24C32
 
 const uint8_t EX_PIN0 = 100;
 const uint8_t EX_PIN1 = 101;

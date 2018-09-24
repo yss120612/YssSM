@@ -36,7 +36,6 @@ Mode * distill = new Distillation(&agg, &hard);
 Mode * rectify = new Rectify(&agg, &hard);
 Mode * manual = new Manual(&agg, &hard);
 
-
 void setup() {
 #ifdef _SERIAL
 	Serial.begin(74880);
@@ -49,40 +48,12 @@ void setup() {
 	agg.init();
 	
 	CONF.setMem(hard.getAT24mem());
-	
+
+	CONF.loadDefaults();
+
 	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-	CONF.seWiFi("Yss_GIGA","bqt3bqt3");
-	CONF.seHttp("admin", "esp");
-	CONF.seScrSavMin(1);
-	CONF.seSuvidMin(60);
-	CONF.seSuvidTemp(60);
-
-	CONF.seDistKranOpened(21.2);
-	CONF.seDistStopTemp(98.8);
-	CONF.seDistWorkPower(42);
-	CONF.seDistForsajTemp(57);
-	
-	CONF.seManualKranOpened(19.5);
-	CONF.seManualWorkPower(42);
-
-	CONF.seRectWorkSelf(20);
-	CONF.seRectKranOpened(21.5);
-	CONF.seRectHeadKranOpened(21.5);
-	CONF.seRectStopTemp(80.8);
-	CONF.seRectHeadPower(32);
-	CONF.seRectWorkPower(32);
-	CONF.seRectForsajTemp(57);
-
-	CONF.setTSAmin(28);
-	CONF.setTSAmax(50);
-	CONF.seTSAcritical(90);
-
-	CONF.setTriakCoolerTemp(50);
-	CONF.seTriakCoolerGist(10);
-	
+		
 	httph.setup();
-	
-	logg.logging(" Temp= " + String(CONF.getDistStopTemp()) + " Kran= " + String(CONF.getDistKranOpened()) + " Suvid Temp(50)= " + String(CONF.getSuvidTemp()) + " WiFi name=" + CONF.getWiFiN() + " WiFi Pass=" + CONF.getWiFiP());
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 
 
@@ -100,7 +71,6 @@ void setup() {
 	httph.setDataSource(&workMode);
 	logg.logging("Open http://"+ WiFi.localIP().toString()+ "/ in your browser to see it working");
 
-	//CONF.write();
 	if (CONF.checkVersion()) {
 		CONF.read();
 	}
@@ -112,7 +82,12 @@ void setup() {
 	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
 	logg.logging("ESP.getFlashChipRealSize()=" + String(ESP.getFlashChipRealSize()));
 	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
+	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
 }
+
+
+
+
 
 void nulAC() {
 	agg.getHeater()->processHeater();

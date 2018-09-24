@@ -15,6 +15,37 @@ Config::~Config()
 {
 }
 
+void Config::loadDefaults() {
+	seWiFi("Yss_GIGA", "bqt3bqt3");
+	seHttp("admin", "esp");
+	seScrSavMin(1);
+	seSuvidMin(60);
+	seSuvidTemp(60);
+
+	seDistKranOpened(21.2);
+	seDistStopTemp(98.8);
+	seDistWorkPower(42);
+	seDistForsajTemp(57);
+
+	seManualKranOpened(19.5);
+	seManualWorkPower(42);
+
+	seRectWorkSelf(20);
+	seRectKranOpened(21.5);
+	seRectHeadKranOpened(21.5);
+	seRectStopTemp(80.8);
+	seRectHeadPower(32);
+	seRectWorkPower(32);
+	seRectForsajTemp(57);
+
+	setTSAmin(28);
+	setTSAmax(50);
+	seTSAcritical(90);
+
+	setTriakCoolerTemp(50);
+	seTriakCoolerGist(10);
+}
+
 boolean Config::checkVersion()
 {
 	uint8_t v = at24mem->read(0);
@@ -355,6 +386,9 @@ const uint8_t Config::getTriakCoolerGist(){	return triakCoolerGist;}
 
 void Config::write()
 {
+#ifndef HAVE_AT24C32
+	return;
+#endif
 	if (!changed) return;
 	calcLength();
 	uint8_t * buff = new uint8_t [length];
@@ -387,10 +421,10 @@ void Config::write()
 	*(buff + idx++) = triakCoolerTemp;
 	*(buff + idx++) = triakCoolerGist;
 
-	wifi_ssid.getBytes(buff + idx, wifi_ssid.length()); idx += wifi_ssid.length()+1;
-	wifi_password.getBytes(buff + idx, wifi_password.length()); idx += wifi_password.length() + 1;
-	www_username.getBytes(buff + idx, www_username.length()); idx += www_username.length() + 1;
-	www_password.getBytes(buff + idx, www_password.length()); idx += www_password.length();
+	wifi_ssid.getBytes(buff + idx, wifi_ssid.length() + 1); idx += wifi_ssid.length()+1;
+	wifi_password.getBytes(buff + idx, wifi_password.length() + 1); idx += wifi_password.length() + 1;
+	www_username.getBytes(buff + idx, www_username.length() + 1); idx += www_username.length() + 1;
+	www_password.getBytes(buff + idx, www_password.length() + 1); idx += www_password.length()+1;
 	
 	at24mem->write(0, buff, length);
 	logg.logging("CONFIG saved ("+String(idx)+" bytes)!");
@@ -400,6 +434,9 @@ void Config::write()
 
 void Config::read()
 {
+#ifndef HAVE_AT24C32
+	return;
+#endif
 	calcLength();
 	length += 100;
 	uint8_t * buff = new uint8_t[length];
@@ -431,13 +468,16 @@ void Config::read()
 	triakCoolerTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	triakCoolerGist = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	
-	
-	wifi_ssid = "";		while (static_cast<uint8_t>(*(buff + idx)) != 0) { wifi_ssid += static_cast<char>(*(buff + idx)); idx += sizeof(char); } idx += sizeof(char);
-	wifi_password = ""; while (static_cast<uint8_t>(*(buff + idx)) != 0) { wifi_password += static_cast<char>(*(buff + idx)); idx += sizeof(char);} idx += sizeof(char);;
-	www_username = "";	while (static_cast<uint8_t>(*(buff + idx)) != 0) { www_username += static_cast<char>(*(buff + idx)); idx += sizeof(char); } sizeof(char);
-	www_password = "";	while (static_cast<uint8_t>(*(buff + idx)) != 0) { www_password += static_cast<char>(*(buff + idx)); idx += sizeof(char);}
+	//logg.logging("0 loaded idx=(" + String(idx) + " bytes)!");
+	wifi_ssid = "";		while (*(buff + idx) != 0) { wifi_ssid += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
+	//logg.logging("1 loaded idx=(" + String(idx) + " bytes)! wifi_ssid=" + wifi_ssid);
+	wifi_password = ""; while (*(buff + idx) != 0) { wifi_password += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
+	//logg.logging("2 loaded idx=(" + String(idx) + " bytes)! wifi_password=" + wifi_password);
+	www_username = "";	while (*(buff + idx) != 0) { www_username += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
+	//logg.logging("3 loaded idx=(" + String(idx) + " bytes)! www_username=" + www_username);
+	www_password = "";	while (static_cast<uint8_t>(*(buff + idx)) != 0) { www_password += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
 
-	logg.logging("CONFIG loaded (" + String(idx) + " bytes)! www_username="+ www_username);
+	logg.logging("CONFIG loaded (" + String(idx) + " bytes)!");
 	changed = false;
 	delete buff;
 

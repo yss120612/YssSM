@@ -16,6 +16,7 @@ class Config
 public:
 	Config();
 	~Config();
+	void loadDefaults();
 	boolean checkVersion();
 	void setHttp(const String n, const  String p);
 	void seHttp(const String n, const String p);
