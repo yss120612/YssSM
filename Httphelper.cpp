@@ -301,9 +301,3 @@ boolean HttpHelper::handleFileRead(String path) {
 	return false;
 } //bool handleFileRead
 
-
-
-
-
-
-

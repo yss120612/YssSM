@@ -16,34 +16,37 @@ Config::~Config()
 }
 
 void Config::loadDefaults() {
-	seWiFi("Yss_GIGA", "bqt3bqt3");
-	seHttp("admin", "esp");
-	seScrSavMin(1);
-	seSuvidMin(60);
-	seSuvidTemp(60);
 
-	seDistKranOpened(21.2);
-	seDistStopTemp(98.8);
-	seDistWorkPower(42);
-	seDistForsajTemp(57);
-
-	seManualKranOpened(19.5);
-	seManualWorkPower(42);
-
-	seRectWorkSelf(20);
-	seRectKranOpened(21.5);
-	seRectHeadKranOpened(21.5);
-	seRectStopTemp(80.8);
-	seRectHeadPower(32);
-	seRectWorkPower(32);
-	seRectForsajTemp(57);
-
-	setTSAmin(28);
-	setTSAmax(50);
-	seTSAcritical(90);
-
-	setTriakCoolerTemp(50);
-	seTriakCoolerGist(10);
+	wifi_ssid = "Yss_GIGA";
+	wifi_password = "bqt3bqt3";
+	www_username = "admin";
+	www_password = "esp";
+	scrSaverMin = 1;
+	suvidMin = 60;
+	suvidTemp = 60;
+	
+	distKranOpened = 21.1f;
+	distStopTemp = 98.8f;
+	distWorkPower = 42;
+	distForsajTemp = 57;
+	
+	manualKranOpened = 19.5f;
+	manualWorkPower = 42;
+	
+	rectWorkSlf = 20;
+	rectKranOpened = 20.7f;
+	rectHeadKranOpened = 21.0f;
+	rectStopTemp = 80.8f;
+	rectWorkPower=32;
+	rectHeadPower = 32;
+	rectForsajTemp = 37;
+	
+	TSAmin = 28;
+	TSAmax = 50;
+	TSAcritical = 90;
+	
+	triakCoolerTemp = 50;
+	triakCoolerGist = 10;
 }
 
 boolean Config::checkVersion()
@@ -59,11 +62,7 @@ void Config::setHttp(const String n, const  String p) {
 	write();
 }
 
-void Config::seHttp(const String n, const  String p) {
-	if (!www_username.equals(n) || !www_password.equals(p)) changed = true;
-	www_username = n;
-	www_password = p;
-}
+
 void Config::setWiFi(const String n, const String p) {
 	if (!wifi_ssid.equals(n) || !wifi_password.equals(p)) changed = true;
 	wifi_ssid = n;
@@ -71,11 +70,6 @@ void Config::setWiFi(const String n, const String p) {
 	write();
 }
 
-void Config::seWiFi(const String n, const String p) {
-	if (!wifi_ssid.equals(n) || !wifi_password.equals(p)) changed = true;
-	wifi_ssid = n;
-	wifi_password = p;
-}
 
 
 void Config::setScrSavMin(int ss)
@@ -85,24 +79,11 @@ void Config::setScrSavMin(int ss)
 	write();
 }
 
-void Config::seScrSavMin(int ss)
-{
-	if (scrSaverMin != ss) changed = true;
-	scrSaverMin = ss;
-}
-
-
 void Config::setSuvidMin(int sm)
 {
 	if (suvidMin != sm) changed = true;
 	suvidMin = sm;
 	write();
-}
-
-void Config::seSuvidMin(int sm)
-{
-	if (suvidMin != sm) changed = true;
-	suvidMin = sm;
 }
 
 
@@ -112,14 +93,6 @@ void Config::setSuvidTemp(uint8_t st)
 	suvidTemp = st;
 	write();
 }
-
-void Config::seSuvidTemp(uint8_t st)
-{
-	if (suvidTemp != st) changed = true;
-	suvidTemp = st;
-}
-
-
 
 void Config::setTriakCoolerTemp(uint8_t st)
 {
@@ -135,13 +108,6 @@ void Config::setTriakCoolerGist(uint8_t st)
 	write();
 }
 
-void Config::seTriakCoolerGist(uint8_t st)
-{
-	if (triakCoolerGist != st) changed = true;
-	triakCoolerGist = st;
-}
-
-
 void Config::setRectWorkPower(uint8_t st)
 {
 	if (rectWorkPower != st) changed = true;
@@ -149,24 +115,11 @@ void Config::setRectWorkPower(uint8_t st)
 	write();
 }
 
-void Config::seRectWorkPower(uint8_t st)
-{
-	if (rectWorkPower != st) changed = true;
-	rectWorkPower = st;
-}
-
-
 void Config::setRectWorkSelf(uint8_t st)
 {
 	if (rectWorkSlf != st) changed = true;
 	rectWorkSlf = st;
 	write();
-}
-
-void Config::seRectWorkSelf(uint8_t st)
-{
-	if (rectWorkSlf != st) changed = true;
-	rectWorkSlf = st;
 }
 
 void Config::setRectHeadPower(uint8_t st)
@@ -176,28 +129,12 @@ void Config::setRectHeadPower(uint8_t st)
 	write();
 }
 
-void Config::seRectHeadPower(uint8_t st)
-{
-	if (rectHeadPower != st) changed = true;
-	rectHeadPower = st;
-}
-
-
 void Config::setRectStopTemp(float st)
 {
 	if (rectStopTemp != st) changed = true;
 	rectStopTemp = st;
 	write();
 }
-
-void Config::seRectStopTemp(float st)
-{
-	if (rectStopTemp != st) changed = true;
-	rectStopTemp = st;
-}
-
-
-
 
 void Config::setRectKranOpened(float st)
 {
@@ -206,25 +143,11 @@ void Config::setRectKranOpened(float st)
 	write();
 }
 
-void Config::seRectKranOpened(float st)
-{
-	if (rectKranOpened != st) changed = true;
-	rectKranOpened = st;
-}
-
-
 void Config::setRectHeadKranOpened(float st)
 {
 	if (rectHeadKranOpened != st) changed = true;
 	rectHeadKranOpened = st;
 	write();
-}
-
-
-void Config::seRectHeadKranOpened(float st)
-{
-	if (rectHeadKranOpened != st) changed = true;
-	rectHeadKranOpened = st;
 }
 
 void Config::setRectForsajTemp(uint8_t st)
@@ -234,26 +157,12 @@ void Config::setRectForsajTemp(uint8_t st)
 	write();
 }
 
-void Config::seRectForsajTemp(uint8_t st)
-{
-	if (rectForsajTemp != st) changed = true;
-	rectForsajTemp = st;
-}
-
-
 void Config::setDistWorkPower(uint8_t st)
 {
 	if (distWorkPower != st) changed = true;
 	distWorkPower = st;
 	write();
 }
-
-void Config::seDistWorkPower(uint8_t st)
-{
-	if (distWorkPower != st) changed = true;
-	distWorkPower = st;
-}
-
 
 void Config::setDistStopTemp(float st)
 {
@@ -262,24 +171,11 @@ void Config::setDistStopTemp(float st)
 	write();
 }
 
-void Config::seDistStopTemp(float st)
-{
-	if (distStopTemp != st) changed = true;
-	distStopTemp = st;
-}
-
-
 void Config::setDistKranOpened(float st)
 {
 	if (distKranOpened != st) changed = true;
 	distKranOpened = st;
 	write();
-}
-
-void Config::seDistKranOpened(float st)
-{
-	if (distKranOpened != st) changed = true;
-	distKranOpened = st;
 }
 
 void Config::setDistForsajTemp(uint8_t st)
@@ -289,23 +185,11 @@ void Config::setDistForsajTemp(uint8_t st)
 	write();
 }
 
-void Config::seDistForsajTemp(uint8_t st)
-{
-	if (distForsajTemp != st) changed = true;
-	distForsajTemp = st;
-}
-
 void Config::setManualWorkPower(uint8_t st)
 {
 	if (manualWorkPower != st) changed = true;
 	manualWorkPower = st;
 	write();
-}
-
-void Config::seManualWorkPower(uint8_t st)
-{
-	if (manualWorkPower != st) changed = true;
-	manualWorkPower = st;
 }
 
 void Config::setManualKranOpened(float st)
@@ -314,13 +198,6 @@ void Config::setManualKranOpened(float st)
 	manualKranOpened = st;
 	write();
 }
-
-void Config::seManualKranOpened(float st)
-{
-	if (manualKranOpened != st) changed = true;
-	manualKranOpened = st;
-}
-
 
 void Config::setTSAmin(uint8_t st)
 {
@@ -341,13 +218,6 @@ void Config::setTSAcritical(uint8_t st)
 	write();
 }
 
-
-void Config::seTSAcritical(uint8_t st)
-{
-	if (TSAcritical != st) changed = true;
-	TSAcritical = st;
-
-}
 
 const String Config::getHttpU() { return www_username; };
 const String Config::getHttpP() { return www_password; };
