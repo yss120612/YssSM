@@ -125,23 +125,22 @@ void Distillation::command(MenuCommand * id)
 void Distillation::stop(uint8_t reason) {
 	work_mode = PROC_OFF;
 	end_reason = reason;
-	readTime();
 	switch (end_reason)
 	{
 	case PROCEND_FAULT:
-		logg.logging("Distill fault and finished at " + String(tim));
+		logg.logging("Distill fault and finished at " + getTimeStr());
 		break;
 	case PROCEND_MANUAL:
-		logg.logging("Distill manually stopped at " + String(tim));
+		logg.logging("Distill manually stopped at " + getTimeStr());
 		break;
 	case PROCEND_TEMPERATURE:
-		logg.logging("Distill normal finished at " + String(tim) + " by kube temperature");
+		logg.logging("Distill normal finished at " + getTimeStr() + " by kube temperature");
 		break;
 	case PROCEND_UROVEN:
-		logg.logging("Distill normal finished at " + String(tim) + " by uroven sensor");
+		logg.logging("Distill normal finished at " + getTimeStr() + " by uroven sensor");
 		break;
 	case PROCEND_FLOOD:
-		logg.logging("Distill  finished at " + String(tim) + " by flood sensor");
+		logg.logging("Distill  finished at " + getTimeStr() + " by flood sensor");
 		break;
 	default:
 		break;
@@ -165,8 +164,7 @@ void Distillation::start() {
 	tsa_alarms = 0;
 	hardware->getUrovenWS()->disarm();
 	hardware->getFloodWS()->arm(50);
-	readTime();
-	logg.logging("Distill process started at " + String(tim));
+	logg.logging("Distill process started at " + getTimeStr());
 }
 
 void Distillation::initParams(MenuParameter * mp)
@@ -228,11 +226,11 @@ void Distillation::process(long ms) {
 		if (tdef > CONF.getDistForsajTemp()){//end of forsaj
 			agg->getHeater()->setPower(CONF.getDistWorkPower());
 			agg->getKran()->openQuantum(CONF.getDistKranOpened());
-			readTime();
 			hardware->getUrovenWS()->arm(50);
-			logg.logging("Distill forsaj finished at "+String(tim));
+			logg.logging("Distill forsaj finished at "+ getTimeStr());
 			hardware->getBeeper()->beep(2000, 2000);
 			hardware->setAlarm1(3);
+			hardware->setAlarm2(15);
 			work_mode = PROC_WORK;
 		}
 		break;
@@ -245,20 +243,16 @@ void Distillation::process(long ms) {
 			hardware->getBeeper()->beep(2000, 3000);
 			stop(PROCEND_UROVEN);
 		}
-		if (coldBeginCheck==0)
-		{
-			hardware->setAlarm2(15);
-			coldBeginCheck = 1;
-		}
-		if (coldBeginCheck==1 && hardware->getClock()->checkAlarm2()) {
+				
+		if (coldBeginCheck==0 && hardware->getClock()->checkAlarm2()) {
 			coldBeginCheck = 2;
 		}
 		break;
 	}
 
 	boolean evnt = false;
+
 	if (hardware->getClock()->checkAlarm1()) {
-		readTime();
 		if (ttsa < CONF.getTSAmin() && coldBeginCheck==2)
 		{
 			hardware->getBeeper()->beep(1000, 500);
@@ -269,33 +263,29 @@ void Distillation::process(long ms) {
 		}
 		if (ttsa > CONF.getTSAmax()) {
 			hardware->getBeeper()->beep(1000, 500);
-			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + String(tim));
+			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + getTimeStr());
 			agg->getHeater()->shiftPower(-5);
 			agg->getKran()->openQuantum(agg->getKran()->getState() + 0.5);
 			tsa_alarms++;
 			evnt = true;
 			if (tsa_alarms >= 3) {
 				hardware->getBeeper()->beep(1000, 5000);
-				logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + String(tim));
+				logg.logging("TSA max alarms (" + String(ttsa) + "C) at " + getTimeStr());
 				stop(PROCEND_FAULT);
 			}
-		}
-		else 
-		{
+		}	else {
 			if (tsa_alarms > 0) {
-				readTime();
-				logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + String(tim));
+				logg.logging("TSA alarm reset (" + String(ttsa) + "C) at " + getTimeStr());
 				tsa_alarms = 0;
 			}
 		}
-		hardware->setAlarm1(evnt?3:5);
+		hardware->setAlarm1(evnt?3:3);
 	}
 
 	//Аварийные остановки
 	if (ttsa > CONF.getTSAcritical())
 	{
-		readTime();
-		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + String(tim));
+		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + getTimeStr());
 		stop(PROCEND_FAULT);
 	}
 

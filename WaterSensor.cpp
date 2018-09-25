@@ -25,7 +25,6 @@ void WaterSensor::setup(uint8_t sens, uint8_t pwr, Multiplexor *m, PinExtender *
 
 void WaterSensor::process(long ms)
 {
-	//logg.logging(String(mult->anaRead(sensor_pin)));
 	if (!check_me) return;
 	data = mult->anaRead(sensor_pin);
 	if (data>limit) {
