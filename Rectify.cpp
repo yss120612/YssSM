@@ -306,14 +306,13 @@ void Rectify::acceptParams(MenuParameter * mp)
 void Rectify::next() {
 	switch (work_mode) {
 	case PROC_WAIT_SELF:
-		work_mode = PROC_GET_HEAD;
 		hardware->getUrovenWS()->arm(25);
 		cont->setVisible(false);
 		menu->setActive(false);
 		logg.logging("Rectify Collech HEAD started at " + getTimeStr());
+		work_mode = PROC_GET_HEAD;
 		break;
 	case PROC_WAIT_HEAD:
-		work_mode = PROC_WORK;
 		coldBeginCheck = false;
 		agg->getHeater()->setPower(CONF.getRectWorkPower());
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
@@ -323,6 +322,7 @@ void Rectify::next() {
 		cont->setVisible(false);
 		menu->setActive(false);
 		logg.logging("Rectify Collech BODY started at " + getTimeStr());
+		work_mode = PROC_WORK;
 		break;
 }
 }
