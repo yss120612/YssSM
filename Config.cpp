@@ -313,12 +313,19 @@ void Config::read()
 	at24mem->read(0, buff, length);
 	uint16_t idx = 1;
 	
-	distStopTemp =			 static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	/*distStopTemp =			 static_cast<float>(*(buff + idx)); idx += sizeof(float);
 	distKranOpened = static_cast<float>(*(buff + idx)); idx += sizeof(float);
 	rectStopTemp = static_cast<float>(*(buff + idx)); idx += sizeof(float);
 	rectKranOpened = static_cast<float>(*(buff + idx)); idx += sizeof(float);
 	rectHeadKranOpened = static_cast<float>(*(buff + idx)); idx += sizeof(float);
-	manualKranOpened	= static_cast<float>(*(buff + idx)); idx += sizeof(float);
+	manualKranOpened	= static_cast<float>(*(buff + idx)); idx += sizeof(float);*/
+
+	memcpy(&distStopTemp,(buff + idx),  sizeof(float)); idx += sizeof(float);
+	memcpy(&distKranOpened, (buff + idx),  sizeof(float)); idx += sizeof(float);
+	memcpy(&rectStopTemp, (buff + idx), sizeof(float)); idx += sizeof(float);
+	memcpy(&rectKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
+	memcpy(&rectHeadKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
+	memcpy(&manualKranOpened, (buff + idx),sizeof(float)); idx += sizeof(float);
 
 	scrSaverMin =		static_cast<int>(*(buff + idx)); idx += sizeof(int);
 	suvidMin = static_cast<int>(*(buff + idx)); idx += sizeof(int);
