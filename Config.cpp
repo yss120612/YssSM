@@ -8,7 +8,7 @@
 Config::Config()
 {
 	changed = false;
-	version = 2;
+	version = 3;
 }
 
 Config::~Config()
@@ -39,7 +39,7 @@ void Config::loadDefaults() {
 	rectStopTemp = 80.8f;
 	rectWorkPower=32;
 	rectHeadPower = 32;
-	rectForsajTemp = 37;
+	rectForsajTemp = 41;
 	
 	TSAmin = 28;
 	TSAmax = 50;
@@ -51,7 +51,12 @@ void Config::loadDefaults() {
 
 boolean Config::checkVersion()
 {
-	uint8_t v = at24mem->read(0);
+	uint8_t v =
+#ifndef HAVE_AT24C32
+		0
+#else
+		at24mem->read(0);
+#endif
 	return v == version;
 }
 
