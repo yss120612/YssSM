@@ -104,7 +104,7 @@ class MenuFParameter : public MenuParameter {
 public:
 	MenuFParameter(String nm, Menu * par, int i);
 	float getCurrent() { return current; };
-	void setup(float curr, float st, int m_i, int m_a) { current = curr, step = st; ma = m_a; mi = m_i; }
+	void setup(float curr, float st, float m_i, float m_a) { current = curr, step = st; ma = m_a; mi = m_i; }
 	String getStCurr() { return String(current,1); };
 	void up() { current + step>ma ? ma : current += step; }
 	void down() { current - step<mi ? mi : current -= step; }
@@ -112,8 +112,8 @@ protected:
 
 	float current;
 	float step;
-	int mi;
-	int ma;
+	float mi;
+	float ma;
 };
 
 class MenuBParameter : public MenuParameter {

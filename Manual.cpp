@@ -52,6 +52,7 @@ void Manual::makeMenu()
 	menu->add(mHeater);
 	mPump = new MenuCommand("Pump On", 3);
 	menu->add(mPump);
+	menu->add(new MenuCommand("Test", 4));
 	menu->add(new MenuCommand("Return", 100));
 	Menu * setup = new Menu();
 		setup->setParent(menu);
@@ -65,6 +66,7 @@ void Manual::makeMenu()
 
 void Manual::command(MenuCommand * id)
 {
+	float tsa;
 	switch (id->getId()) {
 	case 1:
 		if (agg->getKran()->getState() > 0) {
@@ -99,6 +101,12 @@ void Manual::command(MenuCommand * id)
 			mPump->setName("Pump off");
 			menu->setActive(false);
 		}
+		break;
+	case 4:
+		tsa = hardware->getTTsarga()->getTemp();
+		logg.logging("TTsarga=" + String(tsa, 1));
+		CONF.setRectStopTemp(tsa + 0.2f);
+		logg.logging("TStop=" + String(CONF.getRectStopTemp(), 1));
 		break;
 	case 100:
 		stopAll();
