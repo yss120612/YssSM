@@ -350,14 +350,10 @@ void Config::read()
 	triakCoolerTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	triakCoolerGist = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	
-	//logg.logging("0 loaded idx=(" + String(idx) + " bytes)!");
 	wifi_ssid = "";		while (*(buff + idx) != 0) { wifi_ssid += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
-	//logg.logging("1 loaded idx=(" + String(idx) + " bytes)! wifi_ssid=" + wifi_ssid);
 	wifi_password = ""; while (*(buff + idx) != 0) { wifi_password += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
-	//logg.logging("2 loaded idx=(" + String(idx) + " bytes)! wifi_password=" + wifi_password);
 	www_username = "";	while (*(buff + idx) != 0) { www_username += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
-	//logg.logging("3 loaded idx=(" + String(idx) + " bytes)! www_username=" + www_username);
-	www_password = "";	while (static_cast<uint8_t>(*(buff + idx)) != 0) { www_password += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
+	www_password = "";	while (*(buff + idx) != 0) { www_password += static_cast<char>(*(buff + idx)); idx += sizeof(char); }; idx += sizeof(char);
 
 	logg.logging("CONFIG loaded (" + String(idx) + " bytes)!");
 	changed = false;

@@ -345,7 +345,6 @@ void Rectify::process(long ms)
 			logg.logging("Rectify forsaj finished at " + getTimeStr());
 			hardware->getBeeper()->beep(2000, 1000);
 			work_mode = PROC_SELF_WORK;
-			//workSelf = ms + 60000 * (int)CONF.getRectWorkSelf();//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
 			hardware->setAlarm2((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
 			hardware->setAlarm1(3);//начинаем проверять ТСА
 		}
@@ -355,7 +354,6 @@ void Rectify::process(long ms)
 			logg.logging("Rectify Work Self finished at " + getTimeStr());
 			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
 			hardware->getBeeper()->beep(1000, 5000);
-			//workSelf = ms + 60000 * 10;//10 минут
 			hardware->setAlarm2(10);
 			cont->setVisible(true);
 			menu->setActive(true);
@@ -373,7 +371,6 @@ void Rectify::process(long ms)
 			logg.logging("Rectify collect head finished at " + getTimeStr());
 			work_mode = PROC_WAIT_HEAD;
 			hardware->getBeeper()->beep(2000, 5000);
-			//workSelf = ms + 60000  * 10;//10 минут
 			hardware->setAlarm2(10);
 			cont->setVisible(true);
 			menu->setActive(true);
@@ -382,7 +379,6 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_WAIT_HEAD: 
-		//if (ms - workSelf > 0) {//если за 10 минут никто не подошел
 		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
 			stop(PROCEND_NO_ATT_HEAD);
 		}
@@ -399,16 +395,14 @@ void Rectify::process(long ms)
 			hardware->getBeeper()->beep(1000, 5000);
 		}
 
-		if (coldBeginCheck==0)
+		/*if (coldBeginCheck==0)
 		{
 			hardware->setAlarm2(15);
 			coldBeginCheck = 1;
 		}
 		if (coldBeginCheck==1 && hardware->getClock()->checkAlarm2()) {
 			coldBeginCheck = 2;
-		}
-		break;
-		//if (coldBeginCheck == 0) coldBeginCheck = ms + 1000 * 60 * 15;//через 15 минут проверяем на минимум
+		}*/
 		break;
 	}
 
@@ -417,7 +411,8 @@ void Rectify::process(long ms)
 
 	boolean evnt = false;
 	if (hardware->getClock()->checkAlarm1()) {
-		if (ttsa < CONF.getTSAmin() && coldBeginCheck==2)
+		if (work_mode == PROC_WORK && coldBeginCheck < 10) coldBeginCheck++;
+		if (ttsa < CONF.getTSAmin() && coldBeginCheck>=5)
 		{
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + getTimeStr());
@@ -445,7 +440,7 @@ void Rectify::process(long ms)
 				tsa_alarms = 0;
 			}
 		}
-		hardware->setAlarm1(evnt ? 3 : 5);
+		hardware->setAlarm1(evnt ? 3 : 3);
 	}
 
 	if (ttsa > CONF.getTSAcritical())

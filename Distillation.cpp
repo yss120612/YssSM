@@ -219,8 +219,9 @@ void Distillation::process(long ms) {
 
 	
 	tcube = hardware->getTKube()->getTemp();
-	ttsa = hardware->getTTSA()->getTemp();
-	tdef= hardware->getTTsarga()->getTemp();
+	ttsa  = hardware->getTTSA()->getTemp();
+	tdef  = hardware->getTTsarga()->getTemp();
+
 	switch (work_mode) {
 	case PROC_FORSAJ:
 		if (tdef > CONF.getDistForsajTemp()){//end of forsaj
@@ -230,7 +231,7 @@ void Distillation::process(long ms) {
 			logg.logging("Distill forsaj finished at "+ getTimeStr());
 			hardware->getBeeper()->beep(2000, 2000);
 			hardware->setAlarm1(3);
-			hardware->setAlarm2(15);
+			//hardware->setAlarm2(15);
 			work_mode = PROC_WORK;
 		}
 		break;
@@ -244,16 +245,17 @@ void Distillation::process(long ms) {
 			stop(PROCEND_UROVEN);
 		}
 				
-		if (coldBeginCheck==0 && hardware->getClock()->checkAlarm2()) {
+		/*if (coldBeginCheck==0 && hardware->getClock()->checkAlarm2()) {
 			coldBeginCheck = 2;
-		}
+		}*/
 		break;
 	}
 
 	boolean evnt = false;
 
 	if (hardware->getClock()->checkAlarm1()) {
-		if (ttsa < CONF.getTSAmin() && coldBeginCheck==2)
+		if (work_mode == PROC_WORK && coldBeginCheck<10) coldBeginCheck++;
+		if (ttsa < CONF.getTSAmin() && coldBeginCheck>=5)
 		{
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
