@@ -19,6 +19,8 @@ void Config::loadDefaults() {
 
 	wifi_ssid = "Yss_GIGA";
 	wifi_password = "bqt3bqt3";
+	//wifi_ssid = "ROSTELEKOM-42";
+	//wifi_password = "123qweasdzxc";
 	www_username = "admin";
 	www_password = "esp";
 	scrSaverMin = 1;
@@ -53,7 +55,7 @@ boolean Config::checkVersion()
 {
 	uint8_t v =
 #ifndef HAVE_AT24C32
-		0
+		0;
 #else
 		at24mem->read(0);
 #endif

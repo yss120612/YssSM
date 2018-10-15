@@ -51,8 +51,6 @@ void setup() {
 
 	CONF.loadDefaults();
 
-	//CONF.setWiFi("ROSTELEKOM-42", "123qweasdzxc");
-		
 	httph.setup();
 	
 	attachInterrupt(ENC_A_PIN, A, CHANGE); // Настраиваем обработчик прерываний по изменению сигнала на линии A 

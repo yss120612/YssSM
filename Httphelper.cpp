@@ -31,6 +31,7 @@ void HttpHelper::setup() {
 	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
 
 	server->on("/rectifydata", std::bind(&HttpHelper::handleRectify, this));
+	server->on("/rectifyset", std::bind(&HttpHelper::handleRectifySet, this)); // Установка rectify
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
 
@@ -118,6 +119,13 @@ void HttpHelper::handleRectify()
 		      + ", \"state_data\":\"" + ds->getData(DS_RECTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
+
+void HttpHelper::handleRectifySet()
+{
+	ds->setData(SET_RECTTSTOP, server->arg("TSTOPSET"));
+	server->send(200, "text/plain", "OK");
+}
+
 
 void HttpHelper::handleSuvid(){
 	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) 

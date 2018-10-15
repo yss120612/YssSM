@@ -43,6 +43,7 @@ private:
 	void handleLog();
 	void handleDistill();
 	void handleRectify();
+	void handleRectifySet();
 	void handleSuvid();
 	//void handleSuvidChart();
 	//Config * conf;

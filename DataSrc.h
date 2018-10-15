@@ -17,6 +17,7 @@ class DataSrc
 public:
 	DataSrc();
 	virtual String getData(uint what) = 0;
+	virtual void setData(uint w, String ds)=0;
 private:
 
 };

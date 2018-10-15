@@ -245,3 +245,7 @@ String Mode::getData(uint w)
 		break;
 	}
 }
+
+void Mode::setData(uint w, String ds)
+{
+}

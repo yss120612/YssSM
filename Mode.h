@@ -41,6 +41,7 @@ public:
 	virtual void processMenuLong();
 	virtual void process(long ms) = 0;
 	virtual String getData(uint w);
+	virtual void setData(uint w,String ds);
 	virtual void left();
 	virtual void right();
 	virtual void press();

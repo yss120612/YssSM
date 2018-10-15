@@ -18,6 +18,7 @@ public:
 	Rectify(Aggregates * a, Hardware *h);
 	~Rectify();
 	String getData(uint w);
+	void setData(uint w, String ds);
 	void initDraw();
 protected:
 	void showState();
@@ -36,11 +37,13 @@ protected:
 	float tcube;
 	float ttsa;
 	float tdef;
+	boolean checkLowTSA;
 	//long TSAchecked;
 	//long TSAcheckedCold;
 	uint8_t coldBeginCheck;
 	//long workSelf;
 	uint8_t tsa_alarms;
+	
 };
 
 

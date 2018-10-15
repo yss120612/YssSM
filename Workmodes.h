@@ -23,6 +23,7 @@ public:
 	void setCurrent(uint8_t i);
 	Mode * getCurrent();
 	String getData(uint w);
+	void setData(uint w, String ds);
 private:
 	Mode * current;
 	QList <Mode *> _modes;

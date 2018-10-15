@@ -138,6 +138,13 @@ enum mydata {
 };
 
 
+enum mysetdata {
+	SET_RECTSTART,
+	SET_RECTTSTOP,
+	SET_RECTSTOP,
+};
+
+
 #define PROC_OFF  0 //начало
 #define PROC_FORSAJ  1 //разгон до temp_start
 #define PROC_WORK 2

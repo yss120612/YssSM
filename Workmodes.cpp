@@ -44,5 +44,10 @@ String WorkModes::getData(uint w)
 	return current->getData(w);
 }
 
+void WorkModes::setData(uint w, String ds)
+{
+	current->setData(w,ds);
+}
+
 
 WorkModes workMode;

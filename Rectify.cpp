@@ -4,6 +4,7 @@ Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 {
 	MyName = "Rectify";
 	makeMenu();
+	checkLowTSA = false;
 }
 
 Rectify::~Rectify()
@@ -53,6 +54,15 @@ String Rectify::getData(uint w)
 	}
 	else
 	return Mode::getData(w);
+}
+
+void Rectify::setData(uint w, String ds)
+{
+	switch (w) {
+	case SET_RECTTSTOP:
+		CONF.setRectStopTemp(ds.toFloat());
+		break;
+	}
 }
 
 void Rectify::initDraw()
@@ -224,7 +234,7 @@ void Rectify::start()
 	tsa_alarms = 0;
 	stop_defined = false;
 	readTime();
-	logg.logging("Distill process started at " + String(tim));
+	logg.logging("Rectify process started at " + String(tim));
 }
 
 void Rectify::initParams(MenuParameter * mp)
@@ -353,8 +363,8 @@ void Rectify::process(long ms)
 		if (hardware->getClock()->checkAlarm2()){
 			logg.logging("Rectify Work Self finished at " + getTimeStr());
 			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
-			hardware->getBeeper()->beep(1000, 5000);
 			hardware->setAlarm2(10);
+			hardware->getBeeper()->beep(1000, 5000);
 			cont->setVisible(true);
 			menu->setActive(true);
 			ss_active = false;
@@ -370,12 +380,12 @@ void Rectify::process(long ms)
 		if (hardware->getUrovenWS()->isAlarmed()) {
 			logg.logging("Rectify collect head finished at " + getTimeStr());
 			work_mode = PROC_WAIT_HEAD;
-			hardware->getBeeper()->beep(2000, 5000);
 			hardware->setAlarm2(10);
+			hardware->getBeeper()->beep(2000, 5000);
 			cont->setVisible(true);
 			menu->setActive(true);
-			last_action = ms;
 			ss_active = false;
+			last_action = ms;
 		}
 		break;
 	case PROC_WAIT_HEAD: 
@@ -394,15 +404,6 @@ void Rectify::process(long ms)
 			stop(PROCEND_TEMPERATURE);
 			hardware->getBeeper()->beep(1000, 5000);
 		}
-
-		/*if (coldBeginCheck==0)
-		{
-			hardware->setAlarm2(15);
-			coldBeginCheck = 1;
-		}
-		if (coldBeginCheck==1 && hardware->getClock()->checkAlarm2()) {
-			coldBeginCheck = 2;
-		}*/
 		break;
 	}
 
@@ -411,8 +412,8 @@ void Rectify::process(long ms)
 
 	boolean evnt = false;
 	if (hardware->getClock()->checkAlarm1()) {
-		if (work_mode == PROC_WORK && coldBeginCheck < 10) coldBeginCheck++;
-		if (ttsa < CONF.getTSAmin() && coldBeginCheck>=5)
+		if (checkLowTSA && work_mode == PROC_WORK && coldBeginCheck < 10) coldBeginCheck++;
+		if (coldBeginCheck >= 5 && ttsa < CONF.getTSAmin())
 		{
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + getTimeStr());

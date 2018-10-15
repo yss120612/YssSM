@@ -49,7 +49,22 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TSTOP"></div>		
+		</div>
+	
+		<div class="col-md-offset-1 col-md-10">
+			<form action="/rectifyset">
+				<div class="form-group">
+					<label for="exampleInputEmail1">Остановить процесс при </label>
+					<input type="input" class="form-control" id="TSTOPSET" aria-describedby="helpTstop">
+					<small id="helpTstop" class="form-text text-muted">Температура в царге, когда остановить процесс</small>
+				</div>
+				<button type="submit" class="btn btn-primary">Установить</button>
+			</form>
+		</div>
 		
+	
 		<div class="col-md-offset-1 col-md-10">
 			<div id="CHART"></div>		
 		</div>
@@ -141,7 +156,7 @@
                dashStyle: 'shortdash',
                 width: 1,
                 label: {
-                    text: 'Окончание процесса'
+                    text: 'Окончание процесса '+target+'C'
                 }
 			});
 			}
@@ -211,6 +226,8 @@
 		$('#UROVEN').html('Датчик уровня <b>'+data['wsu_data']+'</b>');
 		$('#FLOOD').html('Датчик протечки <b>'+data['wsf_data']+'</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
+		$('#TSTOP').html('Температура останова <b>'+data['tstop_data']+'&deg;C</b>');
+		$('#TSTOPSET').val(data['tstop_data']);
 		});
 		setTimeout('process()',3000);
 	}
