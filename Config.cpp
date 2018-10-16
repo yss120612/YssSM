@@ -8,7 +8,7 @@
 Config::Config()
 {
 	changed = false;
-	version = 3;
+	version = 4;
 }
 
 Config::~Config()
@@ -38,7 +38,7 @@ void Config::loadDefaults() {
 	rectWorkSlf = 20;
 	rectKranOpened = 20.7f;
 	rectHeadKranOpened = 21.0f;
-	rectStopTemp = 80.8f;
+	rectStopTemp = 82.8f;
 	rectWorkPower=32;
 	rectHeadPower = 32;
 	rectForsajTemp = 41;
@@ -140,7 +140,7 @@ void Config::setRectStopTemp(float st)
 {
 	if (rectStopTemp != st) changed = true;
 	rectStopTemp = st;
-	write();
+	//write();
 }
 
 void Config::setRectKranOpened(float st)
@@ -276,7 +276,7 @@ void Config::write()
 
 	memcpy((buff + idx), &distStopTemp,		sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &distKranOpened,	sizeof(float)); idx += sizeof(float);
-	memcpy((buff + idx), &rectStopTemp,		sizeof(float)); idx += sizeof(float);
+	//memcpy((buff + idx), &rectStopTemp,		sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &rectKranOpened,	sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &rectHeadKranOpened,	sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &manualKranOpened, sizeof(float)); idx += sizeof(float);
@@ -329,7 +329,7 @@ void Config::read()
 
 	memcpy(&distStopTemp,(buff + idx),  sizeof(float)); idx += sizeof(float);
 	memcpy(&distKranOpened, (buff + idx),  sizeof(float)); idx += sizeof(float);
-	memcpy(&rectStopTemp, (buff + idx), sizeof(float)); idx += sizeof(float);
+	//memcpy(&rectStopTemp, (buff + idx), sizeof(float)); idx += sizeof(float);
 	memcpy(&rectKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
 	memcpy(&rectHeadKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
 	memcpy(&manualKranOpened, (buff + idx),sizeof(float)); idx += sizeof(float);
@@ -389,7 +389,7 @@ void Config::read()
 uint16_t Config::calcLength()
 {
 	length =	sizeof(int) * 2 + 
-				sizeof(float) * 6 + 
+				sizeof(float) * 5 + 
 				sizeof(uint8_t) * 14 + 
 				wifi_ssid.length() + 1 + 
 				wifi_password.length() + 1 + 

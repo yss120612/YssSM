@@ -123,7 +123,8 @@ void HttpHelper::handleRectify()
 void HttpHelper::handleRectifySet()
 {
 	ds->setData(SET_RECTTSTOP, server->arg("TSTOPSET"));
-	server->send(200, "text/plain", "OK");
+	logg.logging("Temperature sett on " + server->arg("TSTOPSET"));
+	//server->send(200, "text/plain", "OK");
 }
 
 

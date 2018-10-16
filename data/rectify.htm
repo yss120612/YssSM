@@ -53,12 +53,11 @@
 			<div id="TSTOP"></div>		
 		</div>
 	
-		<div class="col-md-offset-1 col-md-10">
-			<form action="/rectifyset">
+		<div class="col-md-offset-1 col-md-5">
+			<form action="/rectifyset" id="setTStop" class="form-inline">
 				<div class="form-group">
-					<label for="exampleInputEmail1">Остановить процесс при </label>
+					<label for="exampleInputEmail1">Остановить процесс при температуре </label>
 					<input type="input" class="form-control" id="TSTOPSET" aria-describedby="helpTstop">
-					<small id="helpTstop" class="form-text text-muted">Температура в царге, когда остановить процесс</small>
 				</div>
 				<button type="submit" class="btn btn-primary">Установить</button>
 			</form>
@@ -76,6 +75,7 @@
 	$(document).ready(function(){
 	process();
 	var target=0;
+	var ask_count=0;
 	var chart1 = new Highcharts.Chart({
 	title: {
 		text: 'Ректификация'
@@ -203,6 +203,18 @@
         }
 		]
     });
+	  $('#setTStop').submit(function(){  
+                $.ajax({  
+                    type: "POST",  
+                    url: "/rectifyset",  
+                    data: "TSTOPSET="+$("#TSTOPSET").val(),  
+                    success: function(html){  
+                       
+                    }  
+                });  
+                return false;  
+            });  
+	
 	});
 	
 	
@@ -215,7 +227,6 @@
 	function process(){
 		$.getJSON(
 		"/rectifydata",
-		 
 		function(data){
 		$('#TTSA').html('Температура TSA <b>'+data['tsa_data']+'&deg;C</b>');
 		$('#TDEF').html('Температура в дефлегматоре <b>'+data['def_data']+'&deg;C</b>');
@@ -227,7 +238,10 @@
 		$('#FLOOD').html('Датчик протечки <b>'+data['wsf_data']+'</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
 		$('#TSTOP').html('Температура останова <b>'+data['tstop_data']+'&deg;C</b>');
+		if (ask_count>2){
 		$('#TSTOPSET').val(data['tstop_data']);
+		ask_count+=1;
+		}
 		});
 		setTimeout('process()',3000);
 	}
