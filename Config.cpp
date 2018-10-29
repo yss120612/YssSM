@@ -183,7 +183,7 @@ void Config::setBrewingCoolingTemp(uint8_t st)
 	breCoolingTemp = st;
 	write();
 }
-}
+
 
 void Config::setBrewingKran(float st)
 {
