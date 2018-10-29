@@ -1,7 +1,7 @@
-// Suvid.h
+// Brewing.h
 
-#ifndef _SUVID_h
-#define _SUVID_h
+#ifndef _BREWING_h
+#define _BREWING_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -9,38 +9,31 @@
 	#include "WProgram.h"
 #endif
 
-
-//#include "Heater.h"
-//#include "DallasTerm.h"
-//#include "Beeper.h"
-//#include "Display.h"
 #include "Mode.h"
-//#include "Termopause.h"
-//#include "Workmodes.h"
 
 
-
-
-class Suvid : public Mode {
+class Brewing : public Mode {
 public:
-	Suvid(Aggregates * a, Hardware *h);
-	~Suvid() { delete mcmd; };
+	Brewing(Aggregates * a, Hardware *h);
+	~Brewing() { delete mcmd; };
 	void start();
 	void stop(uint8_t reason);
 	void process(long ms);
 	String getData(uint w);
 protected:
+	uint8_t phase;
 	MenuCommand * mcmd;
-	//TermoPause tpause;
 	void error(uint8_t);
 	void showState();
+	uint8_t getTarget();
+	int getTimeLeft();
 	void initDraw();
 	void makeMenu();
+	boolean have_chiller;
 	void command(MenuCommand * id);
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
 };
-
 
 #endif
 

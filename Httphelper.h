@@ -45,6 +45,7 @@ private:
 	void handleRectify();
 	void handleRectifySet();
 	void handleSuvid();
+	void handleBrewing();
 	//void handleSuvidChart();
 	//Config * conf;
 	ESP8266WebServer * server;

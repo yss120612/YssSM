@@ -35,6 +35,8 @@ void HttpHelper::setup() {
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
 
+	server->on("/brewingdata", std::bind(&HttpHelper::handleBrewing, this));
+
 	//server->on("/suvidchart", std::bind(&HttpHelper::handleSuvidChart, this));
 
 	//server->on("/restart", web_handlers::restart);
@@ -50,6 +52,8 @@ void HttpHelper::setup() {
 	server->serveStatic("/rectify", SPIFFS, "/rectify.htm", NULL);
 
 	server->serveStatic("/suvid", SPIFFS, "/suvid.htm", NULL);
+
+	server->serveStatic("/brewing", SPIFFS, "/brewing.htm", NULL);
 
 	server->serveStatic("/css/bootstrap.min.css", SPIFFS, "/css/bootstrap.min.css", NULL);
 
@@ -137,6 +141,18 @@ void HttpHelper::handleSuvid(){
 		      + "\", \"time_data\":\"" + ds->getData(DS_SUVIDTIMELEFT) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
+
+void HttpHelper::handleBrewing() {
+	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE)
+		+ ", \"cooler_data\":" + ds->getData(DS_TTRIAK)
+		+ ", \"heater_data\":" + ds->getData(DS_HPOWER)
+		+ ", \"ttarget_data\":\"" + ds->getData(DS_BREWINGTARGET)
+		+ ", \"phase_data\":\"" + ds->getData(DS_BREWINGPHASE)
+		+ "\", \"state_data\":\"" + ds->getData(DS_BREWINGSTATE)
+		+ "\", \"time_data\":\"" + ds->getData(DS_BREWINGTIMELEFT) + "\" }";
+	server->send(200, "text/json", str); // Oтправляем ответ No Reset
+}
+
 
 //void HttpHelper::handleSuvidChart() {
 //	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE) 

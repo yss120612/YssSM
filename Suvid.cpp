@@ -1,4 +1,5 @@
 #include "Suvid.h"
+#include "Workmodes.h"
 
 Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	
@@ -9,7 +10,7 @@ Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 
 void Suvid::initDraw() {
 	Mode::initDraw();
-	tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
+	//tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
 }
 
 void Suvid::showState() {
@@ -97,7 +98,7 @@ String Suvid::getData(uint w)
 			}
 			break;
 		case DS_SUVIDTARGET:
-			return String(tpause.getTemp());
+			return String(CONF.getSuvidTemp());
 		break;
 		default:
 			return "";
@@ -158,13 +159,13 @@ void Suvid::initParams(MenuParameter * mp)
 	switch (mp->getId()) {
 		//ot 0:0 do 23:50
 	case 10:
-		((MenuIParameter *)mp)->setup(tpause.getTime()/60, 1, 0, 23);
+		((MenuIParameter *)mp)->setup(CONF.getSuvidMin()/60, 1, 0, 23);
 		break;
 	case 11:
-		((MenuIParameter *)mp)->setup(tpause.getTime() % 60, 10, 0, 50);
+		((MenuIParameter *)mp)->setup(CONF.getSuvidMin() % 60, 10, 0, 50);
 		break;
 	case 12:
-		((MenuIParameter *)mp)->setup(tpause.getTemp(), 1, 20, 100);
+		((MenuIParameter *)mp)->setup(CONF.getSuvidTemp(), 1, 20, 100);
 		break;
 	}
 }
@@ -179,13 +180,13 @@ void Suvid::acceptParams(MenuParameter * mp)
 		//logg.logging("Hours="+String(((MenuIParameter *)mp->getPrev())->getCurrent()));
 		//logg.logging("Minutes=" + String(((MenuIParameter *)mp)->getCurrent()));
 		CONF.setSuvidMin(((MenuIParameter *)mp->getPrev())->getCurrent() * 60 + ((MenuIParameter *)mp)->getCurrent());
-		tpause.setTime(CONF.getSuvidMin());
+		//tpause.setTime(CONF.getSuvidMin());
 		//CONF.read();
 		break;
 	case 12:
 		//logg.logging("Temp-ra=" + String(((MenuIParameter *)mp)->getCurrent()));
 		CONF.setSuvidTemp(((MenuIParameter *)mp)->getCurrent());
-		tpause.setTemp(CONF.getSuvidTemp());
+		//tpause.setTemp(CONF.getSuvidTemp());
 		break;
 	}
 }
@@ -199,21 +200,22 @@ void Suvid::process(long ms) {
 	
 	case PROC_FORSAJ:
 		
-		if (tmp >= tpause.getTemp()) {
+		if (tmp >= CONF.getSuvidTemp()) {
 			work_mode = PROC_WORK;
 			logg.logging("SuVid WORK started at " + getTimeStr());
-			hardware->setAlarm2(tpause.getTime());//Завели будильник
+			hardware->setAlarm2(CONF.getSuvidMin());//Завели будильник
 
 		}
 		break;
 	case PROC_WORK:
 		if (hardware->getClock()->checkAlarm2()) {
 			stop(PROCEND_TIME);//будильник сработал
+			return;
 		}
 		break;
 	}
 
-	agg->getHeater()->setPID(tmp, tpause.getTemp());
+	agg->getHeater()->setPID(tmp, CONF.getSuvidTemp());
 }
 
 void Suvid::error(uint8_t er) {

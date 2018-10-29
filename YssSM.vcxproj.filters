@@ -612,9 +612,6 @@
     <ClInclude Include="Const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Termopause.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Workmodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -906,6 +903,9 @@
     <ClInclude Include="Manual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Brewing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DallasTerm.cpp">
@@ -1095,9 +1095,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Const.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Termopause.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Workmodes.cpp">
@@ -1350,6 +1347,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Manual.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Brewing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -24,6 +24,20 @@ public:
 	void setSuvidMin(int sm);
 	void setSuvidTemp(uint8_t st);
 
+	void setBrewingMin1(int sm);
+	void setBrewingTemp1(uint8_t st);
+	void setBrewingMin2(int sm);
+	void setBrewingTemp2(uint8_t st);
+	void setBrewingMin3(int sm);
+	void setBrewingTemp3(uint8_t st);
+	void setBrewingMin4(int sm);
+	void setBrewingTemp4(uint8_t st);
+
+	void setBrewingCoolingTemp(uint8_t sm);
+	void setBrewingKran(float st);
+
+
+
 	void setTriakCoolerTemp(uint8_t st);
 	void setTriakCoolerGist(uint8_t st);
 
@@ -56,6 +70,18 @@ public:
 
 	const int getSuvidMin();
 	const uint8_t getSuvidTemp();
+
+	const int getBrewingMin1();
+	const uint8_t getBrewingTemp1();
+	const int getBrewingMin2();
+	const uint8_t getBrewingTemp2();
+	const int getBrewingMin3();
+	const uint8_t getBrewingTemp3();
+	const int getBrewingMin4();
+	const uint8_t getBrewingTemp4();
+	const float getBrewingKran();
+	const uint8_t getBrewingCoolingTemp();
+
 
 	const uint8_t	getRectWorkSelf();
 	const uint8_t	getRectHeadPower();
@@ -98,6 +124,19 @@ private:
 	int scrSaverMin;
 	int suvidMin;
 	uint8_t suvidTemp;
+
+	int brewingMin1;
+	uint8_t brewingTemp1;
+	int brewingMin2;
+	uint8_t brewingTemp2;
+	int brewingMin3;
+	uint8_t brewingTemp3;
+	int brewingMin4;
+	uint8_t brewingTemp4;
+
+	float	breKranOpened;
+	uint8_t breCoolingTemp;
+
 	
 	uint8_t distWorkPower;
 	float distStopTemp;
@@ -115,7 +154,6 @@ private:
 	float	rectStopTemp;
 
 	uint8_t rectForsajTemp;
-
 
 	uint8_t TSAmin;
 	uint8_t TSAmax;

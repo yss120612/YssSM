@@ -8,7 +8,7 @@
 Config::Config()
 {
 	changed = false;
-	version = 4;
+	version = 7;
 }
 
 Config::~Config()
@@ -27,6 +27,21 @@ void Config::loadDefaults() {
 	suvidMin = 60;
 	suvidTemp = 60;
 	
+	brewingMin1 = 60;
+	brewingTemp1 = 90;
+	//brewingMin2 =20;//из рецепта
+	brewingMin2 = 0;
+	brewingTemp2 = 75;
+	//brewingMin3 = 10;
+	brewingMin3 = 0;
+	brewingTemp3 = 88;
+	//brewingMin4 = 10;
+	brewingMin4 = 0;
+	brewingTemp4 = 96;
+	
+	breCoolingTemp = 25;
+	breKranOpened = 21.0f;
+
 	distKranOpened = 21.1f;
 	distStopTemp = 98.8f;
 	distWorkPower = 42;
@@ -100,6 +115,83 @@ void Config::setSuvidTemp(uint8_t st)
 	suvidTemp = st;
 	write();
 }
+
+
+void Config::setBrewingMin1(int sm)
+{
+	if (brewingMin1 != sm) changed = true;
+	brewingMin1 = sm;
+	write();
+}
+
+
+void Config::setBrewingTemp1(uint8_t st)
+{
+	if (brewingTemp1 != st) changed = true;
+	brewingTemp1 = st;
+	write();
+}
+
+void Config::setBrewingMin2(int sm)
+{
+	if (brewingMin2 != sm) changed = true;
+	brewingMin2 = sm;
+	write();
+}
+
+
+void Config::setBrewingTemp2(uint8_t st)
+{
+	if (brewingTemp2 != st) changed = true;
+	brewingTemp2 = st;
+	write();
+}
+
+void Config::setBrewingMin3(int sm)
+{
+	if (brewingMin3 != sm) changed = true;
+	brewingMin3 = sm;
+	write();
+}
+
+
+void Config::setBrewingTemp3(uint8_t st)
+{
+	if (brewingTemp3 != st) changed = true;
+	brewingTemp3 = st;
+	write();
+}
+
+void Config::setBrewingMin4(int sm)
+{
+	if (brewingMin4 != sm) changed = true;
+	brewingMin4 = sm;
+	write();
+}
+
+
+void Config::setBrewingTemp4(uint8_t st)
+{
+	if (brewingTemp4 != st) changed = true;
+	brewingTemp4 = st;
+	write();
+}
+
+void Config::setBrewingCoolingTemp(uint8_t st)
+{
+	if (breCoolingTemp != st) changed = true;
+	breCoolingTemp = st;
+	write();
+}
+}
+
+void Config::setBrewingKran(float st)
+{
+	if (breKranOpened != st) changed = true;
+	breKranOpened = st;
+	write();
+}
+
 
 void Config::setTriakCoolerTemp(uint8_t st)
 {
@@ -235,6 +327,19 @@ const int Config::getScrSavMin(){ return scrSaverMin;}
 const int Config::getSuvidMin(){ return suvidMin;}
 const uint8_t Config::getSuvidTemp(){return suvidTemp;}
 
+
+const int Config::getBrewingMin1() { return brewingMin1; }
+const uint8_t Config::getBrewingTemp1() { return brewingTemp1; }
+const int Config::getBrewingMin2() { return brewingMin2; }
+const uint8_t Config::getBrewingTemp2() { return brewingTemp2; }
+const int Config::getBrewingMin3() { return brewingMin3; }
+const uint8_t Config::getBrewingTemp3() { return brewingTemp3; }
+const int Config::getBrewingMin4() { return brewingMin4; }
+const uint8_t Config::getBrewingTemp4() { return brewingTemp4; }
+const float Config::getBrewingKran(){	return breKranOpened;}
+const uint8_t Config::getBrewingCoolingTemp(){	return breCoolingTemp;}
+
+
 const uint8_t Config::getDistWorkPower(){ return distWorkPower;}
 const float Config::getDistStopTemp() { return distStopTemp;}
 const float Config::getDistKranOpened(){	return distKranOpened;}
@@ -280,11 +385,22 @@ void Config::write()
 	memcpy((buff + idx), &rectKranOpened,	sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &rectHeadKranOpened,	sizeof(float)); idx += sizeof(float);
 	memcpy((buff + idx), &manualKranOpened, sizeof(float)); idx += sizeof(float);
+	memcpy((buff + idx), &breKranOpened, sizeof(float)); idx += sizeof(float);
 
 	memcpy((buff + idx), &scrSaverMin,		sizeof(int));	idx += sizeof(int);
 	memcpy((buff + idx), &suvidMin,			sizeof(int));	idx += sizeof(int);
+	memcpy((buff + idx), &brewingMin1, sizeof(int));	idx += sizeof(int);
+	memcpy((buff + idx), &brewingMin2, sizeof(int));	idx += sizeof(int);
+	memcpy((buff + idx), &brewingMin3, sizeof(int));	idx += sizeof(int);
+	memcpy((buff + idx), &brewingMin4, sizeof(int));	idx += sizeof(int);
+
 
 	*(buff + idx++) = suvidTemp;
+	*(buff + idx++) = brewingTemp1;
+	*(buff + idx++) = brewingTemp2;
+	*(buff + idx++) = brewingTemp3;
+	*(buff + idx++) = brewingTemp4;
+	*(buff + idx++) = breCoolingTemp;
 	*(buff + idx++) = distWorkPower;
 	*(buff + idx++) = distForsajTemp;
 	*(buff + idx++) = manualWorkPower;
@@ -333,12 +449,22 @@ void Config::read()
 	memcpy(&rectKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
 	memcpy(&rectHeadKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
 	memcpy(&manualKranOpened, (buff + idx),sizeof(float)); idx += sizeof(float);
+	memcpy(&breKranOpened, (buff + idx), sizeof(float)); idx += sizeof(float);
 
 	scrSaverMin =		static_cast<int>(*(buff + idx)); idx += sizeof(int);
 	suvidMin = static_cast<int>(*(buff + idx)); idx += sizeof(int);
+	brewingMin1 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
+	brewingMin2 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
+	brewingMin3 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
+	brewingMin4 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
+	breCoolingTemp = static_cast<int>(*(buff + idx)); idx += sizeof(int);
 
 	
 	suvidTemp =			static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	brewingTemp1 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	brewingTemp2 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	brewingTemp3 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	brewingTemp4 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	distWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	distForsajTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	manualWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
@@ -388,9 +514,9 @@ void Config::read()
 
 uint16_t Config::calcLength()
 {
-	length =	sizeof(int) * 2 + 
-				sizeof(float) * 5 + 
-				sizeof(uint8_t) * 14 + 
+	length =	sizeof(int) * 6 + 
+				sizeof(float) * 6 + 
+				sizeof(uint8_t) * 19 + 
 				wifi_ssid.length() + 1 + 
 				wifi_password.length() + 1 + 
 				www_username.length() + 1 + 

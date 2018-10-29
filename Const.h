@@ -110,10 +110,11 @@ enum mo{
 	MODE_SUVID,
 	MODE_DISTILL,
 	MODE_RECTIFY,
+	MODE_BREWING,
 	MODE_MANUAL
 };
 
-enum mydata {
+enum mydata {//ДЛЯ просмотра ИЗ ВЕБА
 	DS_TKUBE,
 	DS_TTSA,
 	DS_TTSARGA,
@@ -134,11 +135,17 @@ enum mydata {
 	DS_SUVIDSTATE,
 	DS_SUVIDTIMELEFT,
 	DS_SUVIDTARGET,
-	DS_SUVIDEND
+	DS_SUVIDEND,
+	DS_BREWINGSTART,
+	DS_BREWINGSTATE,
+	DS_BREWINGTIMELEFT,
+	DS_BREWINGTARGET,
+	DS_BREWINGPHASE,
+	DS_BREWINGEND
 };
 
 
-enum mysetdata {
+enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 	SET_RECTSTART,
 	SET_RECTTSTOP,
 	SET_RECTSTOP,
@@ -152,6 +159,7 @@ enum mysetdata {
 #define PROC_SELF_WORK 4
 #define PROC_WAIT_SELF 5
 #define PROC_WAIT_HEAD 6
+#define PROC_COOLING 7
 
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени

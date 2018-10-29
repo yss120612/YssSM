@@ -1,4 +1,5 @@
 #include "Rectify.h"
+#include "Workmodes.h"
 
 Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 {

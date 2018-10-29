@@ -1,4 +1,5 @@
 
+#include "Brewing.h"
 #include "Manual.h"
 #include "Pump.h"
 #include "Multiplexor.h"
@@ -34,6 +35,7 @@ Mode * main = new Main(&agg, &hard);
 Mode * suvid = new Suvid(&agg, &hard);
 Mode * distill = new Distillation(&agg, &hard);
 Mode * rectify = new Rectify(&agg, &hard);
+Mode * brewing = new Brewing(&agg, &hard);
 Mode * manual = new Manual(&agg, &hard);
 
 void setup() {
@@ -64,6 +66,7 @@ void setup() {
 	workMode.addMode(suvid);
 	workMode.addMode(distill);
 	workMode.addMode(rectify);
+	workMode.addMode(brewing);
 	workMode.addMode(manual);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);

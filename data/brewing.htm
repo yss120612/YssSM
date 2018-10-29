@@ -18,70 +18,57 @@
 		<div class="col-md-12">
 			<a href="/" class="btn btn-info">Дом</a>
 		</div>
+				
 		<div class="col-md-offset-1 col-md-10">
-		<h3>Ректификация</h3>
+		<h3>Затирание</h3>
 		</div>
+	
 		<div class="col-md-offset-1 col-md-10">
-			<div id="TTSA"></div>		
+			<div id="TTARGET"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
-			<div id="TDEF"></div>		
+			<div id="PHASE"></div>		
 		</div>
+		
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMELEFT"></div>		
+		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TKUBE"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TTRIAK"></div>		
 		</div>
+		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="HPOWER"></div>		
 		</div>
-		<div class="col-md-offset-1 col-md-10">
-			<div id="KSTATE"></div>		
-		</div>
 		
-		<div class="col-md-offset-1 col-md-10">
-			<div id="UROVEN"></div>		
-		</div>
-		<div class="col-md-offset-1 col-md-10">
-			<div id="FLOOD"></div>		
-		</div>
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
-		<div class="col-md-offset-1 col-md-10">
-			<div id="TSTOP"></div>		
-		</div>
-	
-		<div class="col-md-offset-1 col-md-5">
-			<form action="/rectifyset" id="setTStop" class="form-inline">
-				<div class="form-group">
-					<label for="exampleInputEmail1">Остановить процесс при температуре </label>
-					<input type="input" class="form-control setdata" id="TSTOPSET" aria-describedby="helpTstop">
-				</div>
-				<button type="submit" class="btn btn-primary">Установить</button>
-			</form>
-		</div>
 		
-	
 		<div class="col-md-offset-1 col-md-10">
 			<div id="CHART"></div>		
 		</div>
-		
 	</div>
 	</div>
- </body>
+ 
  <script type="text/javascript">
 	$(document).ready(function(){
 	process();
+	
+	
 	var target=0;
-	var ask_count=0;
 	var chart1 = new Highcharts.Chart({
 	title: {
-		text: 'Ректификация'
+		text: 'SuVid'
 	},
 	subtitle: {
-		text: 'температуры в узлах и мощность тэна.'
+		text: 'История изменения температуры в кубе и мощности тэна.'
 	},
 	yAxis:[{
 	
@@ -132,125 +119,76 @@
 			
 			 var series0 = this.series[0];
 			 var series1 = this.series[1];
-			 var series2 = this.series[2];
-			 var series3 = this.series[3];
 			 var ax = this.yAxis[0];
 			 
 			setInterval(function(){
-			$.getJSON("/rectifydata", function(lst) {
+			$.getJSON("/suviddata", function(lst) {
 			var shift = series0.data.length > 99;
 			var y0= parseFloat(lst['kube_data']);
 			var y1= parseFloat(lst['heater_data']);
-			var y2= parseFloat(lst['tsa_data']);
-			var y3= parseFloat(lst['def_data']);
-			var t=parseFloat(lst['tstop_data']);
+			var t=parseFloat(lst['ttarget_data']);
 			var x=(new Date()).getTime();
 			if (target!=t)
 			{
 			target=t;
 			ax.removePlotLine('tmp');
 			ax.addPlotLine({
-				value: target,
-               color: 'green',
+				value: parseFloat(lst['ttarget_data']),
+                color: 'green',
 				id: 'tmp',
-               dashStyle: 'shortdash',
+                dashStyle: 'shortdash',
                 width: 1,
                 label: {
-                    text: 'Окончание процесса '+target+'C'
+                    text: 'Заданная температура'
                 }
 			});
 			}
-			
-			//y0= randomInteger(0, 99);
-			//y1= randomInteger(0, 99);
-			//y2= randomInteger(0, 99);
-			//y3= randomInteger(0, 99);
-			
 			series0.addPoint([x,y0],true,shift); 
 			series1.addPoint([x,y1],true,shift); 
-			series2.addPoint([x,y2],true,shift); 
-			series3.addPoint([x,y3],true,shift); 
 			});
 			}, 30000);
             }
         }
         },
-	
-
-		
+			
 		
         series: [{
-			name:'Т куба',
+			name:'Температура',
             data: [20],
 			yAxis: 0,
-            pointStart: (new Date()).getTime(),
+            pointStart: (new Date()).getTime()-10000,
+           // pointInterval: 10 * 1000
         },{
 			name:'Мощность тэна',
             data: [40],
 			yAxis: 1,
 			color: '#FF0000',
-            pointStart: (new Date()).getTime(),
-		}, {
-			name:'Т ТСА',
-            data: [20],
-			yAxis: 0,
-            pointStart: (new Date()).getTime(),
-        },{
-			name:'Т колонны',
-            data: [20],
-			yAxis: 0,
-            pointStart: (new Date()).getTime(),
-        }
-		]
+            pointStart: (new Date()).getTime()-10000,
+		}]
     });
-	$('.setdata').focus(function() {
-		$(this).addClass("focus");
 	});
-	$('.setdata').focus(function() {
-		$(this).removeClass("focus");
-	});
-		  
-	$('#setTStop').submit(function(){  
-                $.ajax({  
-                    type: "POST",  
-                    url: "/rectifyset",  
-                    data: "TSTOPSET="+$("#TSTOPSET").val(),  
-                    success: function(html){  
-                       
-                    }  
-                });  
-                return false;  
-            });  
-	
-	});
-	
 	
 	function randomInteger(min, max) {
     var rand = min - 0.5 + Math.random() * (max - min + 1)
     rand = Math.round(rand);
     return rand;
   }
-  
+	
+		
 	function process(){
 		$.getJSON(
-		"/rectifydata",
+		"/brewingdata",
 		function(data){
-		$('#TTSA').html('Температура TSA <b>'+data['tsa_data']+'&deg;C</b>');
-		$('#TDEF').html('Температура в дефлегматоре <b>'+data['def_data']+'&deg;C</b>');
+		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
+		$('#TKUBE').html('Фаза затирания <b>'+data['phase_data']+'</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
-		$('#KSTATE').html('Кран охладителя открыт на <b>'+data['kran_data']+'%</b>');
-		$('#UROVEN').html('Датчик уровня <b>'+data['wsu_data']+'</b>');
-		$('#FLOOD').html('Датчик протечки <b>'+data['wsf_data']+'</b>');
+		$('#TIMELEFT').html('Осталось <b>'+data['time_data']+'</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
-		$('#TSTOP').html('Температура останова <b>'+data['tstop_data']+'&deg;C</b>');
-		if (!$('#TSTOP').hasClass('focus')){
-		$('#TSTOPSET').val(data['tstop_data']);
-		};
-		
 		});
 		setTimeout('process()',3000);
-	}
-	</script>
+	};
+		</script>
+	</body>
 </html>
