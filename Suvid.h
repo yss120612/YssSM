@@ -29,6 +29,7 @@ public:
 	void stop(uint8_t reason,String text="");
 	void process(long ms);
 	String getData(uint w);
+	void setData(uint w, String ds);
 protected:
 	MenuCommand * mcmd;
 	void showState();

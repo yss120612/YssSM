@@ -28,6 +28,10 @@
 		</div>
 		
 		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMETARGET"></div>		
+		</div>
+		
+		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMELEFT"></div>		
 		</div>
 		
@@ -45,6 +49,20 @@
 		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
+		</div>
+		
+		<div class="col-md-offset-1 col-md-5">
+			<form action="/rectifyset" id="setTPause" class="form-inline">
+				<div class="form-group">
+					<label for="TMPPAUSE">Температура </label>
+					<input type="input" class="form-control setdata" id="TMPPAUSE" aria-describedby="helpTmpPause">
+				</div>
+				<div class="form-group">
+					<label for="TIMEPAUSE">Время (мин.) </label>
+					<input type="input" class="form-control setdata" id="TIMEPAUSE" aria-describedby="helpTimePause">
+				</div>
+				<button type="submit" class="btn btn-primary">Установить</button>
+			</form>
 		</div>
 		
 		<div class="col-md-offset-1 col-md-10">
@@ -162,6 +180,26 @@
             pointStart: (new Date()).getTime()-10000,
 		}]
     });
+	
+	$('.setdata').focus(function() {
+		$(this).addClass("focus");
+	});
+	$('.setdata').blur(function() {
+		$(this).removeClass("focus");
+	});
+		  
+	$('#setTPause').submit(function(){  
+                $.ajax({  
+                    type: "POST",  
+                    url: "/suvidset",  
+                    data: "TMP="+$("#TMPPAUSE").val()+"&TIME="+$("#TIMEPAUSE").val(),  
+                    success: function(html){  
+                       
+                    }  
+                });  
+                return false;  
+            });  
+	
 	});
 	
 	function randomInteger(min, max) {
@@ -176,6 +214,13 @@
 		"/suviddata",
 		function(data){
 		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
+		if (!$('#TMPPAUSE').hasClass('focus')){
+		$('#TMPPAUSE').val(data['ttarget_data']);
+		}
+		$('#TIMETARGET').html('Время заданное <b>'+data['timetarget_data']+' мин.</b>');
+		if (!$('#TIMEPAUSE').hasClass('focus')){
+		$('#TIMEPAUSE').val(data['timetarget_data']);
+		}
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');

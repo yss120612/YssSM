@@ -34,6 +34,7 @@ void HttpHelper::setup() {
 	server->on("/rectifyset", std::bind(&HttpHelper::handleRectifySet, this)); // Установка rectify
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
+	server->on("/suvidset", std::bind(&HttpHelper::handleSuvidSet, this)); // Установка rectify
 
 	server->on("/brewingdata", std::bind(&HttpHelper::handleBrewing, this));
 
@@ -137,10 +138,21 @@ void HttpHelper::handleSuvid(){
 		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
 		      + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
 		      + ", \"ttarget_data\":\"" + ds->getData(DS_SUVIDTARGET)
+			  + "\", \"timetarget_data\":\"" + ds->getData(DS_SUVIDTIME)
 		      + "\", \"state_data\":\"" + ds->getData(DS_SUVIDSTATE) 
 		      + "\", \"time_data\":\"" + ds->getData(DS_SUVIDTIMELEFT) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
+
+void HttpHelper::handleSuvidSet()
+{
+	ds->setData(SET_SUVIDTEMP, server->arg("TMP"));
+	logg.logging("SUVID Temperature set on " + server->arg("TMP"));
+	ds->setData(SET_SUVIDTIME, server->arg("TIME"));
+	logg.logging("SUVID Time set on " + server->arg("TIME"));
+	//server->send(200, "text/plain", "OK");
+}
+
 
 void HttpHelper::handleBrewing() {
 	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE)

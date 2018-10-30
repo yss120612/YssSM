@@ -97,6 +97,9 @@ String Suvid::getData(uint w)
 		case DS_SUVIDTARGET:
 			return String(CONF.getSuvidTemp());
 		break;
+		case DS_SUVIDTIME:
+			return String(CONF.getSuvidMin());
+			break;
 		default:
 			return "";
 			break;
@@ -105,6 +108,18 @@ String Suvid::getData(uint w)
 	}
 	else
 		return Mode::getData(w);
+}
+
+void Suvid::setData(uint w, String ds)
+{
+	switch (w) {
+	case SET_SUVIDTEMP:
+		CONF.setSuvidTemp((uint8_t)ds.toInt());
+		break;
+	case SET_SUVIDTIME:
+		CONF.setSuvidMin(ds.toInt());
+		break;
+	}
 }
 
 void Suvid::makeMenu()

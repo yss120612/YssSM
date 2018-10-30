@@ -45,6 +45,7 @@ private:
 	void handleRectify();
 	void handleRectifySet();
 	void handleSuvid();
+	void handleSuvidSet();
 	void handleBrewing();
 	//void handleSuvidChart();
 	//Config * conf;

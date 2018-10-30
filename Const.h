@@ -135,6 +135,7 @@ enum mydata {//ДЛЯ просмотра ИЗ ВЕБА
 	DS_SUVIDSTATE,
 	DS_SUVIDTIMELEFT,
 	DS_SUVIDTARGET,
+	DS_SUVIDTIME,
 	DS_SUVIDEND,
 	DS_BREWINGSTART,
 	DS_BREWINGSTATE,
@@ -148,7 +149,11 @@ enum mydata {//ДЛЯ просмотра ИЗ ВЕБА
 enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 	SET_RECTSTART,
 	SET_RECTTSTOP,
-	SET_RECTSTOP,
+	SET_RECTEND,
+	SET_SUVIDSTART,
+	SET_SUVIDTEMP,
+	SET_SUVIDTIME,
+	SET_SUVIDEND
 };
 
 
