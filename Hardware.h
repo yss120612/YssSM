@@ -66,6 +66,10 @@ public:
 
 	void setAlarm2(int min);
 
+	void reSetAlarm1();
+
+	void reSetAlarm2();
+
 	void timeLeft1(char * buff);
 
 	void timeLeft2(char * buff);
@@ -88,6 +92,7 @@ public:
 
 protected:
 	void prepareAlarm(int min);
+
 	void timeLeft(char * buff);
 	int minutesLeft();
 	

@@ -175,10 +175,7 @@
             }
         }
         },
-	
-
-		
-		
+			
         series: [{
 			name:'Т куба',
             data: [20],
@@ -203,11 +200,13 @@
         }
 		]
     });
+	
 	$('.setdata').focus(function() {
-		$(this).addClass("focus");
+		$(this).addClass("fcs");
 	});
+	
 	$('.setdata').blur(function() {
-		$(this).removeClass("focus");
+		$(this).removeClass("fcs");
 	});
 		  
 	$('#setTStop').submit(function(){  
@@ -245,8 +244,8 @@
 		$('#FLOOD').html('Датчик протечки <b>'+data['wsf_data']+'</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
 		$('#TSTOP').html('Температура останова <b>'+data['tstop_data']+'&deg;C</b>');
-		if (!$('#TSTOP').hasClass('focus')){
-		$('#TSTOPSET').val(data['tstop_data']);
+		if (!$('#TSTOPSET').hasClass('fcs')){
+			 $('#TSTOPSET').val(data['tstop_data']);
 		};
 		
 		});

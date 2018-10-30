@@ -8,7 +8,7 @@
 Config::Config()
 {
 	changed = false;
-	version = 7;
+	version = 8;
 }
 
 Config::~Config()
@@ -457,14 +457,14 @@ void Config::read()
 	brewingMin2 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
 	brewingMin3 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
 	brewingMin4 = static_cast<int>(*(buff + idx)); idx += sizeof(int);
-	breCoolingTemp = static_cast<int>(*(buff + idx)); idx += sizeof(int);
-
-	
+		
 	suvidTemp =			static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	brewingTemp1 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	brewingTemp2 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	brewingTemp3 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	brewingTemp4 = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+	breCoolingTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
+
 	distWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	distForsajTemp = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);
 	manualWorkPower = static_cast<uint8_t>(*(buff + idx)); idx += sizeof(uint8_t);

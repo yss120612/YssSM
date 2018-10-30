@@ -172,9 +172,9 @@ enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 #define PROCEND_NO_ATT_SELF 8 //закончили никто не подошел после работы на себя
 #define PROCEND_NO_ATT_HEAD 9 //закончили никто не подошел после отбора голов
 
-#define PROCERR_OK 0 //нет ошибок
-#define PROCERR_NOTKUB 1 //нет градусника в кубе
-#define PROCERR_NOHEATER 2 //нет тена
+//#define PROCERR_OK 0 //нет ошибок
+//#define PROCERR_NOTKUB 1 //нет градусника в кубе
+//#define PROCERR_NOHEATER 2 //нет тена
 
 const uint16_t test_time = 10000;//10 секунд
 

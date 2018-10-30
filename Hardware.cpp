@@ -119,6 +119,18 @@ void Hardware::setAlarm2(int min)
 	RTC.writeAlarm2(DS3231_ALM_DTHM);
 }
 
+void Hardware::reSetAlarm1()
+{
+	RTC.control(DS3231_A1_FLAG, DS3231_OFF);
+}
+
+void Hardware::reSetAlarm2()
+{
+	RTC.control(DS3231_A2_FLAG, DS3231_OFF);
+}
+
+
+
 void Hardware::prepareAlarm(int min) {
 	RTC.now();
 	int minutes = min % 60;

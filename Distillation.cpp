@@ -4,6 +4,7 @@ Distillation::Distillation(Aggregates * a, Hardware *h) : Mode(a,h)
 {
 	MyName = "Distillation";
 	makeMenu();
+	cold_check = true;
 }
 
 Distillation::~Distillation()
@@ -87,10 +88,12 @@ void Distillation::makeMenu()
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 13);
 	MenuIParameter * pwWork = new MenuIParameter("WorkPower", setup, 14);
 	MenuFParameter * pwKran = new MenuFParameter("OpenKran", setup, 15);
+	MenuBParameter * hColl = new MenuBParameter("Chk cool", setup, 16);
 	setup->add(tFor);
 	setup->add(tEnd);
 	setup->add(pwWork);
 	setup->add(pwKran);
+	setup->add(hColl);
 	menu->add(new MenuSubmenu("Setup", setup));
 }
 
@@ -122,51 +125,6 @@ void Distillation::command(MenuCommand * id)
 	}
 }
 
-void Distillation::stop(uint8_t reason) {
-	work_mode = PROC_OFF;
-	end_reason = reason;
-	switch (end_reason)
-	{
-	case PROCEND_FAULT:
-		logg.logging("Distill fault and finished at " + getTimeStr());
-		break;
-	case PROCEND_MANUAL:
-		logg.logging("Distill manually stopped at " + getTimeStr());
-		break;
-	case PROCEND_TEMPERATURE:
-		logg.logging("Distill normal finished at " + getTimeStr() + " by kube temperature");
-		break;
-	case PROCEND_UROVEN:
-		logg.logging("Distill normal finished at " + getTimeStr() + " by uroven sensor");
-		break;
-	case PROCEND_FLOOD:
-		logg.logging("Distill  finished at " + getTimeStr() + " by flood sensor");
-		break;
-	default:
-		break;
-	}
-	agg->getHeater()->setPower(0);
-	agg->getHeater()->stop();
-	agg->getKran()->forceClose();
-	hardware->getFloodWS()->disarm();
-	hardware->getUrovenWS()->disarm();
-	mcmd->setName("Start");
-}
-
-void Distillation::start() {
-	work_mode = PROC_FORSAJ;
-	err = PROCERR_OK;
-	end_reason = PROCEND_NO;
-	agg->getHeater()->setPower(98);
-	agg->getHeater()->start();
-	mcmd->setName("Stop");
-	coldBeginCheck = 0;
-	tsa_alarms = 0;
-	hardware->getUrovenWS()->disarm();
-	hardware->getFloodWS()->arm(50);
-	logg.logging("Distill process started at " + getTimeStr());
-}
-
 void Distillation::initParams(MenuParameter * mp)
 {
 	if (mp == NULL) return;
@@ -182,6 +140,9 @@ void Distillation::initParams(MenuParameter * mp)
 		break;
 	case 15:
 		((MenuFParameter *)mp)->setup(CONF.getDistKranOpened(), 0.1, 10 , 85);
+		break;
+	case 16:
+		((MenuBParameter *)mp)->setup(cold_check);
 		break;
 	}
 }
@@ -209,7 +170,57 @@ void Distillation::acceptParams(MenuParameter * mp)
 			agg->getKran()->openQuantum(CONF.getDistKranOpened());
 		}
 		break;
+	case 16:
+		cold_check=((MenuBParameter *)mp)->getCurrent();
+		break;
 	}
+}
+
+void Distillation::start() {
+	work_mode = PROC_FORSAJ;
+	//err = PROCERR_OK;
+	end_reason = PROCEND_NO;
+	agg->getHeater()->setPower(98);
+	agg->getHeater()->start();
+	mcmd->setName("Stop");
+	tsa_alarms = 0;
+	hardware->getUrovenWS()->disarm();
+	hardware->getFloodWS()->arm(50);
+	hardware->reSetAlarm1();
+	logg.logging("Distill process started at " + getTimeStr());
+}
+
+void Distillation::stop(uint8_t reason) {
+	work_mode = PROC_OFF;
+	end_reason = reason;
+	switch (end_reason)
+	{
+	case PROCEND_FAULT:
+		logg.logging("Distill fault and finished at " + getTimeStr());
+		break;
+	case PROCEND_MANUAL:
+		logg.logging("Distill manually stopped at " + getTimeStr());
+		break;
+	case PROCEND_TEMPERATURE:
+		logg.logging("Distill normal finished at " + getTimeStr() + " by kube temperature");
+		break;
+	case PROCEND_UROVEN:
+		logg.logging("Distill normal finished at " + getTimeStr() + " by uroven sensor");
+		break;
+	case PROCEND_FLOOD:
+		logg.logging("Distill  finished at " + getTimeStr() + " by flood sensor");
+		break;
+	default:
+		break;
+	}
+
+	hardware->reSetAlarm1();
+	agg->getHeater()->setPower(0);
+	agg->getHeater()->stop();
+	agg->getKran()->forceClose();
+	hardware->getFloodWS()->disarm();
+	hardware->getUrovenWS()->disarm();
+	mcmd->setName("Start");
 }
 
 void Distillation::process(long ms) {
@@ -231,7 +242,7 @@ void Distillation::process(long ms) {
 			logg.logging("Distill forsaj finished at "+ getTimeStr());
 			hardware->getBeeper()->beep(2000, 2000);
 			hardware->setAlarm1(3);
-			//hardware->setAlarm2(15);
+			check_count = 0;
 			work_mode = PROC_WORK;
 		}
 		break;
@@ -253,9 +264,10 @@ void Distillation::process(long ms) {
 
 	boolean evnt = false;
 
-	if (hardware->getClock()->checkAlarm1()) {
-		if (work_mode == PROC_WORK && coldBeginCheck<10) coldBeginCheck++;
-		if (ttsa < CONF.getTSAmin() && coldBeginCheck>=5)
+
+	if ( hardware->getClock()->checkAlarm1()) {
+		if (check_count < 100) check_count++;
+		if (ttsa < CONF.getTSAmin() && cold_check && check_count>5)//5*(period of alarm1)
 		{
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + String(tim));
@@ -263,6 +275,7 @@ void Distillation::process(long ms) {
 			agg->getKran()->openQuantum(agg->getKran()->getState() - 0.2);
 			evnt = true;
 		}
+
 		if (ttsa > CONF.getTSAmax()) {
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + getTimeStr());

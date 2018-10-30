@@ -180,64 +180,6 @@ void Rectify::command(MenuCommand * id)
 	}
 }
 
-void Rectify::stop(uint8_t reason)
-{
-	work_mode = PROC_OFF;
-	end_reason = reason;
-	readTime();
-	switch (end_reason)
-	{
-	case PROCEND_FAULT:
-		logg.logging("Rectify fault and finished at " + String(tim));
-		break;
-	case PROCEND_MANUAL:
-		logg.logging("Rectify manually stopped at " + String(tim));
-		break;
-	case PROCEND_TEMPERATURE:
-		logg.logging("Rectify normal finished at " + String(tim));
-		break;
-	case PROCEND_UROVEN:
-		logg.logging("Rectify finished at " + String(tim)+" by uroven sensor");
-		break;
-	case PROCEND_FLOOD:
-		logg.logging("Rectify finished at " + String(tim) + " by flood sensor");
-		break;
-	case PROCEND_NO_ATT_HEAD:
-		logg.logging("Rectify finished at " + String(tim) + " by no attention after head");
-		break;
-	case PROCEND_NO_ATT_SELF:
-		logg.logging("Rectify finished at " + String(tim) + " by no attention after self work");
-		break;
-	default:
-		break;
-	}
-	agg->getHeater()->setPower(0);
-	agg->getHeater()->stop();
-	agg->getKran()->forceClose();
-	hardware->getFloodWS()->disarm();
-	hardware->getUrovenWS()->disarm();
-	mcmd->setName("Start");
-}
-
-void Rectify::start()
-{
-	work_mode = PROC_FORSAJ;
-	err = PROCERR_OK;
-	end_reason = PROCEND_NO;
-	agg->getHeater()->setPower(98);
-	agg->getHeater()->start();
-	//hardware->getUrovenWS()->arm(25);
-	hardware->getFloodWS()->arm(25);
-	mcmd->setName("Stop");
-	//TSAchecked = 0;
-	//TSAcheckedCold = 0;
-	coldBeginCheck = 0;
-	tsa_alarms = 0;
-	stop_defined = false;
-	readTime();
-	logg.logging("Rectify process started at " + String(tim));
-}
-
 void Rectify::initParams(MenuParameter * mp)
 {
 	if (mp == NULL) return;
@@ -308,13 +250,77 @@ void Rectify::acceptParams(MenuParameter * mp)
 		CONF.setRectWorkSelf(((MenuIParameter *)mp)->getCurrent());
 		break;
 	case 17:
-		head_collected=((MenuBParameter *)mp)->getCurrent();
+		head_collected = ((MenuBParameter *)mp)->getCurrent();
 		break;
-	
+
 	}
 }
 
+void Rectify::start()
+{
+	work_mode = PROC_FORSAJ;
+	//err = PROCERR_OK;
+	end_reason = PROCEND_NO;
+	agg->getHeater()->setPower(98);
+	agg->getHeater()->start();
+	//hardware->getUrovenWS()->arm(25);
+	hardware->getFloodWS()->arm(25);
+	hardware->reSetAlarm1();
+	hardware->reSetAlarm2();
+	mcmd->setName("Stop");
+	//TSAchecked = 0;
+	//TSAcheckedCold = 0;
+
+	coldBeginCheck = 0;
+	tsa_alarms = 0;
+	stop_defined = false;
+	readTime();
+	logg.logging("Rectify process started at " + String(tim));
+}
+
+void Rectify::stop(uint8_t reason)
+{
+	work_mode = PROC_OFF;
+	end_reason = reason;
+	readTime();
+	switch (end_reason)
+	{
+	case PROCEND_FAULT:
+		logg.logging("Rectify fault and finished at " + String(tim));
+		break;
+	case PROCEND_MANUAL:
+		logg.logging("Rectify manually stopped at " + String(tim));
+		break;
+	case PROCEND_TEMPERATURE:
+		logg.logging("Rectify normal finished at " + String(tim));
+		break;
+	case PROCEND_UROVEN:
+		logg.logging("Rectify finished at " + String(tim)+" by uroven sensor");
+		break;
+	case PROCEND_FLOOD:
+		logg.logging("Rectify finished at " + String(tim) + " by flood sensor");
+		break;
+	case PROCEND_NO_ATT_HEAD:
+		logg.logging("Rectify finished at " + String(tim) + " by no attention after head");
+		break;
+	case PROCEND_NO_ATT_SELF:
+		logg.logging("Rectify finished at " + String(tim) + " by no attention after self work");
+		break;
+	default:
+		break;
+	}
+	agg->getHeater()->setPower(0);
+	agg->getHeater()->stop();
+	agg->getKran()->forceClose();
+	hardware->getFloodWS()->disarm();
+	hardware->getUrovenWS()->disarm();
+	hardware->reSetAlarm1();
+	hardware->reSetAlarm2();
+	mcmd->setName("Start");
+}
+
 void Rectify::next() {
+	hardware->reSetAlarm2();
 	switch (work_mode) {
 	case PROC_WAIT_SELF:
 		hardware->getUrovenWS()->arm(25);
@@ -398,7 +404,7 @@ void Rectify::process(long ms)
 		if (!stop_defined && hardware->getClock()->checkAlarm2()) {
 			CONF.setRectStopTemp(tdef + 0.2f);
 			stop_defined = true;
-			logg.logging("Rectify stop temperature defined ("+String(CONF.getRectStopTemp(),1)+"C) at " + getTimeStr());
+			logg.logging("Rectify stop temperature (tdef="+String(tdef,2)+") defined ("+String(CONF.getRectStopTemp(),2)+"C) at " + getTimeStr());
 			hardware->getBeeper()->beep(1000, 1000);
 		}
 		if (tdef > CONF.getRectStopTemp()) {//end of collect body
@@ -407,14 +413,11 @@ void Rectify::process(long ms)
 		}
 		break;
 	}
-
-
-	
-
+	   
 	boolean evnt = false;
 	if (hardware->getClock()->checkAlarm1()) {
-		if (checkLowTSA && work_mode == PROC_WORK && coldBeginCheck < 10) coldBeginCheck++;
-		if (coldBeginCheck >= 5 && ttsa < CONF.getTSAmin())
+		if (work_mode == PROC_WORK && coldBeginCheck < 10) coldBeginCheck++;
+		if (checkLowTSA && coldBeginCheck >= 5 && ttsa < CONF.getTSAmin())
 		{
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA cold (" + String(ttsa) + "C) at " + getTimeStr());
@@ -422,6 +425,7 @@ void Rectify::process(long ms)
 			agg->getKran()->openQuantum(agg->getKran()->getState() - 0.2);
 			evnt = true;
 		}
+
 		if (ttsa > CONF.getTSAmax()) {
 			hardware->getBeeper()->beep(1000, 500);
 			logg.logging("TSA alarm (" + String(ttsa) + "C) at " + getTimeStr());

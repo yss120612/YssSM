@@ -61,7 +61,7 @@ protected:
 	Menu * menu;
 	int8_t work_mode;
 	int8_t end_reason;
-	int8_t err;
+	//int8_t err;
 };
 
 #endif

@@ -26,13 +26,11 @@ public:
 	Suvid(Aggregates * a, Hardware *h);
 	~Suvid() { delete mcmd; };
 	void start();
-	void stop(uint8_t reason);
+	void stop(uint8_t reason,String text="");
 	void process(long ms);
 	String getData(uint w);
 protected:
 	MenuCommand * mcmd;
-	//TermoPause tpause;
-	void error(uint8_t);
 	void showState();
 	void initDraw();
 	void makeMenu();

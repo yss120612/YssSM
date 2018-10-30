@@ -17,13 +17,12 @@ public:
 	Brewing(Aggregates * a, Hardware *h);
 	~Brewing() { delete mcmd; };
 	void start();
-	void stop(uint8_t reason);
+	void stop(uint8_t reason, String text = "");
 	void process(long ms);
 	String getData(uint w);
 protected:
 	uint8_t phase;
 	MenuCommand * mcmd;
-	void error(uint8_t);
 	void showState();
 	uint8_t getTarget();
 	int getTimeLeft();

@@ -35,7 +35,8 @@ protected:
 	float tcube;
 	float ttsa;
 	float tdef;
-	uint8_t coldBeginCheck;
+	boolean cold_check;
+	uint8_t check_count;
 	uint8_t tsa_alarms;
 };
 

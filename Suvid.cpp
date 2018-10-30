@@ -2,15 +2,13 @@
 #include "Workmodes.h"
 
 Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
-	
 	makeMenu();
 	MyName = "SuVid";
-	
+	end_reason = PROCEND_NO;
 }
 
 void Suvid::initDraw() {
 	Mode::initDraw();
-	//tpause.setup(CONF.getSuvidMin(), CONF.getSuvidTemp());
 }
 
 void Suvid::showState() {
@@ -18,7 +16,6 @@ void Suvid::showState() {
 	uint8_t Y;
 	if (ss_active) {
 		X = rand() % 25;
-		//Y = 13 + rand() % (hardware->getDisplay()->height() - 44);
 		Y = 15;
 		hardware->getDisplay()->drawString(rand() % (80), 0, "Suvid...");
 	}
@@ -191,70 +188,43 @@ void Suvid::acceptParams(MenuParameter * mp)
 	}
 }
 
-void Suvid::process(long ms) {
-	if (work_mode == PROC_OFF) return;
-	if (last_time + test_time - ms >0) return;
-	last_time = ms;
-	float tmp = hardware->getTKube()->getTemp();
-	switch (work_mode) {
-	
-	case PROC_FORSAJ:
-		
-		if (tmp >= CONF.getSuvidTemp()) {
-			work_mode = PROC_WORK;
-			logg.logging("SuVid WORK started at " + getTimeStr());
-			hardware->setAlarm2(CONF.getSuvidMin());//«авели будильник
-
-		}
-		break;
-	case PROC_WORK:
-		if (hardware->getClock()->checkAlarm2()) {
-			stop(PROCEND_TIME);//будильник сработал
-			return;
-		}
-		break;
-	}
-
-	agg->getHeater()->setPID(tmp, CONF.getSuvidTemp());
-}
-
-void Suvid::error(uint8_t er) {
-	err = er;
-	end_reason = PROCEND_ERROR;
-
-}
-
 void Suvid::start() {
 	work_mode = PROC_OFF;
-	err = PROCERR_OK;
+//	err = PROCERR_OK;
 	end_reason = PROCEND_NO;
 	//hardware->getUrovenWS()->arm();
 	//hardware->getFloodWS()->arm();
 	//hardware->getUrovenWS()->setLimit(0);
 	if (agg->getHeater() == NULL) {
-		error(PROCERR_NOHEATER);
+		stop(PROCEND_ERROR, "Heater not found!");
+		//error(PROCERR_NOHEATER);
 		return;
 	}
 
-	if (hardware->getTKube() == NULL) {
-		error(PROCERR_NOTKUB);
+	if (hardware->getTKube() == NULL || hardware->getTKube()->getTemp()<0 || hardware->getTKube()->getTemp() > 120) {
+		stop(PROCEND_ERROR, "Cube termometr not found!");
 		return;
 	}
+
 	work_mode = PROC_FORSAJ;
 	agg->getHeater()->start();
 	agg->getHeater()->setPower(50);
 	hardware->getPump()->start();
+	hardware->getFloodWS()->arm(25);
+	hardware->reSetAlarm2();
 	logg.logging("SuVid started at "+ getTimeStr());
 	mcmd->setName("Stop");
 }
 
-void Suvid::stop(uint8_t reason) {
+void Suvid::stop(uint8_t reason,String text) {
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
 	hardware->getPump()->stop();
+	hardware->getFloodWS()->disarm();
 	work_mode = PROC_OFF;
 	end_reason = reason;
-	String st = "SuVid finished started at " + getTimeStr() + " by reason ";
+	hardware->reSetAlarm2();
+	String st = "SuVid finished at " + getTimeStr() + " by reason ";
 	hardware->getBeeper()->beep(2000, 3000);
 	switch (reason)
 	{
@@ -273,8 +243,41 @@ void Suvid::stop(uint8_t reason) {
 	case PROCEND_FAULT:
 		st += "fault";
 		break;
+	case PROCEND_FLOOD:
+		st += "flood sensor alarmed";
+		break;
 	}
 	logg.logging(st);
 	mcmd->setName("Start");
 }
 
+void Suvid::process(long ms) {
+	if (work_mode == PROC_OFF) return;
+	if (last_time + test_time - ms > 0) return;
+	last_time = ms;
+	float tmp = hardware->getTKube()->getTemp();
+	switch (work_mode) {
+
+	case PROC_FORSAJ:
+
+		if (tmp >= CONF.getSuvidTemp()) {
+			work_mode = PROC_WORK;
+			logg.logging("SuVid WORK started at " + getTimeStr());
+			hardware->setAlarm2(CONF.getSuvidMin());//«авели будильник
+
+		}
+		break;
+	case PROC_WORK:
+		if (hardware->getClock()->checkAlarm2()) {
+			stop(PROCEND_TIME);//будильник сработал
+			return;
+		}
+		break;
+	}
+
+	if (hardware->getFloodWS()->isAlarmed()) {
+		stop(PROCEND_FLOOD);
+	}
+
+	agg->getHeater()->setPID(tmp, CONF.getSuvidTemp());
+}
