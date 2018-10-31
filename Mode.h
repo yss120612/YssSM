@@ -26,6 +26,7 @@ class Mode : public ModeBase
 {
 public:
 	Mode( Aggregates * a, Hardware *h);
+	~Mode();
 	virtual void draw(long m);
 	virtual void initDraw();
 	virtual void showState() = 0;

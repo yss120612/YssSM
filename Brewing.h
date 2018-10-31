@@ -20,6 +20,7 @@ public:
 	void stop(uint8_t reason, String text = "");
 	void process(long ms);
 	String getData(uint w);
+	void setData(uint w, String ds);
 protected:
 	uint8_t phase;
 	MenuCommand * mcmd;
@@ -27,6 +28,7 @@ protected:
 	uint8_t getTarget();
 	int getTimeLeft();
 	void initDraw();
+	
 	void makeMenu();
 	boolean have_chiller;
 	void command(MenuCommand * id);

@@ -34,11 +34,10 @@ void HttpHelper::setup() {
 	server->on("/rectifyset", std::bind(&HttpHelper::handleRectifySet, this)); // Установка rectify
 
 	server->on("/suviddata", std::bind(&HttpHelper::handleSuvid, this));
-	server->on("/suvidset", std::bind(&HttpHelper::handleSuvidSet, this)); // Установка rectify
+	server->on("/suvidset", std::bind(&HttpHelper::handleSuvidSet, this)); // Установка suvid
 
 	server->on("/brewingdata", std::bind(&HttpHelper::handleBrewing, this));
-
-	//server->on("/suvidchart", std::bind(&HttpHelper::handleSuvidChart, this));
+	server->on("/brewingset", std::bind(&HttpHelper::handleBrewingSet, this));
 
 	//server->on("/restart", web_handlers::restart);
 		
@@ -132,7 +131,6 @@ void HttpHelper::handleRectifySet()
 	//server->send(200, "text/plain", "OK");
 }
 
-
 void HttpHelper::handleSuvid(){
 	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE) 
 		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
@@ -150,28 +148,65 @@ void HttpHelper::handleSuvidSet()
 	logg.logging("SUVID Temperature set on " + server->arg("TMP"));
 	ds->setData(SET_SUVIDTIME, server->arg("TIME"));
 	logg.logging("SUVID Time set on " + server->arg("TIME"));
-	//server->send(200, "text/plain", "OK");
 }
-
 
 void HttpHelper::handleBrewing() {
 	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE)
 		+ ", \"cooler_data\":" + ds->getData(DS_TTRIAK)
 		+ ", \"heater_data\":" + ds->getData(DS_HPOWER)
-		+ ", \"ttarget_data\":\"" + ds->getData(DS_BREWINGTARGET)
-		+ ", \"phase_data\":\"" + ds->getData(DS_BREWINGPHASE)
+		+ ", \"ttarget1_data\":\"" + ds->getData(DS_BREWINGTMP1)
+		+ "\", \"timetarget1_data\":\"" + ds->getData(DS_BREWINGTIME1)
+		+ "\", \"ttarget2_data\":\"" + ds->getData(DS_BREWINGTMP2)
+		+ "\", \"timetarget2_data\":\"" + ds->getData(DS_BREWINGTIME2)
+		+ "\", \"ttarget3_data\":\"" + ds->getData(DS_BREWINGTMP3)
+		+ "\", \"timetarget3_data\":\"" + ds->getData(DS_BREWINGTIME3)
+		+ "\", \"ttarget4_data\":\"" + ds->getData(DS_BREWINGTMP4)
+		+ "\", \"timetarget4_data\":\"" + ds->getData(DS_BREWINGTIME4)
+		+ "\", \"chiller_data\":\"" + ds->getData(DS_BREWINGCHILLER)
+		+ "\", \"phase_data\":\"" + ds->getData(DS_BREWINGPHASE)
 		+ "\", \"state_data\":\"" + ds->getData(DS_BREWINGSTATE)
 		+ "\", \"time_data\":\"" + ds->getData(DS_BREWINGTIMELEFT) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
+void HttpHelper::handleBrewingSet()
+{
+	switch ((server->arg("part")).toInt()) {
+	case 1:
+		ds->setData(SET_BREWINGTMP1, server->arg("TMP1"));
+		logg.logging("BREWING Temperature 1 set on " + server->arg("TMP1"));
+		ds->setData(SET_BREWINGTIME1, server->arg("TIME1"));
+		logg.logging("BREWING Time 1 set on " + server->arg("TIME1"));
+		break;
+	case 2:
+		ds->setData(SET_BREWINGTMP2, server->arg("TMP2"));
+		logg.logging("BREWING Temperature 2 set on " + server->arg("TMP2"));
+		ds->setData(SET_BREWINGTIME2, server->arg("TIME2"));
+		logg.logging("BREWING Time 2 set on " + server->arg("TIME2"));
+		break;
+	case 3:
+		ds->setData(SET_BREWINGTMP3, server->arg("TMP3"));
+		logg.logging("BREWING Temperature 3 set on " + server->arg("TMP3"));
+		ds->setData(SET_BREWINGTIME3, server->arg("TIME3"));
+		logg.logging("BREWING Time 3 set on " + server->arg("TIME3"));
+		break;
+	case 4:
+		ds->setData(SET_BREWINGTMP4, server->arg("TMP4"));
+		logg.logging("BREWING Temperature 4 set on " + server->arg("TMP4"));
+		ds->setData(SET_BREWINGTIME4, server->arg("TIME4"));
+		logg.logging("BREWING Time 4 set on " + server->arg("TIME4"));
+		break;
+	case 5:
+		ds->setData(SET_BREWINGCHILLER, server->arg("CHILLER"));
+		break;
 
-//void HttpHelper::handleSuvidChart() {
-//	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE) 
-//		    + "\", \"heater_data\":" + ds->getData(DS_HPOWER) 
-//		      + ", \"ttarget_data\":\"" + ds->getData(DS_SUVIDTARGET) + "\" }";
-//	server->send(200, "text/json", str); // Oтправляем ответ No Reset
-//}
+	}
+	
+	
+	
+	
+	
+}
 
 void HttpHelper::WiFiconnect()
 {

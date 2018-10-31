@@ -52,7 +52,7 @@
 		</div>
 		
 		<div class="col-md-offset-1 col-md-5">
-			<form action="/rectifyset" id="setTPause" class="form-inline">
+			<form action="/suvidset" id="setTPause" class="form-inline">
 				<div class="form-group">
 					<label for="TMPPAUSE">Температура </label>
 					<input type="input" class="form-control setdata" id="TMPPAUSE" aria-describedby="helpTmpPause">
@@ -61,6 +61,7 @@
 					<label for="TIMEPAUSE">Время (мин.) </label>
 					<input type="input" class="form-control setdata" id="TIMEPAUSE" aria-describedby="helpTimePause">
 				</div>
+				<input type="hidden" id="lock">
 				<button type="submit" class="btn btn-primary">Установить</button>
 			</form>
 		</div>
@@ -182,10 +183,10 @@
     });
 	
 	$('.setdata').focus(function() {
-		$(this).addClass("focus");
+		$("#lock").addClass("focus");
 	});
 	$('.setdata').blur(function() {
-		$(this).removeClass("focus");
+		$("#lock").removeClass("focus");
 	});
 		  
 	$('#setTPause').submit(function(){  
@@ -214,11 +215,11 @@
 		"/suviddata",
 		function(data){
 		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
-		if (!$('#TMPPAUSE').hasClass('focus')){
+		if (!$('#lock').hasClass('focus')){
 		$('#TMPPAUSE').val(data['ttarget_data']);
 		}
 		$('#TIMETARGET').html('Время заданное <b>'+data['timetarget_data']+' мин.</b>');
-		if (!$('#TIMEPAUSE').hasClass('focus')){
+		if (!$('#lock').hasClass('focus')){
 		$('#TIMEPAUSE').val(data['timetarget_data']);
 		}
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');

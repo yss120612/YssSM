@@ -24,7 +24,10 @@
 		</div>
 	
 		<div class="col-md-offset-1 col-md-10">
-			<div id="TTARGET"></div>		
+			<div id="TTARGET1"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMETARGET1"></div>		
 		</div>
 		
 		<div class="col-md-offset-1 col-md-10">
@@ -49,6 +52,21 @@
 		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
+		</div>
+		
+		<div class="col-md-offset-1 col-md-5">
+			<form action="/brewingset" id="setTPause1" class="form-inline">
+				<div class="form-group">
+					<label for="TMPPAUSE1">Температура </label>
+					<input type="input" class="form-control setdata" id="TMPPAUSE1" aria-describedby="helpTmpPause1">
+				</div>
+				<div class="form-group">
+					<label for="TIMEPAUSE1">Время (мин.) </label>
+					<input type="input" class="form-control setdata" id="TIMEPAUSE1" aria-describedby="helpTimePause1">
+				</div>
+				<input type="hidden" id="lock">
+				<button type="submit" class="btn btn-primary">Установить</button>
+			</form>
 		</div>
 		
 		<div class="col-md-offset-1 col-md-10">
@@ -166,6 +184,26 @@
             pointStart: (new Date()).getTime()-10000,
 		}]
     });
+	
+	$('.setdata').focus(function() {
+		$("#lock").addClass("focus");
+	});
+	$('.setdata').blur(function() {
+		$("#lock").removeClass("focus");
+	});
+		  
+	$('#setTPause').submit(function(){  
+                $.ajax({  
+                    type: "POST",  
+                    url: "/suvidset",  
+                    data: "TMP="+$("#TMPPAUSE").val()+"&TIME="+$("#TIMEPAUSE").val(),  
+                    success: function(html){  
+                       
+                    }  
+                });  
+                return false;  
+            });  
+	
 	});
 	
 	function randomInteger(min, max) {
@@ -179,7 +217,15 @@
 		$.getJSON(
 		"/brewingdata",
 		function(data){
-		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
+		$('#TTARGET1').html('Температура поддерживаемая <b>'+data['ttarget1_data']+'&deg;C</b>');
+		if (!$('#lock').hasClass('focus')){
+		$('#TMPPAUSE').val(data['ttarget1_data']);
+		}
+		$('#TIMETARGET1').html('Время заданное <b>'+data['timetarget1_data']+' мин.</b>');
+		if (!$('#lock').hasClass('focus')){
+		$('#TIMEPAUSE1').val(data['timetarget1_data']);
+		}
+		
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
 		$('#TKUBE').html('Фаза затирания <b>'+data['phase_data']+'</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');

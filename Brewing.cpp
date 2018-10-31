@@ -107,8 +107,29 @@ String Brewing::getData(uint w)
 				return "-";
 			}
 			break;
-		case DS_BREWINGTARGET:
-			return String(getTarget());
+		case DS_BREWINGTMP1:
+			return String(CONF.getBrewingTemp1());
+			break;
+		case DS_BREWINGTIME1:
+			return String(CONF.getBrewingMin1());
+			break;
+		case DS_BREWINGTMP2:
+			return String(CONF.getBrewingTemp2());
+			break;
+		case DS_BREWINGTIME2:
+			return String(CONF.getBrewingMin2());
+			break;
+		case DS_BREWINGTMP3:
+			return String(CONF.getBrewingTemp3());
+			break;
+		case DS_BREWINGTIME3:
+			return String(CONF.getBrewingMin3());
+			break;
+		case DS_BREWINGTMP4:
+			return String(CONF.getBrewingTemp4());
+			break;
+		case DS_BREWINGTIME4:
+			return String(CONF.getBrewingMin4());
 			break;
 		case DS_BREWINGPHASE:
 			return String(phase);
@@ -121,6 +142,44 @@ String Brewing::getData(uint w)
 	}
 	else
 		return Mode::getData(w);
+}
+
+void Brewing::setData(uint w, String ds) {
+	if (w > SET_BREWINGSTART && w < SET_BREWINGEND) {
+		switch (w) {
+		SET_BREWINGTMP1:
+			CONF.setBrewingTemp1((uint8_t)ds.toInt());
+			break;
+		SET_BREWINGTIME1:
+			CONF.setBrewingMin1(ds.toInt());
+			break;
+		SET_BREWINGTMP2:
+			CONF.setBrewingTemp2((uint8_t)ds.toInt());
+			break;
+		SET_BREWINGTIME2:
+			CONF.setBrewingMin2(ds.toInt());
+			break;
+		SET_BREWINGTMP3:
+			CONF.setBrewingTemp3((uint8_t)ds.toInt());
+			break;
+		SET_BREWINGTIME3:
+			CONF.setBrewingMin3(ds.toInt());
+			break;
+		SET_BREWINGTMP4:
+			CONF.setBrewingTemp4((uint8_t)ds.toInt());
+			break;
+		SET_BREWINGTIME4:
+			CONF.setBrewingMin4(ds.toInt());
+			break;
+		SET_BREWINGCHILLER:
+			have_chiller = (ds.toInt() != 0);
+			break;
+			
+		}
+	}
+	else {
+		Mode::setData(w,ds);
+	}
 }
 
 void Brewing::makeMenu()

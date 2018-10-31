@@ -96,6 +96,11 @@ Mode::Mode(Aggregates * a,Hardware * h)
 	
 }
 
+Mode::~Mode()
+{
+	delete menu;
+}
+
 void Mode::draw(long m)
 {
 	hardware->getDisplay()->clear();
@@ -147,7 +152,6 @@ String Mode::getTimeStr() {
 	readTime();
 	return String(tim);
 }
-
 
 void Mode::processMenuPress()
 {
