@@ -171,41 +171,22 @@ void HttpHelper::handleBrewing() {
 
 void HttpHelper::handleBrewingSet()
 {
-	switch ((server->arg("part")).toInt()) {
+	uint8_t part = (server->arg("PART")).toInt();
+	switch (part) {
 	case 1:
-		ds->setData(SET_BREWINGTMP1, server->arg("TMP1"));
-		logg.logging("BREWING Temperature 1 set on " + server->arg("TMP1"));
-		ds->setData(SET_BREWINGTIME1, server->arg("TIME1"));
-		logg.logging("BREWING Time 1 set on " + server->arg("TIME1"));
-		break;
 	case 2:
-		ds->setData(SET_BREWINGTMP2, server->arg("TMP2"));
-		logg.logging("BREWING Temperature 2 set on " + server->arg("TMP2"));
-		ds->setData(SET_BREWINGTIME2, server->arg("TIME2"));
-		logg.logging("BREWING Time 2 set on " + server->arg("TIME2"));
-		break;
 	case 3:
-		ds->setData(SET_BREWINGTMP3, server->arg("TMP3"));
-		logg.logging("BREWING Temperature 3 set on " + server->arg("TMP3"));
-		ds->setData(SET_BREWINGTIME3, server->arg("TIME3"));
-		logg.logging("BREWING Time 3 set on " + server->arg("TIME3"));
-		break;
 	case 4:
-		ds->setData(SET_BREWINGTMP4, server->arg("TMP4"));
-		logg.logging("BREWING Temperature 4 set on " + server->arg("TMP4"));
-		ds->setData(SET_BREWINGTIME4, server->arg("TIME4"));
-		logg.logging("BREWING Time 4 set on " + server->arg("TIME4"));
+		ds->setData(SET_BREWINGTMP1+part-1, server->arg("TMP"));
+		logg.logging("BREWING Temperature " + String(part) +" set on " + server->arg("TMP"));
+		ds->setData(SET_BREWINGTIME1 + part - 1, server->arg("TIME"));
+		logg.logging("BREWING Time " + String(part) + " set on " + server->arg("TIME"));
 		break;
 	case 5:
 		ds->setData(SET_BREWINGCHILLER, server->arg("CHILLER"));
 		break;
 
 	}
-	
-	
-	
-	
-	
 }
 
 void HttpHelper::WiFiconnect()

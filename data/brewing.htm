@@ -24,11 +24,34 @@
 		</div>
 	
 		<div class="col-md-offset-1 col-md-10">
+		<h5>1я пауза</h5>
 			<div id="TTARGET1"></div>		
 		</div>
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMETARGET1"></div>		
 		</div>
+		<div class="col-md-offset-1 col-md-10">
+		<h5>2я пауза</h5>
+			<div id="TTARGET2"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMETARGET2"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+		<h5>3я пауза</h5>
+			<div id="TTARGET3"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMETARGET3"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+		<h5>4я пауза</h5>
+			<div id="TTARGET4"></div>		
+		</div>
+		<div class="col-md-offset-1 col-md-10">
+			<div id="TIMETARGET4"></div>		
+		</div>
+		
 		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="PHASE"></div>		
@@ -56,19 +79,38 @@
 		
 		<div class="col-md-offset-1 col-md-5">
 			<form action="/brewingset" id="setTPause1" class="form-inline">
+			 <div class="form-group col-md-4">
+				<label for="inputState">Настроить</label>
+					<select id="inputState" class="form-control setdata" >
+					<option value="1">Термопауза 1</option>
+					<option value="2">Термопауза 2</option>
+					<option value="3">Термопауза 3</option>
+					<option value="4">Термопауза 4</option>
+					<option value="5">Чиллер</option>
+				</select>
+				</div>
+				<div class="form-group" id="PAUSEDIV">
 				<div class="form-group">
-					<label for="TMPPAUSE1">Температура </label>
-					<input type="input" class="form-control setdata" id="TMPPAUSE1" aria-describedby="helpTmpPause1">
+					<label for="TMPPAUSE">Температура </label>
+					<input type="input" class="form-control setdata" id="TMPPAUSE" aria-describedby="helpTmpPause">
 				</div>
 				<div class="form-group">
-					<label for="TIMEPAUSE1">Время (мин.) </label>
-					<input type="input" class="form-control setdata" id="TIMEPAUSE1" aria-describedby="helpTimePause1">
+					<label for="TIMEPAUSE">Время (мин.) </label>
+					<input type="input" class="form-control setdata" id="TIMEPAUSE" aria-describedby="helpTimePause">
 				</div>
-				<input type="hidden" id="lock">
+				</div>
+				<div class="form-check" id="CILLERDIV">
+					<label class="form-check-label">
+						<input class="form-check-input setdata" type="checkbox" id="CHILLER"> Чиллер
+					</label>
+				</div>
+				
+				<input type="hidden" id="lock1" value="1">
 				<button type="submit" class="btn btn-primary">Установить</button>
 			</form>
 		</div>
 		
+				
 		<div class="col-md-offset-1 col-md-10">
 			<div id="CHART"></div>		
 		</div>
@@ -193,16 +235,41 @@
 	});
 		  
 	$('#setTPause').submit(function(){  
-                $.ajax({  
+			if ($("#inputState").val()=="5"){	
+			$.ajax({  
                     type: "POST",  
                     url: "/suvidset",  
-                    data: "TMP="+$("#TMPPAUSE").val()+"&TIME="+$("#TIMEPAUSE").val(),  
+                    data: "CHILLER="+$("#CHILLER").is(':checked')?"1":"2"+"&PART="+$("#inputState").val(),  
                     success: function(html){  
                        
                     }  
+			}
+			else{
+                $.ajax({  
+                    type: "POST",  
+                    url: "/suvidset",  
+                    data: "TMP="+$("#TMPPAUSE").val()+"&TIME="+$("#TIMEPAUSE").val()+"&PART="+$("#inputState").val(),  
+                    success: function(html){  
+                       
+                    }  
+				}
                 });  
                 return false;  
             });  
+	
+	$("#inputState").change(function() {
+		if ($("#inputState").val()=="5"){
+		$("PAUSEDIV").hide();
+		$("CHILLERDIV").show();
+		}
+		else
+		{
+		$("PAUSEDIV").show();
+		$("CHILLERDIV").hide();
+		}
+	});
+	
+	$("#inputState").val("1");
 	
 	});
 	
@@ -218,16 +285,38 @@
 		"/brewingdata",
 		function(data){
 		$('#TTARGET1').html('Температура поддерживаемая <b>'+data['ttarget1_data']+'&deg;C</b>');
-		if (!$('#lock').hasClass('focus')){
-		$('#TMPPAUSE').val(data['ttarget1_data']);
-		}
 		$('#TIMETARGET1').html('Время заданное <b>'+data['timetarget1_data']+' мин.</b>');
+		$('#TTARGET2').html('Температура поддерживаемая <b>'+data['ttarget1_data']+'&deg;C</b>');
+		$('#TIMETARGET2').html('Время заданное <b>'+data['timetarget1_data']+' мин.</b>');
+		$('#TTARGET3').html('Температура поддерживаемая <b>'+data['ttarget1_data']+'&deg;C</b>');
+		$('#TIMETARGET3').html('Время заданное <b>'+data['timetarget1_data']+' мин.</b>');
+		$('#TTARGET4').html('Температура поддерживаемая <b>'+data['ttarget1_data']+'&deg;C</b>');
+		$('#TIMETARGET4').html('Время заданное <b>'+data['timetarget1_data']+' мин.</b>');
+		
+		
+		
 		if (!$('#lock').hasClass('focus')){
-		$('#TIMEPAUSE1').val(data['timetarget1_data']);
+		if ($("#inputState").val()=="1"){
+		$('#TMPPAUSE').val(data['ttarget1_data']);
+		$('#TIMEPAUSE').val(data['timetarget1_data']);
+		} else if ($("#inputState").val()=="2"){
+		$('#TMPPAUSE').val(data['ttarget2_data']);
+		$('#TIMEPAUSE').val(data['timetarget2_data']);
+		} else if ($("#inputState").val()=="3"){
+		$('#TMPPAUSE').val(data['ttarget3_data']);
+		$('#TIMEPAUSE').val(data['timetarget3_data']);
+		} else if ($("#inputState").val()=="4"){
+		$('#TMPPAUSE').val(data['ttarget4_data']);
+		$('#TIMEPAUSE').val(data['timetarget4_data']);
+		}
+		$('#CHILLER').prop('checked',data['chiller_data']!=0)
 		}
 		
+		
+		
+		
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
-		$('#TKUBE').html('Фаза затирания <b>'+data['phase_data']+'</b>');
+		$('#PHASE').html('Фаза затирания <b>'+data['phase_data']+'</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
 		$('#TIMELEFT').html('Осталось <b>'+data['time_data']+'</b>');

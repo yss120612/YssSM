@@ -134,6 +134,9 @@ String Brewing::getData(uint w)
 		case DS_BREWINGPHASE:
 			return String(phase);
 			break;
+		case DS_BREWINGCHILLER:
+			return have_chiller ? "1" : "0";
+			break;
 		default:
 			return "";
 			break;
