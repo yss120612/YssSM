@@ -66,8 +66,7 @@ void HttpHelper::setup() {
 	server->serveStatic("/js/exporting.js", SPIFFS, "/js/exporting.js", NULL);
 
 	server->serveStatic("/js/highstock.js", SPIFFS, "/js/highstock.js", NULL);
-
-		
+			
 	server->begin();
 
 	httpSpiffsUpdater = new ESP8266WebSpiffsUpdater();
@@ -162,6 +161,7 @@ void HttpHelper::handleBrewing() {
 		+ "\", \"timetarget3_data\":\"" + ds->getData(DS_BREWINGTIME3)
 		+ "\", \"ttarget4_data\":\"" + ds->getData(DS_BREWINGTMP4)
 		+ "\", \"timetarget4_data\":\"" + ds->getData(DS_BREWINGTIME4)
+		+ "\", \"ttarget_data\":\"" + ds->getData(DS_BREWINGTARGET)
 		+ "\", \"chiller_data\":\"" + ds->getData(DS_BREWINGCHILLER)
 		+ "\", \"phase_data\":\"" + ds->getData(DS_BREWINGPHASE)
 		+ "\", \"state_data\":\"" + ds->getData(DS_BREWINGSTATE)

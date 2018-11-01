@@ -137,6 +137,9 @@ String Brewing::getData(uint w)
 		case DS_BREWINGCHILLER:
 			return have_chiller ? "1" : "0";
 			break;
+		case DS_BREWINGTARGET:
+			return String(getTarget());
+			break;
 		default:
 			return "";
 			break;

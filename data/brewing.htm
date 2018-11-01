@@ -23,6 +23,7 @@
 		<h3>Затирание</h3>
 		</div>
 	
+		<div id="PAUSE1">
 		<div class="col-md-offset-1 col-md-10">
 		<h5>1я пауза</h5>
 			<div id="TTARGET1"></div>		
@@ -30,6 +31,9 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMETARGET1"></div>		
 		</div>
+		
+		</div>
+		<div id="PAUSE2">
 		<div class="col-md-offset-1 col-md-10">
 		<h5>2я пауза</h5>
 			<div id="TTARGET2"></div>		
@@ -37,6 +41,9 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMETARGET2"></div>		
 		</div>
+		
+		</div>
+		<div id="PAUSE3">
 		<div class="col-md-offset-1 col-md-10">
 		<h5>3я пауза</h5>
 			<div id="TTARGET3"></div>		
@@ -44,6 +51,9 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMETARGET3"></div>		
 		</div>
+		
+		</div>
+		<div id="PAUSE2">
 		<div class="col-md-offset-1 col-md-10">
 		<h5>4я пауза</h5>
 			<div id="TTARGET4"></div>		
@@ -51,7 +61,7 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TIMETARGET4"></div>		
 		</div>
-		
+		</div>
 		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="PHASE"></div>		
@@ -294,6 +304,15 @@
 		$('#TIMETARGET4').html('Время заданное <b>'+data['timetarget1_data']+' мин.</b>');
 		
 		
+		for (var i = 1; i <= 4; i++) {
+			if (i==pd){
+			if (!$("#PAUSE"+i).hasClass("warning")) $("#PAUSE"+i).addClass("warning");
+			}else{
+			if ($("#PAUSE"+i).hasClass("warning")) $("#PAUSE+i").removeClass("warning");
+			}
+		}
+		
+		
 		
 		if (!$('#lock').hasClass('focus')){
 		if ($("#inputState").val()=="1"){
@@ -316,7 +335,7 @@
 		
 		
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
-		$('#PHASE').html('Фаза затирания <b>'+data['phase_data']+'</b>');
+		$('#PHASE').html('Фаза затирания <b>'+pd+'</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
 		$('#TIMELEFT').html('Осталось <b>'+data['time_data']+'</b>');
