@@ -212,6 +212,9 @@ void Main::command(MenuCommand * id)
 	case 1:
 		workMode.setCurrent(MODE_SUVID);
 		break;
+	case 2:
+		workMode.setCurrent(MODE_BREWING);
+		break;
 	case 3:
 		workMode.setCurrent(MODE_DISTILL);
 		break;

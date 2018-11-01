@@ -10,7 +10,6 @@
 #include <ArduinoJson.h>
 #include <ESP8266WebServerSecure.h>
 #include <ESP8266WebServer.h>
-#include "Termopause.h"
 #include "Config.h"
 //#include "DataSource.h"
 
@@ -64,9 +63,9 @@ void setup() {
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
 	workMode.addMode(suvid);
+	workMode.addMode(brewing);
 	workMode.addMode(distill);
 	workMode.addMode(rectify);
-	workMode.addMode(brewing);
 	workMode.addMode(manual);
 	workMode.setCurrent(MODE_MAIN);
 	httph.setDataSource(&workMode);
