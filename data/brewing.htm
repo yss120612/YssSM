@@ -273,7 +273,7 @@
 		function(data){
 		$("#PAUSEDIV").hide();
 		$("#CHILLERDIV").show();
-		$('#CHILLER').prop('checked',data['chiller_data']!=0);
+		$("#CHILLER").prop('checked',data['chiller_data']!=0);
 		});
 		}
 		else
@@ -283,8 +283,8 @@
 		function(data){
 		$("#PAUSEDIV").show();
 		$("#CHILLERDIV").hide();
-		$('#TMPPAUSE').val(data['ttarget'+$("#inputState").val()+'_data']);
-		$('#TIMEPAUSE').val(data['timetarget'+$("#inputState").val()+'_data']);
+		$("#TMPPAUSE").val(data['ttarget'+$("#inputState").val()+'_data']);
+		$("#TIMEPAUSE").val(data['timetarget'+$("#inputState").val()+'_data']);
 		});
 		}
 		
@@ -313,9 +313,11 @@
 		
 		for (var i = 1; i <= 4; i++) {
 			if (i==pd){
-			if (!$("#PAUSE"+i).hasClass("warning")) $("#PAUSE"+i).addClass("warning");
+			if ($("#PAUSE"+i).hasClass("panel-default")) $("#PAUSE"+i).removeClass("panel-default");
+			if (!$("#PAUSE"+i).hasClass("panel-warning")) $("#PAUSE"+i).addClass("panel-warning");
 			}else{
-			if ($("#PAUSE"+i).hasClass("warning")) $("#PAUSE"+i).removeClass("warning");
+			if (!$("#PAUSE"+i).hasClass("panel-default")) $("#PAUSE"+i).addClass("panel-default");
+			if ($("#PAUSE"+i).hasClass("panel-warning")) $("#PAUSE"+i).removeClass("panel-warning");
 			}
 		}
 		

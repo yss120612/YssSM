@@ -50,13 +50,13 @@ String Distillation::getData(uint w)
 		case DS_DISTSTATE:
 			switch (work_mode) {
 			case PROC_OFF:
-				return "OFF";
+				return "Выключено";
 				break;
 			case PROC_FORSAJ:
-				return "FORSAJ";
+				return "Форсаж";
 				break;
 			case PROC_WORK:
-				return "WORKING";
+				return "Отбор СС";
 				break;
 			}
 			break;
@@ -71,6 +71,15 @@ String Distillation::getData(uint w)
 	}
 	else
 	return Mode::getData(w);
+}
+
+void Distillation::setData(uint w, String ds)
+{
+	switch (w) {
+	case SET_DISTILLTSTOP:
+		CONF.setDistStopTemp(ds.toFloat());
+		break;
+	}
 }
 
 void Distillation::makeMenu()

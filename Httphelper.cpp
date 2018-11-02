@@ -29,6 +29,7 @@ void HttpHelper::setup() {
 	server->on("/logdata", std::bind(&HttpHelper::handleLog, this));
 
 	server->on("/distilldata", std::bind(&HttpHelper::handleDistill, this));
+	server->on("/distillset", std::bind(&HttpHelper::handleDistillSet, this)); // Установка distill
 
 	server->on("/rectifydata", std::bind(&HttpHelper::handleRectify, this));
 	server->on("/rectifyset", std::bind(&HttpHelper::handleRectifySet, this)); // Установка rectify
@@ -107,6 +108,13 @@ void HttpHelper::handleDistill()
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
+void HttpHelper::handleDistillSet()
+{
+	ds->setData(SET_DISTILLTSTOP, server->arg("TSTOP"));
+	logg.logging("Temperature (cube) end of distill set on " + server->arg("TSTOP"));
+	//server->send(200, "text/plain", "OK");
+}
+
 void HttpHelper::handleRectify()
 {
 	
@@ -126,7 +134,7 @@ void HttpHelper::handleRectify()
 void HttpHelper::handleRectifySet()
 {
 	ds->setData(SET_RECTTSTOP, server->arg("TSTOPSET"));
-	logg.logging("Temperature sett on " + server->arg("TSTOPSET"));
+	logg.logging("Temperature (def) end of rectify sett on " + server->arg("TSTOPSET"));
 	//server->send(200, "text/plain", "OK");
 }
 

@@ -42,6 +42,7 @@ private:
 	void WiFiReconnect();
 	void handleLog();
 	void handleDistill();
+	void handleDistillSet();
 	void handleRectify();
 	void handleRectifySet();
 	void handleSuvid();

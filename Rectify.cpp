@@ -22,7 +22,7 @@ String Rectify::getData(uint w)
 		case DS_RECTSTATE:
 			switch (work_mode) {
 			case PROC_OFF:
-				return "OFF";
+				return "Выключено";
 				break;
 			case PROC_FORSAJ:
 				return "FORSAJ";

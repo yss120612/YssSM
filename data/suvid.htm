@@ -52,7 +52,7 @@
 		</div>
 		
 		<div class="col-md-offset-1 col-md-5">
-			<form action="/suvidset" id="setTPause" class="form-inline">
+			<form action="/suvidset" id="setTPause">
 				<div class="form-group">
 					<label for="TMPPAUSE">Температура </label>
 					<input type="input" class="form-control setdata" id="TMPPAUSE" aria-describedby="helpTmpPause">
@@ -215,18 +215,17 @@
 		"/suviddata",
 		function(data){
 		$('#TTARGET').html('Температура поддерживаемая <b>'+data['ttarget_data']+'&deg;C</b>');
-		if (!$('#lock').hasClass('focus')){
-		$('#TMPPAUSE').val(data['ttarget_data']);
-		}
 		$('#TIMETARGET').html('Время заданное <b>'+data['timetarget_data']+' мин.</b>');
-		if (!$('#lock').hasClass('focus')){
-		$('#TIMEPAUSE').val(data['timetarget_data']);
-		}
 		$('#TKUBE').html('Температура в кубе <b>'+data['kube_data']+'&deg;C</b>');
 		$('#TTRIAK').html('Температура радиатора нагревателя <b>'+data['cooler_data']+'&deg;C</b>');
 		$('#HPOWER').html('Мощность нагревателя <b>'+data['heater_data']+'%</b>');
-		$('#TIMELEFT').html('Осталось <b>'+data['time_data']+'</b>');
+		$('#TIMELEFT').html('Осталось времени <b>'+data['time_data']+'</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
+		
+		if (!$('#lock').hasClass('focus')){
+			$('#TMPPAUSE').val(data['ttarget_data']);
+			$('#TIMEPAUSE').val(data['timetarget_data']);
+			}
 		});
 		setTimeout('process()',3000);
 	};

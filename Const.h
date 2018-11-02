@@ -156,6 +156,9 @@ enum mydata {//ДЛЯ просмотра ИЗ ВЕБА
 
 
 enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
+	SET_DISTILLSTART,
+	SET_DISTILLTSTOP,
+	SET_DISTILLEND,
 	SET_RECTSTART,
 	SET_RECTTSTOP,
 	SET_RECTEND,

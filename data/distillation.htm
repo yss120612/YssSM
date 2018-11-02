@@ -19,8 +19,12 @@
 			<a href="/" class="btn btn-info">Дом</a>
 		</div>
 		<div class="col-md-offset-1 col-md-10">
-		<h3>Дистилляция</h3>
+			<h3>Дистилляция</h3>
 		</div>
+		
+		<div class="panel panel-default col-md-offset-1 col-md-10">
+		<div class="panel-heading">Текущие параметры</div>
+		<div class="panel-body">		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="TTSA"></div>		
 		</div>
@@ -48,8 +52,29 @@
 		<div class="col-md-offset-1 col-md-10">
 			<div id="STA"></div>		
 		</div>
+		</div>
+		</div>
+		<div class="panel panel-default col-md-offset-1 col-md-10">
+		<div class="panel-heading">Настройки</div>
+		<div class="panel-body">		
+		<form action="/distillset" id="setTStop">
+				<div class="form-group">
+					<label for="TMPSTOP">Остановить при Т в кубе </label>
+					<input type="input" class="form-control setdata" id="TMPSTOP" aria-describedby="helpTmpStop">
+				</div>
+				<input type="hidden" id="lock">
+				<button type="submit" class="btn btn-primary">Установить</button>
+			</form>
+		</div>
+		</div>
+		
+		<div class="panel panel-success col-md-offset-1 col-md-10">
+		<div class="panel-heading">График</div>
+		<div class="panel-body">		
 		<div class="col-md-offset-1 col-md-10">
 			<div id="CHART"></div>		
+		</div>
+		</div>
 		</div>
 	</div>
 	</div>
@@ -178,6 +203,25 @@
         }
 		]
     });
+	$('.setdata').focus(function() {
+		$("#lock").addClass("focus");
+	});
+	$('.setdata').blur(function() {
+		$("#lock").removeClass("focus");
+	});
+	$('#setTStop').submit(function(){  
+			
+			$.ajax({  
+                    type: "POST",  
+                    url: "/distillset",  
+                    data: "TSTOP="+$("#TMPSTOP").val(),  
+                    success: function(html){  
+                    }  
+			}); 
+                return false;  
+            });  
+			
+	
 	});
 	
 	function process(){
@@ -193,6 +237,10 @@
 		$('#UROVEN').html('Датчик уровня <b>'+data['wsu_data']+'%</b>');
 		$('#FLOOD').html('Датчик протечки <b>'+data['wsf_data']+'%</b>');
 		$('#STA').html('Состояние <b>'+data['state_data']+'</b>');
+		if (!$('#lock').hasClass('focus')){
+			$('#TMPSTOP').val(data['tstop_data']);
+			}
+				
 		});
 		setTimeout('process()',3000);
 	}

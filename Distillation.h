@@ -20,6 +20,8 @@ public:
 	Distillation(Aggregates * a, Hardware *h);
 	~Distillation();
 	String getData(uint w);
+
+	void setData(uint w, String ds);
 	
 protected:
 	
