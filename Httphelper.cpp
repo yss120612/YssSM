@@ -185,9 +185,9 @@ void HttpHelper::handleBrewingSet()
 	case 2:
 	case 3:
 	case 4:
-		ds->setData(SET_BREWINGTMP1+part-1, server->arg("TMP"));
+		ds->setData(SET_BREWINGTMP1+(part-1)*2, server->arg("TMP"));
 		logg.logging("BREWING Temperature " + String(part) +" set on " + server->arg("TMP"));
-		ds->setData(SET_BREWINGTIME1 + part - 1, server->arg("TIME"));
+		ds->setData(SET_BREWINGTIME1 + (part - 1) * 2, server->arg("TIME"));
 		logg.logging("BREWING Time " + String(part) + " set on " + server->arg("TIME"));
 		break;
 	case 5:

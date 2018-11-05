@@ -50,13 +50,13 @@ String Distillation::getData(uint w)
 		case DS_DISTSTATE:
 			switch (work_mode) {
 			case PROC_OFF:
-				return "Выключено";
+				return "Off";
 				break;
 			case PROC_FORSAJ:
-				return "Форсаж";
+				return "Forsaj";
 				break;
 			case PROC_WORK:
-				return "Отбор СС";
+				return "Working...";
 				break;
 			}
 			break;
