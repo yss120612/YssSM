@@ -75,11 +75,18 @@ String Distillation::getData(uint w)
 
 void Distillation::setData(uint w, String ds)
 {
-	switch (w) {
-	case SET_DISTILLTSTOP:
-		CONF.setDistStopTemp(ds.toFloat());
-		break;
+	if (w > SET_DISTILLSTART && w < SET_DISTILLEND) {
+		switch (w) {
+
+		case SET_DISTILLTSTOP:
+			CONF.setDistStopTemp(ds.toFloat());
+			break;
+		}
 	}
+	else {
+		Mode::setData(w, ds);
+	}
+
 }
 
 void Distillation::makeMenu()

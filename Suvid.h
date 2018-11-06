@@ -15,6 +15,7 @@
 //#include "Beeper.h"
 //#include "Display.h"
 #include "Mode.h"
+#include "Workmodes.h"
 //#include "Termopause.h"
 //#include "Workmodes.h"
 

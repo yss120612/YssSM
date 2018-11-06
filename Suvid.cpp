@@ -1,5 +1,5 @@
 #include "Suvid.h"
-#include "Workmodes.h"
+
 
 Suvid::Suvid(Aggregates * a, Hardware *h) : Mode(a,h) {
 	makeMenu();
@@ -112,13 +112,19 @@ String Suvid::getData(uint w)
 
 void Suvid::setData(uint w, String ds)
 {
-	switch (w) {
-	case SET_SUVIDTEMP:
-		CONF.setSuvidTemp((uint8_t)ds.toInt());
-		break;
-	case SET_SUVIDTIME:
-		CONF.setSuvidMin(ds.toInt());
-		break;
+	if (w > SET_SUVIDSTART && w < SET_SUVIDEND)
+	{
+		switch (w) {
+		case SET_SUVIDTEMP:
+			CONF.setSuvidTemp((uint8_t)ds.toInt());
+			break;
+		case SET_SUVIDTIME:
+			CONF.setSuvidMin(ds.toInt());
+			break;
+		}
+	}
+	else {
+		Mode::setData(w, ds);
 	}
 }
 

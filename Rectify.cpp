@@ -1,5 +1,4 @@
 #include "Rectify.h"
-#include "Workmodes.h"
 
 Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 {
@@ -12,6 +11,7 @@ Rectify::~Rectify()
 {
 //	delete mcmd;
 //	delete cont;
+	delete menu;
 }
 
 String Rectify::getData(uint w)
@@ -22,25 +22,25 @@ String Rectify::getData(uint w)
 		case DS_RECTSTATE:
 			switch (work_mode) {
 			case PROC_OFF:
-				return "Выключено";
+				return "OFF";
 				break;
 			case PROC_FORSAJ:
 				return "FORSAJ";
 				break;
 			case PROC_WORK:
-				return "WORKING";
+				return "BODY COLLECTING";
 				break;
 			case PROC_GET_HEAD:
-				return "GET HEAD";
+				return "HEAD COLLECTING";
 				break;
 			case PROC_SELF_WORK:
 				return "SELF WORK";
 				break;
 			case PROC_WAIT_HEAD:
-				return "WAIT USER TO BODY COLLE";
+				return "READY TO COLLECT BODY";
 				break;
 			case PROC_WAIT_SELF:
-				return "WAIT USER TO GET HEAD";
+				return "READY TO COLLECT HEAD";
 				break;
 			}
 			break;
@@ -59,10 +59,15 @@ String Rectify::getData(uint w)
 
 void Rectify::setData(uint w, String ds)
 {
-	switch (w) {
-	case SET_RECTTSTOP:
-		CONF.setRectStopTemp(ds.toFloat());
-		break;
+	if (w > SET_RECTSTART && w < SET_RECTEND) {
+		switch (w) {
+		case SET_RECTTSTOP:
+			CONF.setRectStopTemp(ds.toFloat());
+			break;
+		}
+	}
+	else {
+		Mode::setData(w, ds);
 	}
 }
 

@@ -13,7 +13,6 @@
 
 class DataSrc
 {
-
 public:
 	DataSrc();
 	virtual String getData(uint what) = 0;

@@ -10,7 +10,7 @@
 #endif
 
 #include "Mode.h"
-
+#include "Workmodes.h"
 
 class Rectify : public Mode
 {

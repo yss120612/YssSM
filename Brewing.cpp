@@ -1,9 +1,7 @@
 // 
 // 
 // 
-
 #include "Brewing.h"
-#include "Workmodes.h"
 
 Brewing::Brewing(Aggregates * a, Hardware *h) : Mode(a, h) {
 	makeMenu();
@@ -153,31 +151,32 @@ String Brewing::getData(uint w)
 void Brewing::setData(uint w, String ds) {
 	if (w > SET_BREWINGSTART && w < SET_BREWINGEND) {
 		switch (w) {
-		SET_BREWINGTMP1:
+
+		case SET_BREWINGTMP1:
 			CONF.setBrewingTemp1((uint8_t)ds.toInt());
 			break;
-		SET_BREWINGTIME1:
+		case SET_BREWINGTIME1:
 			CONF.setBrewingMin1(ds.toInt());
 			break;
-		SET_BREWINGTMP2:
+		case SET_BREWINGTMP2:
 			CONF.setBrewingTemp2((uint8_t)ds.toInt());
 			break;
-		SET_BREWINGTIME2:
+		case SET_BREWINGTIME2:
 			CONF.setBrewingMin2(ds.toInt());
 			break;
-		SET_BREWINGTMP3:
+		case SET_BREWINGTMP3:
 			CONF.setBrewingTemp3((uint8_t)ds.toInt());
 			break;
-		SET_BREWINGTIME3:
+		case SET_BREWINGTIME3:
 			CONF.setBrewingMin3(ds.toInt());
 			break;
-		SET_BREWINGTMP4:
+		case SET_BREWINGTMP4:
 			CONF.setBrewingTemp4((uint8_t)ds.toInt());
 			break;
-		SET_BREWINGTIME4:
+		case SET_BREWINGTIME4:
 			CONF.setBrewingMin4(ds.toInt());
 			break;
-		SET_BREWINGCHILLER:
+		case SET_BREWINGCHILLER:
 			have_chiller = (ds.toInt() != 0);
 			break;
 			
@@ -467,7 +466,6 @@ void Brewing::process(long ms) {
 		if (hardware->getClock()->checkAlarm2()) {//будильник сработал
 			logg.logging("Brewing WORK phase №" + String(phase) + " finished at " + getTimeStr());
 			phase++;
-			hardware->reSetAlarm2();
 			if (getTimeLeft() == 0 || getTarget() == 0) {
 				if (have_chiller) {
 					agg->getHeater()->setPower(0);

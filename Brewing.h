@@ -10,6 +10,8 @@
 #endif
 
 #include "Mode.h"
+#include "Workmodes.h"
+
 
 
 class Brewing : public Mode {
