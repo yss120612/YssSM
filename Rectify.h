@@ -34,9 +34,9 @@ protected:
 	MenuCommand *cont;
 	bool head_collected;
 	bool stop_defined;
-	float tcube;
-	float ttsa;
-	float tdef;
+	//float tcube;
+	//float ttsa;
+	//float tdef;
 	boolean checkLowTSA;
 	//long TSAchecked;
 	//long TSAcheckedCold;

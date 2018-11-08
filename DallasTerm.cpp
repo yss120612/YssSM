@@ -5,20 +5,36 @@
 #include "DallasTerm.h"
 
 
+DallasTerm::DallasTerm(const uint8_t addr[], OneWire * d, float del)
+{
+	for (uint8_t i = 0; i < 8; i++) address[i] = addr[i];
+	counter = 0;
+	ds = d;
+	delta = del;
+	meajured = false;
+	changed = false;
+	temperature = 0;
+	
+}
+
 float DallasTerm::getTemp() {
-	float summ;
-	for (uint8_t i = 0; i < dim; i++) {
-		summ += temp[i];
+	if (changed)
+	{
+		float summ;
+		for (uint8_t i = 0; i < dim; i++) {
+			summ += temp[i];
+		}
+		temperature = summ / dim;
+		changed = false;
 	}
-	return summ / dim;
+	return temperature;
 }
 
 
 
 void DallasTerm::process(long ms) {
-//	if (ms - lastWork < interval) return;
 
-	ds->reset(); // Теперь готовимся
+	ds->reset(); //готовимся
 	ds->select(address);
 	
 	float tm;
@@ -27,6 +43,7 @@ void DallasTerm::process(long ms) {
 		tm = (ds->read() | (ds->read() << 8)) * 0.0625 + delta;
 		if (tm >= 0 && tm <= 110) {
 			temp[counter] = tm;
+			changed = true;
 			counter = (counter < dim - 1) ? counter + 1 : 0;
 		}
 		meajured = false;

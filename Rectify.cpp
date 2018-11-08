@@ -340,6 +340,7 @@ void Rectify::next() {
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
 		CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 1.5f);//пока так а
+		hardware->reSetAlarm2();
 		hardware->setAlarm2(40);//через N минут определим температуру окончания
 		cont->setVisible(false);
 		menu->setActive(false);
@@ -355,9 +356,9 @@ void Rectify::process(long ms)
 	if (last_time + test_time - ms > 0) return;
 	last_time = ms;
 	
-	tcube = hardware->getTKube()->getTemp();
-	ttsa = hardware->getTTSA()->getTemp();
-	tdef = hardware->getTTsarga()->getTemp();
+	float tcube = hardware->getTKube()->getTemp();
+	float ttsa = hardware->getTTSA()->getTemp();
+	float tdef = hardware->getTTsarga()->getTemp();
 
 	switch (work_mode) {
 	case PROC_FORSAJ:
@@ -367,6 +368,8 @@ void Rectify::process(long ms)
 			logg.logging("Rectify forsaj finished at " + getTimeStr());
 			hardware->getBeeper()->beep(2000, 1000);
 			work_mode = PROC_SELF_WORK;
+			hardware->reSetAlarm2();
+			hardware->reSetAlarm1();
 			hardware->setAlarm2((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
 			hardware->setAlarm1(3);//начинаем проверять ТСА
 		}
@@ -375,6 +378,7 @@ void Rectify::process(long ms)
 		if (hardware->getClock()->checkAlarm2()){
 			logg.logging("Rectify Work Self finished at " + getTimeStr());
 			work_mode = head_collected? PROC_WAIT_HEAD:PROC_WAIT_SELF;
+			hardware->reSetAlarm2();
 			hardware->setAlarm2(10);
 			hardware->getBeeper()->beep(1000, 5000);
 			cont->setVisible(true);
@@ -392,6 +396,7 @@ void Rectify::process(long ms)
 		if (hardware->getUrovenWS()->isAlarmed()) {
 			logg.logging("Rectify collect head finished at " + getTimeStr());
 			work_mode = PROC_WAIT_HEAD;
+			hardware->reSetAlarm2();
 			hardware->setAlarm2(10);
 			hardware->getBeeper()->beep(2000, 5000);
 			cont->setVisible(true);
@@ -451,6 +456,7 @@ void Rectify::process(long ms)
 				tsa_alarms = 0;
 			}
 		}
+		
 		hardware->setAlarm1(evnt ? 3 : 3);
 	}
 
