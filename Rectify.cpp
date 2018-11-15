@@ -5,6 +5,8 @@ Rectify::Rectify(Aggregates * a, Hardware *h) : Mode(a, h)
 	MyName = "Rectify";
 	makeMenu();
 	checkLowTSA = false;
+	getTail = false;
+
 }
 
 Rectify::~Rectify()
@@ -36,11 +38,17 @@ String Rectify::getData(uint w)
 			case PROC_SELF_WORK:
 				return "SELF WORK";
 				break;
+			case PROC_GET_TAIL:
+				return "TAILS COLLECTING";
+				break;
 			case PROC_WAIT_HEAD:
 				return "READY TO COLLECT BODY";
 				break;
 			case PROC_WAIT_SELF:
 				return "READY TO COLLECT HEAD";
+				break;
+			case PROC_WAIT_TAIL:
+				return "READY TO COLLECT TAIL";
 				break;
 			}
 			break;
@@ -143,6 +151,7 @@ void Rectify::makeMenu()
 	MenuFParameter * tEnd = new MenuFParameter("T End", setup, 15);
 	MenuIParameter * wSelf = new MenuIParameter("Work Self", setup, 16);
 	MenuBParameter * hColl = new MenuBParameter("No Head", setup, 17);//to continue (head already collected)
+	MenuBParameter * mTail = new MenuBParameter("Get Tail", setup, 18);//Get tail or stop after body
 
 	setup->add(wSelf);
 	setup->add(pwHWork);
@@ -152,6 +161,7 @@ void Rectify::makeMenu()
 	setup->add(tFor);
 	setup->add(tEnd);
 	setup->add(hColl);
+	setup->add(mTail);
 
 	menu->add(new MenuSubmenu("Setup", setup));
 }
@@ -213,6 +223,9 @@ void Rectify::initParams(MenuParameter * mp)
 	case 17:
 		((MenuBParameter *)mp)->setup(head_collected);
 		break;
+	case 18:
+		((MenuBParameter *)mp)->setup(getTail);
+		break;
 	}
 }
 
@@ -256,6 +269,9 @@ void Rectify::acceptParams(MenuParameter * mp)
 		break;
 	case 17:
 		head_collected = ((MenuBParameter *)mp)->getCurrent();
+		break;
+	case 18:
+		getTail = ((MenuBParameter *)mp)->getCurrent();
 		break;
 
 	}
@@ -335,7 +351,7 @@ void Rectify::next() {
 		work_mode = PROC_GET_HEAD;
 		break;
 	case PROC_WAIT_HEAD:
-		coldBeginCheck = false;
+		coldBeginCheck = 0;
 		agg->getHeater()->setPower(CONF.getRectWorkPower());
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
@@ -346,6 +362,12 @@ void Rectify::next() {
 		menu->setActive(false);
 		logg.logging("Rectify Collech BODY started at " + getTimeStr());
 		work_mode = PROC_WORK;
+		break;
+	case PROC_WAIT_TAIL:
+		cont->setVisible(false);
+		menu->setActive(false);
+		logg.logging("Rectify Collech TAIL started at " + getTimeStr());
+		work_mode = PROC_GET_TAIL;
 		break;
 }
 }
@@ -418,6 +440,29 @@ void Rectify::process(long ms)
 			hardware->getBeeper()->beep(1000, 1000);
 		}
 		if (tdef > CONF.getRectStopTemp()) {//end of collect body
+			if (getTail) {
+				logg.logging("Rectify collect body finished at " + getTimeStr());
+				work_mode = PROC_WAIT_TAIL;
+				hardware->reSetAlarm2();
+				hardware->setAlarm2(10);
+				cont->setVisible(true);
+				menu->setActive(true);
+				ss_active = false;
+				last_action = ms;
+			}
+			else {
+				stop(PROCEND_TEMPERATURE);
+			}
+			hardware->getBeeper()->beep(1000, 5000);
+		}
+		break;
+	case PROC_WAIT_TAIL:
+		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
+			stop(PROCEND_NO_ATT_TAIL);
+		}
+		break;
+	case PROC_GET_TAIL:
+		if (tdef > (CONF.getRectStopTemp()+1.1f)) {//end of collect tail
 			stop(PROCEND_TEMPERATURE);
 			hardware->getBeeper()->beep(1000, 5000);
 		}

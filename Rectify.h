@@ -38,6 +38,7 @@ protected:
 	//float ttsa;
 	//float tdef;
 	boolean checkLowTSA;
+	boolean getTail;
 	//long TSAchecked;
 	//long TSAcheckedCold;
 	uint8_t coldBeginCheck;

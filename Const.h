@@ -188,6 +188,8 @@ enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 #define PROC_WAIT_SELF 5
 #define PROC_WAIT_HEAD 6
 #define PROC_COOLING 7
+#define PROC_WAIT_TAIL 8
+#define PROC_GET_TAIL 9
 
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени
@@ -199,6 +201,7 @@ enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 #define PROCEND_FLOOD 7 //закончили по датчику затопления
 #define PROCEND_NO_ATT_SELF 8 //закончили никто не подошел после работы на себя
 #define PROCEND_NO_ATT_HEAD 9 //закончили никто не подошел после отбора голов
+#define PROCEND_NO_ATT_TAIL 10 //закончили никто не подошел после отбора тела
 
 //#define PROCERR_OK 0 //нет ошибок
 //#define PROCERR_NOTKUB 1 //нет градусника в кубе
