@@ -207,7 +207,7 @@ enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 //#define PROCERR_NOTKUB 1 //нет градусника в кубе
 //#define PROCERR_NOHEATER 2 //нет тена
 
-const uint16_t test_time = 10000;//10 секунд
+const uint16_t test_time = 1000*60;//60 секунд
 
 const long checkTSA = 1000 * 60 * 3;//через 3 минуты проверяем TSA после коррекции
 

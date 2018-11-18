@@ -468,6 +468,7 @@ void Brewing::process(long ms) {
 			phase++;
 			if (getTimeLeft() == 0 || getTarget() == 0) {
 				if (have_chiller) {
+					phase = 5;
 					agg->getHeater()->setPower(0);
 					agg->getHeater()->stop();
 					agg->getKran()->openQuantum(CONF.getBrewingKran());

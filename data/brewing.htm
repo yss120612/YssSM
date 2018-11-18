@@ -60,6 +60,14 @@
 		</div>
 		</div>
 		
+		<div id="PAUSE5" class="panel panel-default col-md-2">
+		<div class="panel-heading">Охлаждение</div>
+		<div class="panel-body">		
+				
+		</div>
+		</div>
+		
+		
 		</div>
 		</div>
 		
@@ -311,7 +319,7 @@
 		
 		var pd=data['phase_data'];
 		
-		for (var i = 1; i <= 4; i++) {
+		for (var i = 1; i <= 5; i++) {
 			if (i==pd){
 			if ($("#PAUSE"+i).hasClass("panel-default")) $("#PAUSE"+i).removeClass("panel-default");
 			if (!$("#PAUSE"+i).hasClass("panel-warning")) $("#PAUSE"+i).addClass("panel-warning");
