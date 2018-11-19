@@ -63,7 +63,7 @@
 		<div id="PAUSE5" class="panel panel-default col-md-2">
 		<div class="panel-heading">Охлаждение</div>
 		<div class="panel-body">		
-				
+			<div id="KRANTARGET5"></div>			
 		</div>
 		</div>
 		
@@ -302,8 +302,7 @@
 	
 	});
 	
-	
-		
+			
 	function process(){
 		$.getJSON(
 		"/brewingdata",
@@ -316,6 +315,7 @@
 		$('#TIMETARGET3').html('Время <b>'+data['timetarget3_data']+' мин.</b>');
 		$('#TTARGET4').html('Температура <b>'+data['ttarget4_data']+'&deg;C</b>');
 		$('#TIMETARGET4').html('Время <b>'+data['timetarget4_data']+' мин.</b>');
+		$('#KRANTARGET5').html('Кран открыт на <b>'+data['kran_data']+' %</b>');
 		
 		var pd=data['phase_data'];
 		
@@ -328,8 +328,7 @@
 			if ($("#PAUSE"+i).hasClass("panel-warning")) $("#PAUSE"+i).removeClass("panel-warning");
 			}
 		}
-		
-		
+			
 		
 		if (!$('#lock').hasClass('focus')){
 			if ($("#inputState").val()=="1"){

@@ -39,19 +39,19 @@ void Brewing::showState() {
 		case PROCEND_NO: //работаем
 			hardware->getDisplay()->drawString(X, Y, "Ready 2 start");
 			break;
-		case	PROCEND_TIME: //закончили по времени
+		case PROCEND_TIME: //закончили по времени
 			hardware->getDisplay()->drawString(X, Y, "End by time");
 			break;
-		case	PROCEND_ERROR: //закончили с ошибкой
+		case PROCEND_ERROR: //закончили с ошибкой
 			hardware->getDisplay()->drawString(X, Y, "End by error");
 			break;
-		case  PROCEND_FAULT: //закончили аварийно
+		case PROCEND_FAULT: //закончили аварийно
 			hardware->getDisplay()->drawString(X, Y, "End by fault");
 			break;
 		case PROCEND_TEMPERATURE: //закончили по температуре
 			hardware->getDisplay()->drawString(X, Y, "End by temp");
 			break;
-		case  PROCEND_MANUAL: //закон
+		case PROCEND_MANUAL: //закон
 			hardware->getDisplay()->drawString(X, Y, "End manual");
 			break;
 		}
@@ -91,13 +91,13 @@ String Brewing::getData(uint w)
 				return "OFF";
 				break;
 			case PROC_FORSAJ:
-				return "FORSAJ[" + String(phase) + "]";
+				return "FORSAJ[preparing phase " + String(phase) + "]";
 				break;
 			case PROC_FORSAJDOWN:
-				return "FORSAJDOWN[" + String(phase) + "]";
+				return "FORSAJDOWN[preparing phase " + String(phase) + "]";
 				break;
 			case PROC_WORK:
-				return "WORKING[" + String(phase) + "]";
+				return "WORKING[phase " + String(phase) + "]";
 				break;
 			case PROC_COOLING:
 				return "COOLING";
@@ -146,14 +146,16 @@ String Brewing::getData(uint w)
 		case DS_BREWINGTARGET:
 			return String(getTarget());
 			break;
+		
 		default:
 			return "";
 			break;
 		}
 
 	}
-	else
+	else {
 		return Mode::getData(w);
+	}
 }
 
 void Brewing::setData(uint w, String ds) {
@@ -372,10 +374,10 @@ void Brewing::acceptParams(MenuParameter * mp)
 		pump_cycled = ((MenuBParameter *)mp)->getCurrent();
 		if (work_mode != PROC_OFF) {
 			hardware->reSetAlarm1();
+			hardware->getPump()->start();
 			if (pump_cycled) {
 				hardware->setAlarm1(2);
 			}
-			hardware->getPump()->start();
 		}
 		break;
 	}
@@ -488,7 +490,6 @@ void Brewing::process(long ms) {
 	switch (work_mode) {
 
 	case PROC_FORSAJ:
-
 		if (tmp >= getTarget()) {
 			work_mode = PROC_WORK;
 			logg.logging("Brewing WORK phase №" + String(phase) + " started at " + getTimeStr());
@@ -539,6 +540,7 @@ void Brewing::process(long ms) {
 	if (work_mode == PROC_FORSAJ || work_mode == PROC_WORK) {
 		agg->getHeater()->setPID(tmp, getTarget());
 	}
+
 	if (hardware->getClock()->checkAlarm1()) {
 		if (hardware->getPump()->isWorking()) {
 			hardware->getPump()->stop();
@@ -546,7 +548,7 @@ void Brewing::process(long ms) {
 		}
 		else {
 			hardware->getPump()->start();
-			hardware->setAlarm1(2);
+			if (pump_cycled) hardware->setAlarm1(2);
 		}
 	}
 

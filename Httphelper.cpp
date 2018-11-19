@@ -95,16 +95,16 @@ void HttpHelper::handleLog()
 
 void HttpHelper::handleDistill()
 {
-	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) 
-			  + ", \"def_data\":" + ds->getData(DS_TTSARGA) 
-			  + ", \"kube_data\":" + ds->getData(DS_TKUBE) 
-			  + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
-			  + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
-			  + ", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
-			  + ", \"tstop_data\":\"" + ds->getData(DS_DISTSTOP)
-			  + "\", \"wsu_data\":" + ds->getData(DS_WSUROVEN)
-			  + ", \"wsf_data\":" + ds->getData(DS_WSFLOOD)
-		      + ", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
+	String str =   "{\"tsa_data\":\"" + ds->getData(DS_TTSA) 
+			  + "\", \"def_data\":\"" + ds->getData(DS_TTSARGA) 
+			  + "\", \"kube_data\":\"" + ds->getData(DS_TKUBE) 
+			  + "\", \"cooler_data\":\"" + ds->getData(DS_TTRIAK) 
+			  + "\", \"heater_data\":\"" + ds->getData(DS_HPOWER) 
+			  + "\", \"kran_data\":\"" + ds->getData(DS_KRANSTATE) 
+			  + "\", \"tstop_data\":\"" + ds->getData(DS_DISTSTOP)
+			  + "\", \"wsu_data\":\"" + ds->getData(DS_WSUROVEN)
+			  + "\", \"wsf_data\":\"" + ds->getData(DS_WSFLOOD)
+		      + "\", \"state_data\":\"" + ds->getData(DS_DISTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
@@ -118,16 +118,16 @@ void HttpHelper::handleDistillSet()
 void HttpHelper::handleRectify()
 {
 	
-	String str = "{\"tsa_data\":" + ds->getData(DS_TTSA) 
-			  + ", \"heater_data\":" + ds->getData(DS_HPOWER) 
-			  + ", \"def_data\":" + ds->getData(DS_TTSARGA) 
-		      + ", \"kube_data\":" + ds->getData(DS_TKUBE) 
-		      + ", \"cooler_data\":" + ds->getData(DS_TTRIAK) 
-		      + ", \"tstop_data\":\"" + ds->getData(DS_RECTSTOP) 
-		      + "\", \"kran_data\":" + ds->getData(DS_KRANSTATE) 
-			  + ", \"wsu_data\":" + ds->getData(DS_WSUROVEN)
-			  + ", \"wsf_data\":" + ds->getData(DS_WSFLOOD)
-		      + ", \"state_data\":\"" + ds->getData(DS_RECTSTATE) + "\" }";
+	String str =   "{\"tsa_data\":\"" + ds->getData(DS_TTSA) 
+			  + "\", \"heater_data\":\"" + ds->getData(DS_HPOWER) 
+			  + "\", \"def_data\":\"" + ds->getData(DS_TTSARGA) 
+		      + "\", \"kube_data\":\"" + ds->getData(DS_TKUBE) 
+		      + "\", \"cooler_data\":\"" + ds->getData(DS_TTRIAK) 
+		      + "\", \"tstop_data\":\"" + ds->getData(DS_RECTSTOP) 
+		      + "\", \"kran_data\":\"" + ds->getData(DS_KRANSTATE) 
+			  + "\", \"wsu_data\":\"" + ds->getData(DS_WSUROVEN)
+			  + "\", \"wsf_data\":\"" + ds->getData(DS_WSFLOOD)
+		      + "\", \"state_data\":\"" + ds->getData(DS_RECTSTATE) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
@@ -158,22 +158,23 @@ void HttpHelper::handleRectifySet()
 //}
 
 void HttpHelper::handleBrewing() {
-	String str = "{\"kube_data\":" + ds->getData(DS_TKUBE)
-		+ ", \"cooler_data\":" + ds->getData(DS_TTRIAK)
-		+ ", \"heater_data\":" + ds->getData(DS_HPOWER)
-		+ ", \"ttarget1_data\":\"" + ds->getData(DS_BREWINGTMP1)
-		+ "\", \"timetarget1_data\":\"" + ds->getData(DS_BREWINGTIME1)
-		+ "\", \"ttarget2_data\":\"" + ds->getData(DS_BREWINGTMP2)
-		+ "\", \"timetarget2_data\":\"" + ds->getData(DS_BREWINGTIME2)
-		+ "\", \"ttarget3_data\":\"" + ds->getData(DS_BREWINGTMP3)
-		+ "\", \"timetarget3_data\":\"" + ds->getData(DS_BREWINGTIME3)
-		+ "\", \"ttarget4_data\":\"" + ds->getData(DS_BREWINGTMP4)
-		+ "\", \"timetarget4_data\":\"" + ds->getData(DS_BREWINGTIME4)
-		+ "\", \"ttarget_data\":\"" + ds->getData(DS_BREWINGTARGET)
-		+ "\", \"chiller_data\":\"" + ds->getData(DS_BREWINGCHILLER)
-		+ "\", \"phase_data\":\"" + ds->getData(DS_BREWINGPHASE)
-		+ "\", \"state_data\":\"" + ds->getData(DS_BREWINGSTATE)
-		+ "\", \"time_data\":\"" + ds->getData(DS_BREWINGTIMELEFT) + "\" }";
+	String str = "{\"kube_data\":\"" + ds->getData(DS_TKUBE)
+			+ "\", \"cooler_data\":\"" + ds->getData(DS_TTRIAK)
+			+ "\", \"heater_data\":\"" + ds->getData(DS_HPOWER)
+			+ "\", \"ttarget1_data\":\"" + ds->getData(DS_BREWINGTMP1)
+			+ "\", \"timetarget1_data\":\"" + ds->getData(DS_BREWINGTIME1)
+			+ "\", \"ttarget2_data\":\"" + ds->getData(DS_BREWINGTMP2)
+			+ "\", \"timetarget2_data\":\"" + ds->getData(DS_BREWINGTIME2)
+			+ "\", \"ttarget3_data\":\"" + ds->getData(DS_BREWINGTMP3)
+			+ "\", \"timetarget3_data\":\"" + ds->getData(DS_BREWINGTIME3)
+			+ "\", \"ttarget4_data\":\"" + ds->getData(DS_BREWINGTMP4)
+			+ "\", \"timetarget4_data\":\"" + ds->getData(DS_BREWINGTIME4)
+			+ "\", \"ttarget_data\":\"" + ds->getData(DS_BREWINGTARGET)
+			+ "\", \"chiller_data\":\"" + ds->getData(DS_BREWINGCHILLER)
+			+ "\", \"kran_data\":\"" + ds->getData(DS_KRANSTATE)
+			+ "\", \"phase_data\":\"" + ds->getData(DS_BREWINGPHASE)
+			+ "\", \"state_data\":\"" + ds->getData(DS_BREWINGSTATE)
+			+ "\", \"time_data\":\"" + ds->getData(DS_BREWINGTIMELEFT) + "\" }";
 	server->send(200, "text/json", str); // Oтправляем ответ No Reset
 }
 
