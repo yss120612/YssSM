@@ -14,7 +14,7 @@
 
 #include "Mode.h"
 #include "Main.h"
-#include "Suvid.h"
+//#include "Suvid.h"
 #include "Distillation.h"
 #include "Workmodes.h"
 
@@ -27,7 +27,7 @@ Hardware hard;
 Aggregates agg(&hard);
 
 Mode * main = new Main(&agg, &hard);
-Mode * suvid = new Suvid(&agg, &hard);
+//Mode * suvid = new Suvid(&agg, &hard);
 Mode * distill = new Distillation(&agg, &hard);
 Mode * rectify = new Rectify(&agg, &hard);
 Mode * brewing = new Brewing(&agg, &hard);
@@ -58,7 +58,7 @@ void setup() {
 	
 	workMode.setup(hard.getEncoder());
 	workMode.addMode(main);
-	workMode.addMode(suvid);
+	//workMode.addMode(suvid);
 	workMode.addMode(brewing);
 	workMode.addMode(distill);
 	workMode.addMode(rectify);

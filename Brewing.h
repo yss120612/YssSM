@@ -28,11 +28,13 @@ protected:
 	MenuCommand * mcmd;
 	void showState();
 	uint8_t getTarget();
-	int getTimeLeft();
+	int getTimeTarget();
+	void prepareWork();
 	void initDraw();
 	
 	void makeMenu();
 	boolean have_chiller;
+	boolean pump_cycled;
 	void command(MenuCommand * id);
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);

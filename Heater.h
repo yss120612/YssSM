@@ -26,7 +26,7 @@ public:
 	void shiftPower(int8_t sh);
 	void setPID(float inp,float targetT);
 private:
-	const float kc = 8;
+	const float kc = 6;
 	float kp,ki,kd;
 	float lasterr = 0;
 	float outsumm = 0;

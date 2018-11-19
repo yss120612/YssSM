@@ -58,7 +58,7 @@ void Main::makeMenu()
 {
 	menu = new Menu();
 	menu->setActive(true);
-	menu->add(new MenuCommand("Suvid",1));
+	//menu->add(new MenuCommand("Suvid",1));
 	menu->add(new MenuCommand("Brewing",2));
 	menu->add(new MenuCommand("Distill",3));
 	menu->add(new MenuCommand("Rectify",4));
@@ -209,9 +209,9 @@ void Main::command(MenuCommand * id)
 	String result = "";
 	uint8_t i;
 	switch (id->getId()) {
-	case 1:
-		workMode.setCurrent(MODE_SUVID);
-		break;
+	//case 1:
+		//workMode.setCurrent(MODE_SUVID);
+	//	break;
 	case 2:
 		workMode.setCurrent(MODE_BREWING);
 		break;

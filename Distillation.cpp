@@ -4,7 +4,7 @@ Distillation::Distillation(Aggregates * a, Hardware *h) : Mode(a,h)
 {
 	MyName = "Distillation";
 	makeMenu();
-	cold_check = true;
+	cold_check = false;
 }
 
 Distillation::~Distillation()
@@ -194,7 +194,6 @@ void Distillation::acceptParams(MenuParameter * mp)
 
 void Distillation::start() {
 	work_mode = PROC_FORSAJ;
-	//err = PROCERR_OK;
 	end_reason = PROCEND_NO;
 	agg->getHeater()->setPower(98);
 	agg->getHeater()->start();
@@ -271,10 +270,7 @@ void Distillation::process(long ms) {
 			hardware->getBeeper()->beep(2000, 3000);
 			stop(PROCEND_UROVEN);
 		}
-				
-		/*if (coldBeginCheck==0 && hardware->getClock()->checkAlarm2()) {
-			coldBeginCheck = 2;
-		}*/
+		
 		break;
 	}
 

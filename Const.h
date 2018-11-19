@@ -107,7 +107,7 @@ const uint16_t RTC_MEM_SIZE = 512;
 
 enum mo{
 	MODE_MAIN,
-	MODE_SUVID,
+//	MODE_SUVID,
 	MODE_BREWING,
 	MODE_DISTILL,
 	MODE_RECTIFY,
@@ -190,6 +190,7 @@ enum mysetdata {//ДЛЯ УСТАНОВОК ИЗ ВЕБА
 #define PROC_COOLING 7
 #define PROC_WAIT_TAIL 8
 #define PROC_GET_TAIL 9
+#define PROC_FORSAJDOWN  10 //опускание до temp_start
 
 #define PROCEND_NO 0 //работаем
 #define PROCEND_TIME 1 //закончили по времени

@@ -303,9 +303,6 @@
     <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Suvid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -912,9 +909,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Suvid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mode.cpp">

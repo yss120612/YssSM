@@ -7,6 +7,7 @@ Brewing::Brewing(Aggregates * a, Hardware *h) : Mode(a, h) {
 	makeMenu();
 	MyName = "Brewing";
 	have_chiller = true;
+	pump_cycled = true;
 	end_reason = PROCEND_NO;
 }
 
@@ -60,6 +61,10 @@ void Brewing::showState() {
 		hardware->getDisplay()->drawString(X, Y, "Fsj(" + String(phase) + ") T:" + String(t));
 		hardware->getDisplay()->drawString(X, Y + 16, " PWR:" + String(agg->getHeater()->getPower()));
 		break;
+	case PROC_FORSAJDOWN:
+		hardware->getDisplay()->drawString(X, Y, "FsjDown(" + String(phase) + ") T:" + String(t));
+		hardware->getDisplay()->drawString(X, Y + 16, " Kran:" + String(agg->getKran()->getState(),1));
+		break;
 	case PROC_WORK:
 		hardware->timeLeft2(tleft);
 		hardware->getDisplay()->drawString(X, Y, "Work("+String(phase)+") T:" + String(t));
@@ -68,7 +73,7 @@ void Brewing::showState() {
 		break;
 	case PROC_COOLING:
 		hardware->getDisplay()->drawString(X, Y, "Cooling T:" + String(t));
-		hardware->getDisplay()->drawString(X, Y + 16, " PWR:" + String(agg->getKran()->getState(),1));
+		hardware->getDisplay()->drawString(X, Y + 16, " Kran:" + String(agg->getKran()->getState(), 1));
 		break;
 	default:
 		break;
@@ -87,6 +92,9 @@ String Brewing::getData(uint w)
 				break;
 			case PROC_FORSAJ:
 				return "FORSAJ[" + String(phase) + "]";
+				break;
+			case PROC_FORSAJDOWN:
+				return "FORSAJDOWN[" + String(phase) + "]";
 				break;
 			case PROC_WORK:
 				return "WORKING[" + String(phase) + "]";
@@ -187,8 +195,7 @@ void Brewing::setData(uint w, String ds) {
 	}
 }
 
-void Brewing::makeMenu()
-{
+void Brewing::makeMenu(){
 	menu = new Menu();
 	menu->setActive(true);
 	mcmd = new MenuCommand("Start", 1);
@@ -232,11 +239,13 @@ void Brewing::makeMenu()
 	MenuBParameter * hColl = new MenuBParameter("Chiller", setup, 24);
 	setup->add(hColl);
 
+	MenuBParameter * hPump = new MenuBParameter("Pump cycl", setup, 25);
+	setup->add(hPump);
+
 	menu->add(new MenuSubmenu("Setup", setup));
 }
 
-void Brewing::command(MenuCommand * id)
-{
+void Brewing::command(MenuCommand * id){
 	switch (id->getId()) {
 	case 1:
 		if (work_mode == PROC_OFF) {
@@ -308,6 +317,9 @@ void Brewing::initParams(MenuParameter * mp)
 	case 24:
 		((MenuBParameter *)mp)->setup(have_chiller);
 		break;
+	case 25:
+		((MenuBParameter *)mp)->setup(pump_cycled);
+		break;
 	}
 }
 
@@ -356,6 +368,16 @@ void Brewing::acceptParams(MenuParameter * mp)
 	case 24:
 		have_chiller=((MenuBParameter *)mp)->getCurrent();
 		break;
+	case 25:
+		pump_cycled = ((MenuBParameter *)mp)->getCurrent();
+		if (work_mode != PROC_OFF) {
+			hardware->reSetAlarm1();
+			if (pump_cycled) {
+				hardware->setAlarm1(2);
+			}
+			hardware->getPump()->start();
+		}
+		break;
 	}
 }
 
@@ -369,7 +391,7 @@ uint8_t  Brewing::getTarget() {
 	}
 }
 
-int Brewing::getTimeLeft()
+int Brewing::getTimeTarget()
 {
 	switch (phase) {
 	case 1: return CONF.getBrewingMin1();
@@ -380,32 +402,43 @@ int Brewing::getTimeLeft()
 	}
 }
 
+void Brewing::prepareWork() {
+	if (have_chiller && hardware->getTKube()->getTemp() > getTarget()) {
+		work_mode = PROC_FORSAJDOWN;
+		agg->getKran()->openQuantum(CONF.getBrewingKran());
+		agg->getHeater()->setPower(0);
+	}
+	else {
+		work_mode = PROC_FORSAJ;
+	}
+	logg.logging("Prepare to phase " + String(phase) + " started at " + getTimeStr());
+}
+
 void Brewing::start() {
 	work_mode = PROC_OFF;
-//	err = PROCERR_OK;
 	end_reason = PROCEND_NO;
-	//hardware->getUrovenWS()->arm();
-	//hardware->getFloodWS()->arm();
-	//hardware->getUrovenWS()->setLimit(0);
 	
 	if (agg->getHeater() == NULL) {
 		stop(PROCEND_ERROR, "Heater not found!");
-		//error(PROCERR_NOHEATER);
 		return;
 	}
 
-	if (hardware->getTKube() == NULL || hardware->getTKube()->getTemp() < 0 || hardware->getTKube()->getTemp() > 120) {
+	if (hardware->getTKube() == NULL || hardware->getTKube()->getTemp() <= 0 || hardware->getTKube()->getTemp() > 120) {
 		stop(PROCEND_ERROR, "Cube termometr not found!");
 		return;
 	}
-	work_mode = PROC_FORSAJ;
+	
 	phase = 1;
 	hardware->reSetAlarm2();
+	hardware->reSetAlarm1();
+	if (pump_cycled) {
+		hardware->setAlarm1(2);
+	}
 	agg->getHeater()->start();
-	agg->getHeater()->setPower(50);
+	prepareWork();
 	hardware->getPump()->start();
 	hardware->getFloodWS()->arm(25);
-	logg.logging("Brewing started at " + getTimeStr());
+	logg.logging("Brewing process started at " + getTimeStr());
 	mcmd->setName("Stop");
 }
 
@@ -418,6 +451,7 @@ void Brewing::stop(uint8_t reason,String text) {
 	work_mode = PROC_OFF;
 	end_reason = reason;
 	hardware->reSetAlarm2();
+	hardware->reSetAlarm1();
 	String st = "Brewing finished at " + getTimeStr() + " by reason ";
 	phase = 0;
 	hardware->getBeeper()->beep(2000, 3000);
@@ -458,7 +492,16 @@ void Brewing::process(long ms) {
 		if (tmp >= getTarget()) {
 			work_mode = PROC_WORK;
 			logg.logging("Brewing WORK phase №" + String(phase) + " started at " + getTimeStr());
-			hardware->setAlarm2(getTimeLeft());//Завели будильник
+			hardware->setAlarm2(getTimeTarget());//Завели будильник
+			hardware->getBeeper()->beep(2000, 1000);
+		}
+		break;
+	case PROC_FORSAJDOWN:
+		if (tmp <= getTarget()) {
+			work_mode = PROC_WORK;
+			agg->getKran()->close();
+			logg.logging("Brewing WORK phase №" + String(phase) + " started at " + getTimeStr());
+			hardware->setAlarm2(getTimeTarget());//Завели будильник
 			hardware->getBeeper()->beep(2000, 1000);
 		}
 		break;
@@ -466,7 +509,7 @@ void Brewing::process(long ms) {
 		if (hardware->getClock()->checkAlarm2()) {//будильник сработал
 			logg.logging("Brewing WORK phase №" + String(phase) + " finished at " + getTimeStr());
 			phase++;
-			if (getTimeLeft() == 0 || getTarget() == 0) {
+			if (getTimeTarget() == 0 || getTarget() == 0) {
 				if (have_chiller) {
 					phase = 5;
 					agg->getHeater()->setPower(0);
@@ -482,8 +525,7 @@ void Brewing::process(long ms) {
 				}
 			}
 			else {
-
-				work_mode = PROC_FORSAJ;
+				prepareWork();
 			}
 		}
 		break;
@@ -496,6 +538,16 @@ void Brewing::process(long ms) {
 
 	if (work_mode == PROC_FORSAJ || work_mode == PROC_WORK) {
 		agg->getHeater()->setPID(tmp, getTarget());
+	}
+	if (hardware->getClock()->checkAlarm1()) {
+		if (hardware->getPump()->isWorking()) {
+			hardware->getPump()->stop();
+			hardware->setAlarm1(1);
+		}
+		else {
+			hardware->getPump()->start();
+			hardware->setAlarm1(2);
+		}
 	}
 
 	if (hardware->getFloodWS()->isAlarmed()) {
