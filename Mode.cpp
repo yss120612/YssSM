@@ -93,7 +93,6 @@ Mode::Mode(Aggregates * a,Hardware * h)
 	parent = NULL;
 	agg = a;
 	hardware = h;
-	
 }
 
 Mode::~Mode()

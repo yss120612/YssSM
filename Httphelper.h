@@ -45,8 +45,8 @@ private:
 	void handleDistillSet();
 	void handleRectify();
 	void handleRectifySet();
-	void handleSuvid();
-	void handleSuvidSet();
+	//void handleSuvid();
+	//void handleSuvidSet();
 	void handleBrewingSet();
 	void handleBrewing();
 	//void handleSuvidChart();

@@ -380,11 +380,11 @@ void Rectify::process(long ms)
 	
 	float tcube = hardware->getTKube()->getTemp();
 	float ttsa = hardware->getTTSA()->getTemp();
-	float tdef = hardware->getTTsarga()->getTemp();
+	//float tdef = hardware->getTTsarga()->getTemp();
 
 	switch (work_mode) {
 	case PROC_FORSAJ:
-		if (tdef > CONF.getRectForsajTemp()) {//end of forsaj
+		if (hardware->getTTsarga()->getTemp() > CONF.getRectForsajTemp()) {//end of forsaj
 			agg->getHeater()->setPower(CONF.getRectHeadPower());
 			agg->getKran()->openQuantum(CONF.getRectHeadKranOpened());
 			logg.logging("Rectify forsaj finished at " + getTimeStr());
@@ -434,12 +434,12 @@ void Rectify::process(long ms)
 		break;
 	case PROC_WORK:
 		if (!stop_defined && hardware->getClock()->checkAlarm2()) {
-			CONF.setRectStopTemp(tdef + 0.2f);
+			CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 0.2f);
 			stop_defined = true;
-			logg.logging("Rectify stop temperature (tdef="+String(tdef,2)+") defined ("+String(CONF.getRectStopTemp(),2)+"C) at " + getTimeStr());
+			logg.logging("Rectify stop temperature (tdef="+String(hardware->getTTsarga()->getTemp(),2)+") defined ("+String(CONF.getRectStopTemp(),2)+"C) at " + getTimeStr());
 			hardware->getBeeper()->beep(1000, 1000);
 		}
-		if (tdef > CONF.getRectStopTemp()) {//end of collect body
+		if (hardware->getTTsarga()->getTemp() > CONF.getRectStopTemp()) {//end of collect body
 			if (getTail) {
 				logg.logging("Rectify collect body finished at " + getTimeStr());
 				work_mode = PROC_WAIT_TAIL;
@@ -462,7 +462,7 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_GET_TAIL:
-		if (tdef > (CONF.getRectStopTemp()+1.1f)) {//end of collect tail
+		if (hardware->getTTsarga()->getTemp() > (CONF.getRectStopTemp()+1.1f)) {//end of collect tail
 			stop(PROCEND_TEMPERATURE);
 			hardware->getBeeper()->beep(1000, 5000);
 		}
