@@ -199,7 +199,7 @@
 			 var ax = this.yAxis[0];
 			 
 			setInterval(function(){
-			$.getJSON("/suviddata", function(lst) {
+			$.getJSON("/brewingdata", function(lst) {
 			var shift = series0.data.length > 99;
 			var y0= parseFloat(lst['kube_data']);
 			var y1= parseFloat(lst['heater_data']);
