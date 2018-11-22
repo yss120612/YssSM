@@ -45,9 +45,12 @@ void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
 	have_relay = rp >= 0;
 	relay_pin = rp;
 	hard->getExtender()->setPinMode(relay_pin, OUTPUT);
-	kp = kc * 0.6;
+	/*kp = kc * 0.6;
 	ki = 2 * kc * 0.6 / (test_time / 1000);
-	kd = kc * 0.6 * (test_time / 1000) / 8;
+	kd = kc * 0.6 * (test_time / 1000) / 8;*/
+	kp = 1/6;
+	ki = 600;
+	kd = 120;
 }
 
 void Heater::switchRelay(boolean on) {
