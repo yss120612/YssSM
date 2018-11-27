@@ -50,7 +50,7 @@ void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
 	kd = kc * 0.6 * (test_time / 1000) / 8;*/
 	kp = 49.0f;
 	//ki = 600;
-	//kd = 120;
+	kd = 3.0f;
 	ki = 0;
 	kd = 0;
 }
