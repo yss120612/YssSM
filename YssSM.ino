@@ -79,6 +79,10 @@ void setup() {
 	logg.logging("ESP.getFlashChipRealSize()=" + String(ESP.getFlashChipRealSize()));
 	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
 	logg.logging("ESP.getFreeSketchSpace()=" + String(ESP.getFreeSketchSpace()));
+	logg.logging(hard.i2cDevices());
+	logg.logging(hard.owDevices());
+	logg.logging("End of init");
+
 }
 
 void nulAC() {

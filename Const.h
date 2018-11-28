@@ -48,9 +48,9 @@ const uint8_t TEMPERATURE_PIN = D3;
 
 const uint8_t PUMP_PIN = EX_PIN0;
 
-const uint8_t ENC_A_PIN = D4;
+const uint8_t ENC_A_PIN = D5;
 const uint8_t ENC_B_PIN = D0;
-const uint8_t ENC_BTN_PIN = D5;
+const uint8_t ENC_BTN_PIN = D4;
 
 //const uint8_t EXT_CLC = D7;
 //const uint8_t EXT_LOCK = D6;
