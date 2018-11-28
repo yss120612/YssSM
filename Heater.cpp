@@ -48,11 +48,10 @@ void Heater::setup(Hardware * h, uint8_t hp, int8_t rp) {
 	/*kp = kc * 0.6;
 	ki = 2 * kc * 0.6 / (test_time / 1000);
 	kd = kc * 0.6 * (test_time / 1000) / 8;*/
-	kp = 49.0f;
+	kp = 70.0f;
 	//ki = 600;
 	kd = 3.0f;
-	ki = 0;
-	kd = 0;
+	ki = 10.0f;
 }
 
 void Heater::switchRelay(boolean on) {
