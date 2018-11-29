@@ -34,7 +34,7 @@ private:
 	float delta;
 	uint8_t counter;
 	boolean changed;
-	float temperature;
+	volatile float temperature;
 };
 
 #endif

@@ -380,7 +380,7 @@ void Rectify::process(long ms)
 	
 	float tcube = hardware->getTKube()->getTemp();
 	float ttsa = hardware->getTTSA()->getTemp();
-	//float tdef = hardware->getTTsarga()->getTemp();
+	float tdef = hardware->getTTsarga()->getTemp();
 
 	switch (work_mode) {
 	case PROC_FORSAJ:
