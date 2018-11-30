@@ -256,7 +256,7 @@
 			$.ajax({  
                     type: "POST",  
                     url: "/brewingset",  
-                    data: "CHILLER="+($("#CHILLER").is(":checked")?"1":"2")+"&PART="+$("#inputState").val(),  
+                    data: "CHILLER="+($("#CHILLER").is(":checked")?"1":"0")+"&PART="+$("#inputState").val(),  
                     success: function(html){  
                     }  
 			}); 
