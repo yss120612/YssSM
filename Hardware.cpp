@@ -7,13 +7,14 @@
 
 Hardware::Hardware()
 	:ow(TEMPERATURE_PIN),
-	t_kube(term_addr[T_KUBE], &ow, 1.94),
-	t_triak(term_addr[T_TRIAK], &ow, 2.5),
-	t_tsarga(term_addr[T_TSARGA], &ow, 1.29),
-	t_tsa(term_addr[T_TSA], &ow, 1.53),
+	t_kube(term_addr[T_KUBE], &ow, 2.10f),
+	t_triak(term_addr[T_TRIAK], &ow, 2.5f),
+	t_tsarga(term_addr[T_TSARGA], &ow, 1.29f),
+	t_tsa(term_addr[T_TSA], &ow, 1.53f),
 	display(0x3C, SDA, SCL)
 	
 {
+	
 }
 
 Hardware::~Hardware()

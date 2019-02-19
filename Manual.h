@@ -26,7 +26,7 @@ public:
 	void initParams(MenuParameter * mp);
 	void acceptParams(MenuParameter * mp);
 protected:
-	MenuItem * mKran,* mHeater,* mPump;
+	MenuItem * mKran,* mHeater,* mPump, *mTest;
 };
 
 

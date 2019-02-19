@@ -8,6 +8,7 @@
 Manual::Manual(Aggregates * a, Hardware *h):Mode(a,h)
 {
 	MyName = "Manual";
+	work_mode = PROC_OFF;
 	makeMenu();
 }
 
@@ -40,6 +41,17 @@ void Manual::showState()
 
 void Manual::process(long ms)
 {
+	if (work_mode == PROC_OFF) return;
+	if (last_time + test_time - ms > 0) return;
+	last_time = ms;
+	volatile float tcube = hardware->getTKube()->getTemp();
+	if (tcube > 31) {
+		work_mode = PROC_OFF;
+		mTest->setName("Test on");
+		hardware->getBeeper()->beep(1000, 5000);
+		logg.logging("Test complete on temperature T="+String(hardware->getTKube()->getTemp(),2));
+	}
+
 }
 
 void Manual::makeMenu()
@@ -52,7 +64,8 @@ void Manual::makeMenu()
 	menu->add(mHeater);
 	mPump = new MenuCommand("Pump On", 3);
 	menu->add(mPump);
-	menu->add(new MenuCommand("Test", 4));
+	mTest= new MenuCommand("Test On", 4);
+	menu->add(mTest);
 	menu->add(new MenuCommand("Return", 100));
 	Menu * setup = new Menu();
 		setup->setParent(menu);
@@ -103,10 +116,15 @@ void Manual::command(MenuCommand * id)
 		}
 		break;
 	case 4:
-		tsa = hardware->getTTsarga()->getTemp();
-		logg.logging("TTsarga=" + String(tsa, 1));
-		CONF.setRectStopTemp(tsa + 0.2f);
-		logg.logging("TStop=" + String(CONF.getRectStopTemp(), 1));
+		if (work_mode == PROC_OFF) {
+			work_mode = PROC_TEST;
+			mTest->setName("Test off");
+		}
+		else {
+			work_mode = PROC_OFF;
+			mTest->setName("Test on");
+		}
+		menu->setActive(false);
 		break;
 	case 100:
 		stopAll();
@@ -116,11 +134,14 @@ void Manual::command(MenuCommand * id)
 
 }
 
+
 void Manual::stopAll() {
 	hardware->getPump()->stop();
 	agg->getHeater()->setPower(0);
 	agg->getHeater()->stop();
 	agg->getKran()->forceClose();
+	work_mode = PROC_OFF;
+
 }
 
 void Manual::initParams(MenuParameter * mp)
