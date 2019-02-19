@@ -378,9 +378,9 @@ void Rectify::process(long ms)
 	if (last_time + test_time - ms > 0) return;
 	last_time = ms;
 	
-	float tcube = hardware->getTKube()->getTemp();
-	float ttsa = hardware->getTTSA()->getTemp();
-	float tdef = hardware->getTTsarga()->getTemp();
+	volatile float tcube = hardware->getTKube()->getTemp();
+	volatile float ttsa = hardware->getTTSA()->getTemp();
+	volatile float tdef = hardware->getTTsarga()->getTemp();
 
 	switch (work_mode) {
 	case PROC_FORSAJ:
