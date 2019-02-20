@@ -436,10 +436,10 @@ void Rectify::process(long ms)
 		if (!stop_defined && hardware->getClock()->checkAlarm2()) {
 			CONF.setRectStopTemp(tdef + 0.2f);
 			stop_defined = true;
-			logg.logging("Rectify stop temperature (tdef="+String(hardware->getTTsarga()->getTemp(),2)+")("+String(tdef,2)+") defined ("+String(CONF.getRectStopTemp(),2)+"C) at " + getTimeStr());
+			logg.logging("Rectify stop temperature (tdefA=" + String(hardware->getTTsarga()->getTemp(), 2) + ")(tdefB=" + String(tdef, 2) + ") defined (" + String(CONF.getRectStopTemp(), 2) + "C) at " + getTimeStr());
 			hardware->getBeeper()->beep(1000, 1000);
 		}
-		if (ttsa > CONF.getRectStopTemp()) {//end of collect body
+		if (tdef > CONF.getRectStopTemp()) {//end of collect body
 			if (getTail) {
 				logg.logging("Rectify collect body finished at " + getTimeStr());
 				work_mode = PROC_WAIT_TAIL;

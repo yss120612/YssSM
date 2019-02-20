@@ -18,7 +18,7 @@ DallasTerm::DallasTerm(const uint8_t addr[], OneWire * d, float del)
 }
 
 float DallasTerm::getTemp() {
-	if (changed)
+	/*if (changed)
 	{
 		float summ;
 		for (uint8_t i = 0; i < dim; i++) {
@@ -26,7 +26,7 @@ float DallasTerm::getTemp() {
 		}
 		temperature = summ / dim;
 		changed = false;
-	}
+	}*/
 	return temperature;
 }
 
@@ -42,9 +42,12 @@ void DallasTerm::process(long ms) {
 	   ds->write(0xBE); // Просим передать нам значение регистров со значением температуры
 		tm = (ds->read() | (ds->read() << 8)) * 0.0625 + delta;
 		if (tm >= 0 && tm <= 110) {
-			temp[counter] = tm;
+
+			/*temp[counter] = tm;
 			changed = true;
-			counter = (counter < dim - 1) ? counter + 1 : 0;
+			counter = (counter < dim - 1) ? counter + 1 : 0;*/
+			temperature = temperature * (1.0f - FILTER_K) + tm * FILTER_K;
+
 		}
 		meajured = false;
 	}

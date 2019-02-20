@@ -230,7 +230,7 @@ void Config::setRectHeadPower(uint8_t st)
 
 void Config::setRectStopTemp(float st)
 {
-	if (rectStopTemp != st) changed = true;
+	//if (rectStopTemp != st) changed = true;
 	rectStopTemp = st;
 	//write();
 }
