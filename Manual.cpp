@@ -50,7 +50,10 @@ void Manual::process(long ms)
 		work_mode = PROC_OFF;
 		mTest->setName("Test on");
 		hardware->getBeeper()->beep(1000, 5000);
-		logg.logging("Test complete on temperature T="+String(hardware->getTKube()->getTemp(),2));
+		logg.logging("Test complete on temperature T="+String(hardware->getTKube()->getTemp(),2) +" Tv="+ String(tcube, 2));
+	}
+	else {
+		logg.logging("Test on progress on temperature T=" + String(hardware->getTKube()->getTemp(), 2) + " Tv=" + String(tcube, 2));
 	}
 
 }
