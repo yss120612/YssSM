@@ -38,16 +38,16 @@ private:
 	uint8_t pin_b;
 	uint8_t pin_btn;
 	ModeBase * mode;
-	const long timeButtonPressed = 1500; // Долгое удержание кнопки после 1,5 секунд volatile 
-	int8_t state = 0; // Переменная хранящая статус вращения 
-				   // Переменные хранящие состояние действия до его выполнения 
-	volatile bool flagCW = false; // Было ли вращение по часовой стрелке 
-	volatile bool flagCCW = false; // Было ли вращение против часовой стрелки 
-	volatile bool flagButton = false; // Было ли нажатие кнопки 
-	volatile bool flagButtonLong = false; // Было ли долгое удержание кнопки 
-	volatile long timeButtonDown = 0; // Переменная хранящая время нажатия кнопки 
-	volatile bool isButtonDown = false; // Переменная хранящая время нажатия кнопки 
-	volatile bool longPressReleased = false; // Переменная для фиксации срабатывания долгого нажатия 
+	const long timeButtonPressed = 1500; // Р”РѕР»РіРѕРµ СѓРґРµСЂР¶Р°РЅРёРµ РєРЅРѕРїРєРё РїРѕСЃР»Рµ 1,5 СЃРµРєСѓРЅРґ volatile 
+	int8_t state = 0; // РџРµСЂРµРјРµРЅРЅР°СЏ С…СЂР°РЅСЏС‰Р°СЏ СЃС‚Р°С‚СѓСЃ РІСЂР°С‰РµРЅРёСЏ 
+				   // РџРµСЂРµРјРµРЅРЅС‹Рµ С…СЂР°РЅСЏС‰РёРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РґРµР№СЃС‚РІРёСЏ РґРѕ РµРіРѕ РІС‹РїРѕР»РЅРµРЅРёСЏ 
+	volatile bool flagCW = false; // Р‘С‹Р»Рѕ Р»Рё РІСЂР°С‰РµРЅРёРµ РїРѕ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРµ 
+	volatile bool flagCCW = false; // Р‘С‹Р»Рѕ Р»Рё РІСЂР°С‰РµРЅРёРµ РїСЂРѕС‚РёРІ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРё 
+	volatile bool flagButton = false; // Р‘С‹Р»Рѕ Р»Рё РЅР°Р¶Р°С‚РёРµ РєРЅРѕРїРєРё 
+	volatile bool flagButtonLong = false; // Р‘С‹Р»Рѕ Р»Рё РґРѕР»РіРѕРµ СѓРґРµСЂР¶Р°РЅРёРµ РєРЅРѕРїРєРё 
+	volatile long timeButtonDown = 0; // РџРµСЂРµРјРµРЅРЅР°СЏ С…СЂР°РЅСЏС‰Р°СЏ РІСЂРµРјСЏ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё 
+	volatile bool isButtonDown = false; // РџРµСЂРµРјРµРЅРЅР°СЏ С…СЂР°РЅСЏС‰Р°СЏ РІСЂРµРјСЏ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё 
+	volatile bool longPressReleased = false; // РџРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С„РёРєСЃР°С†РёРё СЃСЂР°Р±Р°С‚С‹РІР°РЅРёСЏ РґРѕР»РіРѕРіРѕ РЅР°Р¶Р°С‚РёСЏ 
 
 };
 

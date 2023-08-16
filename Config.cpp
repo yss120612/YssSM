@@ -29,7 +29,7 @@ void Config::loadDefaults() {
 	
 	brewingMin1 = 60;
 	brewingTemp1 = 90;
-	//brewingMin2 =20;//из рецепта
+	//brewingMin2 =20;//РёР· СЂРµС†РµРїС‚Р°
 	brewingMin2 = 0;
 	brewingTemp2 = 75;
 	//brewingMin3 = 10;

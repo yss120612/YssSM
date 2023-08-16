@@ -28,7 +28,7 @@ public:
 	~Menu();
 	boolean isActive();
 	boolean isEditMode() { return edit_param != NULL; }
-	boolean setActive(boolean acc) { active = acc; }
+	boolean setActive(boolean acc) { active = acc;return acc; }
 	MenuItem * current();
 	void add(MenuItem * mi);
 	void next();

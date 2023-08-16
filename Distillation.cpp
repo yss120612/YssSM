@@ -69,7 +69,7 @@ String Distillation::getData(uint w)
 		}
 		
 	}
-	else
+	
 	return Mode::getData(w);
 }
 
@@ -309,7 +309,7 @@ void Distillation::process(long ms) {
 		hardware->setAlarm1(evnt?3:3);
 	}
 
-	//Àâàðèéíûå îñòàíîâêè
+	//Ñ˜Ð²Ð°Ñ€Ð¸Ð¹Ð½Ñ‹Ðµ Ð¾ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸
 	if (ttsa > CONF.getTSAcritical())
 	{
 		logg.logging("TSA critical T (" + String(ttsa) + "C) at " + getTimeStr());

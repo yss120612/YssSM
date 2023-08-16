@@ -36,22 +36,22 @@ void Brewing::showState() {
 	{
 	case PROC_OFF:
 		switch (end_reason) {
-		case PROCEND_NO: //‡·ÓÚ‡ÂÏ
+		case PROCEND_NO: //—Ä–∞–±–æ—Ç–∞–µ–º
 			hardware->getDisplay()->drawString(X, Y, "Ready 2 start");
 			break;
-		case PROCEND_TIME: //Á‡ÍÓÌ˜ËÎË ÔÓ ‚ÂÏÂÌË
+		case PROCEND_TIME: //–∑–∞–∫–æ–Ω—á–∏–ª–∏ –ø–æ –≤—Ä–µ–º–µ–Ω–∏
 			hardware->getDisplay()->drawString(X, Y, "End by time");
 			break;
-		case PROCEND_ERROR: //Á‡ÍÓÌ˜ËÎË Ò Ó¯Ë·ÍÓÈ
+		case PROCEND_ERROR: //–∑–∞–∫–æ–Ω—á–∏–ª–∏ —Å –æ—à–∏–±–∫–æ–π
 			hardware->getDisplay()->drawString(X, Y, "End by error");
 			break;
-		case PROCEND_FAULT: //Á‡ÍÓÌ˜ËÎË ‡‚‡ËÈÌÓ
+		case PROCEND_FAULT: //–∑–∞–∫–æ–Ω—á–∏–ª–∏ –∞–≤–∞—Ä–∏–π–Ω–æ
 			hardware->getDisplay()->drawString(X, Y, "End by fault");
 			break;
-		case PROCEND_TEMPERATURE: //Á‡ÍÓÌ˜ËÎË ÔÓ ÚÂÏÔÂ‡ÚÛÂ
+		case PROCEND_TEMPERATURE: //–∑–∞–∫–æ–Ω—á–∏–ª–∏ –ø–æ —Ç–µ–º–ø–µ—Ä–∞—Ç—É—Ä–µ
 			hardware->getDisplay()->drawString(X, Y, "End by temp");
 			break;
-		case PROCEND_MANUAL: //Á‡ÍÓÌ
+		case PROCEND_MANUAL: //–∑–∞–∫–æ–Ω
 			hardware->getDisplay()->drawString(X, Y, "End manual");
 			break;
 		}
@@ -156,6 +156,7 @@ String Brewing::getData(uint w)
 	else {
 		return Mode::getData(w);
 	}
+	return "";
 }
 
 void Brewing::setData(uint w, String ds) {
@@ -492,8 +493,8 @@ void Brewing::process(long ms) {
 	case PROC_FORSAJ:
 		if (tmp >= getTarget()) {
 			work_mode = PROC_WORK;
-			logg.logging("Brewing WORK phase π" + String(phase) + " started at " + getTimeStr());
-			hardware->setAlarm2(getTimeTarget());//«‡‚ÂÎË ·Û‰ËÎ¸ÌËÍ
+			logg.logging("Brewing WORK phase ‚Ññ" + String(phase) + " started at " + getTimeStr());
+			hardware->setAlarm2(getTimeTarget());//–ó–∞–≤–µ–ª–∏ –±—É–¥–∏–ª—å–Ω–∏–∫
 			hardware->getBeeper()->beep(2000, 1000);
 		}
 		break;
@@ -501,14 +502,14 @@ void Brewing::process(long ms) {
 		if (tmp <= getTarget()) {
 			work_mode = PROC_WORK;
 			agg->getKran()->close();
-			logg.logging("Brewing WORK phase π" + String(phase) + " started at " + getTimeStr());
-			hardware->setAlarm2(getTimeTarget());//«‡‚ÂÎË ·Û‰ËÎ¸ÌËÍ
+			logg.logging("Brewing WORK phase ‚Ññ" + String(phase) + " started at " + getTimeStr());
+			hardware->setAlarm2(getTimeTarget());//–ó–∞–≤–µ–ª–∏ –±—É–¥–∏–ª—å–Ω–∏–∫
 			hardware->getBeeper()->beep(2000, 1000);
 		}
 		break;
 	case PROC_WORK:
-		if (hardware->getClock()->checkAlarm2()) {//·Û‰ËÎ¸ÌËÍ Ò‡·ÓÚ‡Î
-			logg.logging("Brewing WORK phase π" + String(phase) + " finished at " + getTimeStr());
+		if (hardware->getClock()->checkAlarm2()) {//–±—É–¥–∏–ª—å–Ω–∏–∫ —Å—Ä–∞–±–æ—Ç–∞–ª
+			logg.logging("Brewing WORK phase ‚Ññ" + String(phase) + " finished at " + getTimeStr());
 			phase++;
 			if (getTimeTarget() == 0 || getTarget() == 0) {
 				if (have_chiller) {

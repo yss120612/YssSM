@@ -129,7 +129,7 @@ void ESP8266WebSpiffsUpdater::setup(ESP8266WebServer *server,  const char * user
 			uint32_t maxSketchSpace = ESP.getFlashChipRealSize() / 4;
 
 
-			if (!Update.begin(maxSketchSpace, U_SPIFFS)) {//start with max available size
+			if (!Update.begin(maxSketchSpace, U_FS)) {//start with max available size
 				_setUpdaterError();
 			}
 		}

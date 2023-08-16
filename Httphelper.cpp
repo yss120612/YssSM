@@ -1,4 +1,4 @@
-﻿#include "Httphelper.h"
+#include "Httphelper.h"
 #include <FS.h>
 #include <ArduinoJson.h>
 #include  "Log.h"

@@ -1,5 +1,5 @@
 // Aggregates.h
-//Составное из компонентов hardware железо
+//РЎРѕСЃС‚Р°РІРЅРѕРµ РёР· РєРѕРјРїРѕРЅРµРЅС‚РѕРІ hardware Р¶РµР»РµР·Рѕ
 #ifndef _AGGREGATES_h
 #define _AGGREGATES_h
 

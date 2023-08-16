@@ -26,7 +26,7 @@ HttpHelper httph;
 Hardware hard;
 Aggregates agg(&hard);
 
-Mode * main = new Main(&agg, &hard);
+Mode * _main = new Main(&agg, &hard);
 //Mode * suvid = new Suvid(&agg, &hard);
 Mode * distill = new Distillation(&agg, &hard);
 Mode * rectify = new Rectify(&agg, &hard);
@@ -57,7 +57,7 @@ void setup() {
 	attachInterrupt(HEAT_NUL_PIN, nulAC, RISING); // Настраиваем обработчик прерываний проходу через 0
 	
 	workMode.setup(hard.getEncoder());
-	workMode.addMode(main);
+	workMode.addMode(_main);
 	//workMode.addMode(suvid);
 	workMode.addMode(brewing);
 	workMode.addMode(distill);

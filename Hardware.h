@@ -12,7 +12,7 @@
 
 
 #include <OneWire.h>
-#include <DS1302.h>
+//#include <DS1302.h>
 #include <MD_DS3231.h>
 #include <Wire.h>
 #include <SSD1306Wire.h>

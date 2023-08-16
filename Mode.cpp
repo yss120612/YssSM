@@ -105,7 +105,7 @@ void Mode::draw(long m)
 	hardware->getDisplay()->clear();
 	hardware->getDisplay()->setTextAlignment(TEXT_ALIGN_LEFT);
 
-	if (ss_active || m - last_action > CONF.getScrSavMin() * 60000) //àêòèâíûé ñàâåð
+	if (ss_active || m - last_action > CONF.getScrSavMin() * 60000) //Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ð¹ ÑÐ°Ð²ÐµÑ€
 	{
 		ss_active = true;
 		showState();
@@ -164,7 +164,7 @@ void Mode::processMenuPress()
 	else if (menu->current()->getKind() >= PARAMETRINT && menu->current()->getKind() <= PARAMETRSTR) {
 		if (menu->isEditMode())
 		{
-			if (menu->getEditParams()->getNext() == NULL) {//ñëåäóþùåãî ïàðàìåòðà íåò. çàïîìèíàåì...
+			if (menu->getEditParams()->getNext() == NULL) {//ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÐµÐ³Ð¾ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð° Ð½ÐµÑ‚. Ð·Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°ÐµÐ¼...
 				mp = menu->getEditParams();
 				while (mp != NULL)
 				{

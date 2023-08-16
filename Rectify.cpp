@@ -63,6 +63,7 @@ String Rectify::getData(uint w)
 	}
 	else
 	return Mode::getData(w);
+	return "";
 }
 
 void Rectify::setData(uint w, String ds)
@@ -355,9 +356,9 @@ void Rectify::next() {
 		agg->getHeater()->setPower(CONF.getRectWorkPower());
 		agg->getKran()->openQuantum(CONF.getRectKranOpened());
 		hardware->getUrovenWS()->disarm();
-		CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 1.5f);//пока так а
+		CONF.setRectStopTemp(hardware->getTTsarga()->getTemp() + 1.5f);//РїРѕРєР° С‚Р°Рє Р°
 		hardware->reSetAlarm2();
-		hardware->setAlarm2(40);//через N минут определим температуру окончания
+		hardware->setAlarm2(40);//С‡РµСЂРµР· N РјРёРЅСѓС‚ РѕРїСЂРµРґРµР»РёРј С‚РµРјРїРµСЂР°С‚СѓСЂСѓ РѕРєРѕРЅС‡Р°РЅРёВ¤
 		cont->setVisible(false);
 		menu->setActive(false);
 		logg.logging("Rectify Collech BODY started at " + getTimeStr());
@@ -392,8 +393,8 @@ void Rectify::process(long ms)
 			work_mode = PROC_SELF_WORK;
 			hardware->reSetAlarm2();
 			hardware->reSetAlarm1();
-			hardware->setAlarm2((int)CONF.getRectWorkSelf());//через CONF.getRectWorkSelf() мин заканчиваем работать на себя
-			hardware->setAlarm1(3);//начинаем проверять ТСА
+			hardware->setAlarm2((int)CONF.getRectWorkSelf());//С‡РµСЂРµР· CONF.getRectWorkSelf() РјРёРЅ Р·Р°РєР°РЅС‡РёРІР°РµРј СЂР°Р±РѕС‚Р°С‚СЊ РЅР° СЃРµР±В¤
+			hardware->setAlarm1(3);//РЅР°С‡РёРЅР°РµРј РїСЂРѕРІРµСЂВ¤С‚СЊ вЂњвЂ”С
 		}
 		break;
 	case PROC_SELF_WORK:
@@ -410,7 +411,7 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_WAIT_SELF:
-		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
+		if (hardware->getClock()->checkAlarm2()) {//РµСЃР»Рё Р·Р° 10 РјРёРЅСѓС‚ РЅРёРєС‚Рѕ РЅРµ РїРѕРґРѕС€РµР»
 		stop(PROCEND_NO_ATT_SELF);
 		}
 		break;
@@ -428,7 +429,7 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_WAIT_HEAD: 
-		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
+		if (hardware->getClock()->checkAlarm2()) {//РµСЃР»Рё Р·Р° 10 РјРёРЅСѓС‚ РЅРёРєС‚Рѕ РЅРµ РїРѕРґРѕС€РµР»
 			stop(PROCEND_NO_ATT_HEAD);
 		}
 		break;
@@ -457,7 +458,7 @@ void Rectify::process(long ms)
 		}
 		break;
 	case PROC_WAIT_TAIL:
-		if (hardware->getClock()->checkAlarm2()) {//если за 10 минут никто не подошел
+		if (hardware->getClock()->checkAlarm2()) {//РµСЃР»Рё Р·Р° 10 РјРёРЅСѓС‚ РЅРёРєС‚Рѕ РЅРµ РїРѕРґРѕС€РµР»
 			stop(PROCEND_NO_ATT_TAIL);
 		}
 		break;

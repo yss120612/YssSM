@@ -20,11 +20,11 @@ PinExtender::~PinExtender()
 void PinExtender::setup(uint8_t addr)
 {
 	_address = addr;
-	Wire.beginTransmission(_address);  // i2c – адрес (A0-0,A1-0,A2-0)
+	Wire.beginTransmission(_address);  // i2c Р¦ Р°РґСЂРµСЃ (A0-0,A1-0,A2-0)
 	Wire.write(IODIRA); // IODIRA register
-	Wire.write(0x00); // настроить PORT A как output //bit 0-output 1-input
+	Wire.write(0x00); // РЅР°СЃС‚СЂРѕРёС‚СЊ PORT A РєР°Рє output //bit 0-output 1-input
 	Wire.write(IODIRB); // IODIRB register
-	Wire.write(0x00); // настроить PORT B как output 
+	Wire.write(0x00); // РЅР°СЃС‚СЂРѕРёС‚СЊ PORT B РєР°Рє output 
 	Wire.endTransmission();
 }
 
@@ -153,18 +153,18 @@ void PinExtender::digWrite(uint8_t pin, uint8_t d) {
 //}
 //
 //void PinExtender::setAll(uint16_t bitsToSend) {
-//	// для хранения 16 битов используем unsigned int
+//	// РґР»В¤ С…СЂР°РЅРµРЅРёВ¤ 16 Р±РёС‚РѕРІ РёСЃРїРѕР»СЊР·СѓРµРј unsigned int
 //	data = bitsToSend;
-//	// выключаем на время передачи битов
+//	// РІС‹РєР»СЋС‡Р°РµРј РЅР° РІСЂРµРјВ¤ РїРµСЂРµРґР°С‡Рё Р±РёС‚РѕРІ
 //	digitalWrite(latchPin, LOW);
 //	//delay(100);
-//	// разбиваем наши 16 бит на два байта
-//	// для записи в первый и второй регистр
-//	// "проталкиваем" байты в регистры
+//	// СЂР°Р·Р±РёРІР°РµРј РЅР°С€Рё 16 Р±РёС‚ РЅР° РґРІР° Р±Р°Р№С‚Р°
+//	// РґР»В¤ Р·Р°РїРёСЃРё РІ РїРµСЂРІС‹Р№ Рё РІС‚РѕСЂРѕР№ СЂРµРіРёСЃС‚СЂ
+//	// "РїСЂРѕС‚Р°Р»РєРёРІР°РµРј" Р±Р°Р№С‚С‹ РІ СЂРµРіРёСЃС‚СЂС‹
 //	shiftOut(dataPin, clockPin, MSBFIRST, lowByte(data));
 //	shiftOut(dataPin, clockPin, MSBFIRST, highByte(data));
 //
-//	// "защелкиваем" регистр, чтобы биты появились на выходах регистра
+//	// "Р·Р°С‰РµР»РєРёРІР°РµРј" СЂРµРіРёСЃС‚СЂ, С‡С‚РѕР±С‹ Р±РёС‚С‹ РїРѕВ¤РІРёР»РёСЃСЊ РЅР° РІС‹С…РѕРґР°С… СЂРµРіРёСЃС‚СЂР°
 //	digitalWrite(latchPin, HIGH);
 //}
 //
@@ -177,11 +177,11 @@ void PinExtender::digWrite(uint8_t pin, uint8_t d) {
 //		return;
 //	}
 //
-//	// для хранения 16 битов используем unsigned int
+//	// РґР»В¤ С…СЂР°РЅРµРЅРёВ¤ 16 Р±РёС‚РѕРІ РёСЃРїРѕР»СЊР·СѓРµРј unsigned int
 //	uint16_t bitsToSend = data;
-//	// устанавливаем HIGH в соответствующий бит
+//	// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј HIGH РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ Р±РёС‚
 //	bitWrite(bitsToSend, whichPin-100, whichState);
-//	//УЖЕ УСТАНОВЛЕНО
+//	//вЂќв€†в‰€ вЂќвЂ”вЂњСРЊСњВ¬Р‹в‰€РЊСњ
 //	if (bitsToSend == data) return;
 //
 //	setAll(bitsToSend);
